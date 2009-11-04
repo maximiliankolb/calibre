@@ -1,6 +1,6 @@
 Name:           calibre
-Version:        0.6.19
-Release:        3%{?dist}
+Version:        0.6.20
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -35,6 +35,7 @@ BuildRequires:  python-dateutil
 BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
 
+Requires:       PyQt4
 Requires:       pyPdf
 Requires:       python-cherrypy
 Requires:       python-cssutils
@@ -119,7 +120,7 @@ python setup.py install --root=%{buildroot}%{_prefix} \
 # icons
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
-   %{buildroot}%{_datadir}/pixmaps/%{name}.png
+   %{buildroot}%{_datadir}/pixmaps/%{name}-gui.png
 cp -p resources/images/viewer.svg                 \
    %{buildroot}%{_datadir}/pixmaps/calibre-viewer.svg
 
@@ -129,21 +130,12 @@ find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f
 # packages aren't allowed to register mimetypes like this
 rm -f %{buildroot}%{_datadir}/applications/defaults.list
 
-# Version isn't used correctly and it's not required either
-desktop-file-install \
---remove-key="Version" \
---dir=%{buildroot}%{_datadir}/applications \
-%{buildroot}%{_datadir}/applications/calibre-gui.desktop
-
-desktop-file-install \
---remove-key="Version" \
---dir=%{buildroot}%{_datadir}/applications \
-%{buildroot}%{_datadir}/applications/%{name}-lrfviewer.desktop
-
-desktop-file-install \
---remove-key="Version" \
---dir=%{buildroot}%{_datadir}/applications \
+desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-ebook-viewer.desktop
+desktop-file-validate \
+%{buildroot}%{_datadir}/applications/calibre-gui.desktop
+desktop-file-validate \
+%{buildroot}%{_datadir}/applications/calibre-lrfviewer.desktop
 
 
 mv %{buildroot}%{_datadir}/mime/packages/calibre-mimetypes \
@@ -246,6 +238,13 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Wed Nov  4 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.6.20-1
+- new upstream version:
+http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2030Oct2009
+- upstream now ships correct .desktop files
+- fixed missing dependency: PyQt4
+- fixed calibre-gui icon
+
 * Thu Oct 22 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.19-3
 - removed unfree fonts from source package
 
