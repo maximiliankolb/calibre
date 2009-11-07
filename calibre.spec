@@ -1,6 +1,6 @@
 Name:           calibre
 Version:        0.6.21
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -239,6 +239,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sat Nov  7 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.21-2
+- fix a package tagging issue
+
 * Sat Nov  7 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.21-1
 - new upstream version: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2106Nov2009
 - added python-BeautifulSoup requirement
