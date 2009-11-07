@@ -1,5 +1,5 @@
 Name:           calibre
-Version:        0.6.20
+Version:        0.6.21
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -47,6 +47,7 @@ Requires:       python-imaging
 Requires:       python-mechanize
 Requires:       python-dateutil
 Requires:       python-genshi
+Requires:       python-BeautifulSoup
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -238,6 +239,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sat Nov  7 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.21-1
+- new upstream version: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2106Nov2009
+- added python-BeautifulSoup requirement
+
 * Wed Nov  4 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.6.20-1
 - new upstream version:
 http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2030Oct2009
