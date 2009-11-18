@@ -1,5 +1,5 @@
 Name:           calibre
-Version:        0.6.21
+Version:        0.6.24
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -18,6 +18,7 @@ Source0:        %{name}-%{version}-nofonts.tar.gz
 Source1:        generate-tarball.sh
 Patch0:         %{name}-cssprofiles.patch
 Patch1:         %{name}-manpages.patch
+Patch2:         %{name}-no-update.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -71,6 +72,9 @@ TXT, PDF and LRS.
 
 # don't append calibre1 to the name of the manpages. No need to compress either
 %patch1 -p1 -b .manpages
+
+# don't check for new upstream version (that's what packagers do)
+%patch2 -p1 -b .no-update
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -239,6 +243,13 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Wed Nov 18 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.24-1
+- New upstream release: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2416Nov2009
+
+* Mon Nov 16 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.23-1
+- new upstream release: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2313Nov2009
+- patch to stop checking for new upstream version
+
 * Sat Nov  7 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.21-1
 - new upstream version: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2106Nov2009
 - added python-BeautifulSoup requirement
