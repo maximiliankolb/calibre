@@ -1,6 +1,6 @@
 Name:           calibre
 Version:        0.6.24
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -243,6 +243,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Tue Nov 24 2009 Kevin Kofler <Kevin@tigcc.ticalc.org> - 0.6.24-2
+- Rebuild for Qt 4.6.0 RC1 in F13 (was built against Beta 1 with unstable ABI)
+
 * Wed Nov 18 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.24-1
 - New upstream release: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2416Nov2009
 
