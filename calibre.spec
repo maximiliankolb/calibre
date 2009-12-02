@@ -1,6 +1,6 @@
 Name:           calibre
-Version:        0.6.24
-Release:        2%{?dist}
+Version:        0.6.25
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -165,13 +165,16 @@ rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
+# http://bugs.calibre-ebook.com/ticket/3832
 ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0003m_.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0011m_.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0419m_.ttf
-      
+
+# http://bugs.calibre-ebook.com/ticket/3770#comment:7
+
 # man pages
 mv %{buildroot}%{_datadir}/%{name}/man %{buildroot}%{_mandir}
 
@@ -243,8 +246,8 @@ fi
 %{_mandir}/man1/*
 
 %changelog
-* Tue Nov 24 2009 Kevin Kofler <Kevin@tigcc.ticalc.org> - 0.6.24-2
-- Rebuild for Qt 4.6.0 RC1 in F13 (was built against Beta 1 with unstable ABI)
+* Wed Dec  2 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.25-1
+- New upstream release
 
 * Wed Nov 18 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.24-1
 - New upstream release: http://calibre.kovidgoyal.net/wiki/Changelog#Version0.6.2416Nov2009
