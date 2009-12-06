@@ -1,7 +1,7 @@
-diff -up calibre/src/calibre/gui2/main.py.no_update calibre/src/calibre/gui2/main.py
---- calibre/src/calibre/gui2/main.py.no_update	2009-12-02 11:16:14.357372471 +0200
-+++ calibre/src/calibre/gui2/main.py	2009-12-02 11:17:30.421373426 +0200
-@@ -220,11 +220,11 @@ class Main(MainWindow, Ui_MainWindow, De
+diff -up calibre/src/calibre/gui2/ui.py.no_update calibre/src/calibre/gui2/ui.py
+--- calibre/src/calibre/gui2/ui.py.no_update	2009-12-06 23:21:12.298917664 +0200
++++ calibre/src/calibre/gui2/ui.py	2009-12-06 23:21:18.054898861 +0200
+@@ -226,11 +226,11 @@ class Main(MainWindow, Ui_MainWindow, De
          self.latest_version = ' '
          self.vanity.setText(self.vanity_template%dict(version=' ', device=' '))
          self.device_info = ' '

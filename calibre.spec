@@ -1,5 +1,5 @@
 Name:           calibre
-Version:        0.6.25
+Version:        0.6.26
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -246,6 +246,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sun Dec  6 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.26-1
+- New upstream version
+- Regenerated no-update patch because of code relocation
+
 * Wed Dec  2 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.25-1
 - New upstream release
 
