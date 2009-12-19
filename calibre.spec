@@ -1,10 +1,10 @@
 Name:           calibre
-Version:        0.6.26
+Version:        0.6.29
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
-URL:            http://calibre.kovidgoyal.net/
+URL:            http://calibre-ebook.com/
 
 # SourceURL: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
@@ -246,6 +246,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sat Dec 19 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.29-1
+- New upstream release
+- project website has changed
+
 * Sun Dec  6 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.26-1
 - New upstream version
 - Regenerated no-update patch because of code relocation
