@@ -1,6 +1,6 @@
 Name:           calibre
 Version:        0.6.32
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -253,6 +253,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Wed Jan  6 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.32-2
+- fix for package tagged without adding new patch to cvs
+
 * Wed Jan  6 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.32-1
 - new upstream release 0.6.32
 - project website has changed
