@@ -1,5 +1,5 @@
 Name:           calibre
-Version:        0.6.29
+Version:        0.6.32
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -19,6 +19,7 @@ Source1:        generate-tarball.sh
 Patch0:         %{name}-cssprofiles.patch
 Patch1:         %{name}-manpages.patch
 Patch2:         %{name}-no-update.patch
+Patch3:         %{name}-executables.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -35,6 +36,7 @@ BuildRequires:  python-lxml
 BuildRequires:  python-dateutil
 BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
+BuildRequires:  python-BeautifulSoup
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -71,10 +73,15 @@ TXT, PDF and LRS.
 %patch0 -p1 -b .cssprofiles
 
 # don't append calibre1 to the name of the manpages. No need to compress either
+# upstream won't fix: http://bugs.calibre-ebook.com/ticket/3770#comment:7
 %patch1 -p1 -b .manpages
 
 # don't check for new upstream version (that's what packagers do)
 %patch2 -p1 -b .no-update
+
+# don't write full buildpath in binary files 
+# http://bugs.calibre-ebook.com/ticket/4437
+%patch3 -p1 -b .executables
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -231,7 +238,7 @@ fi
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc COPYRIGHT LICENSE
+%doc COPYRIGHT LICENSE Changelog.yaml
 
 %{_bindir}/*
 %config(noreplace) %{_sysconfdir}/bash_completion.d/
@@ -246,9 +253,11 @@ fi
 %{_mandir}/man1/*
 
 %changelog
-* Sat Dec 19 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.29-1
-- New upstream release
+* Wed Jan  6 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.32-1
+- new upstream release 0.6.32
 - project website has changed
+- added python-BeautifulSoup BuildRequire
+- new patch to fix full buildpath in binary files
 
 * Sun Dec  6 2009 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.26-1
 - New upstream version
