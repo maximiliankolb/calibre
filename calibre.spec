@@ -1,5 +1,5 @@
 Name:           calibre
-Version:        0.6.32
+Version:        0.6.35
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -16,10 +16,8 @@ URL:            http://calibre-ebook.com/
 # ./generate-tarball.sh %{version}
 Source0:        %{name}-%{version}-nofonts.tar.gz
 Source1:        generate-tarball.sh
-Patch0:         %{name}-cssprofiles.patch
-Patch1:         %{name}-manpages.patch
-Patch2:         %{name}-no-update.patch
-Patch3:         %{name}-executables.patch
+Patch0:         %{name}-manpages.patch
+Patch1:         %{name}-no-update.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -41,7 +39,7 @@ BuildRequires:  python-BeautifulSoup
 Requires:       PyQt4
 Requires:       pyPdf
 Requires:       python-cherrypy
-Requires:       python-cssutils
+Requires:       python-cssutils >= 0.9.6
 Requires:       ImageMagick
 Requires:       odfpy
 Requires:       django-tagging
@@ -69,19 +67,12 @@ TXT, PDF and LRS.
 %prep
 %setup -q -n %{name}
 
-# we've moved the profiles so we don't have to redistribute cssutils
-%patch0 -p1 -b .cssprofiles
-
 # don't append calibre1 to the name of the manpages. No need to compress either
 # upstream won't fix: http://bugs.calibre-ebook.com/ticket/3770#comment:7
-%patch1 -p1 -b .manpages
+%patch0 -p1 -b .manpages
 
 # don't check for new upstream version (that's what packagers do)
-%patch2 -p1 -b .no-update
-
-# don't write full buildpath in binary files 
-# http://bugs.calibre-ebook.com/ticket/4437
-%patch3 -p1 -b .executables
+%patch1 -p1 -b .no-update
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -253,6 +244,14 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Mon Jan 25 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-1
+- new upstream release
+- fedora includes cssutils >= 0.9.6 now; removed the cssprofiles patch
+- removed -executables patch, upstream fixed it: http://bugs.calibre-ebook.com/ticket/4437
+
+* Wed Jan  6 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.32-2
+- fix for package tagged without adding new patch to cvs
+
 * Wed Jan  6 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.32-1
 - new upstream release 0.6.32
 - project website has changed
