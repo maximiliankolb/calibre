@@ -1,6 +1,6 @@
 Name:           calibre
 Version:        0.6.35
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -249,6 +249,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Tue Jan 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-3
+- added -cssprofiles patch to cvs 
+
 * Tue Jan 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-2
 - remove python-cssutils 0.9.6 dependency
 
