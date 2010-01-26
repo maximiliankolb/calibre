@@ -1,6 +1,6 @@
 Name:           calibre
 Version:        0.6.35
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -18,6 +18,7 @@ Source0:        %{name}-%{version}-nofonts.tar.gz
 Source1:        generate-tarball.sh
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
+Patch2:         %{name}-cssprofiles.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -39,7 +40,7 @@ BuildRequires:  python-BeautifulSoup
 Requires:       PyQt4
 Requires:       pyPdf
 Requires:       python-cherrypy
-Requires:       python-cssutils >= 0.9.6
+Requires:       python-cssutils
 Requires:       ImageMagick
 Requires:       odfpy
 Requires:       django-tagging
@@ -73,6 +74,10 @@ TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+
+# we've moved the profiles so we don't have to redistribute cssutils
+# until 0.9.6 comes to fedora
+%patch2 -p1 -b .cssprofiles
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -244,6 +249,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Tue Jan 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-2
+- remove python-cssutils 0.9.6 dependency
+
 * Mon Jan 25 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-1
 - new upstream release
 - fedora includes cssutils >= 0.9.6 now; removed the cssprofiles patch
