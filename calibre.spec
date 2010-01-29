@@ -1,6 +1,6 @@
 Name:           calibre
-Version:        0.6.35
-Release:        3%{?dist}
+Version:        0.6.36
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -103,8 +103,7 @@ OVERRIDE_CFLAGS="%{optflags}" python setup.py build
 rm -rf %{buildroot}
 
 # this is the only file we need from the provided cssutils package
-# need it for the install
-cp -p src/cssutils/profiles.py src/calibre/cssutils_profiles.py
+cp -p src/cssutils/profiles.py src/calibre/css_profiles.py
 
 mkdir -p %{buildroot}%{_datadir}
 
@@ -207,10 +206,6 @@ done;
             -e "s/iso639.mo/calibre_iso639.mo/"              \
             %{buildroot}%{_libdir}/%{name}/%{name}/utils/localization.py
 
-# this is the only file we need from the provided cssutils package
-cp -p src/cssutils/profiles.py %{buildroot}%{_libdir}/%{name}/%{name}/
-
-
 %{__rm} -f %{buildroot}%{_bindir}/%{name}-uninstall   
 
 %clean
@@ -249,6 +244,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Jan 29 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.36-1
+- new upstream release 0.6.36
+- fixed a cssprofiles issue with loading the profiles
+
 * Tue Jan 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-3
 - added -cssprofiles patch to cvs 
 
