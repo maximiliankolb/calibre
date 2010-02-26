@@ -1,5 +1,5 @@
 Name:           calibre
-Version:        0.6.37
+Version:        0.6.42
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -88,13 +88,13 @@ TXT, PDF and LRS.
 %{__sed} -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/calibre/*.py
 %{__sed} -i -e '/^#!\//, 1d' resources/recipes/*
+%{__sed} -i -e '/^#!\//, 1d' resources/default_tweaks.py
 
 %{__chmod} -x src/calibre/*/*/*/*.py
 %{__chmod} -x src/calibre/*/*/*.py
 %{__chmod} -x src/calibre/*/*.py
 %{__chmod} -x src/calibre/*.py
 %{__chmod} -x resources/recipes/*
-
 
 %build
 OVERRIDE_CFLAGS="%{optflags}" python setup.py build 
@@ -176,7 +176,6 @@ ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0419m_.ttf
 
 # http://bugs.calibre-ebook.com/ticket/3770#comment:7
-
 # man pages
 mv %{buildroot}%{_datadir}/%{name}/man %{buildroot}%{_mandir}
 
@@ -244,6 +243,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Feb 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.42-1
+- new upstream release 0.6.42
+- remove shebang from default_tweaks.py
+
 * Mon Feb  1 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.37-1
 - new upstream release 0.6.37
 
