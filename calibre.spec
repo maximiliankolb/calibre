@@ -1,6 +1,6 @@
 Name:           calibre
 Version:        0.6.42
-Release:        1%{?dist}
+Release:        1.1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -243,6 +243,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Mar 12 2010 Mike McGrath <mmcgrath@redhat.com> - 0.6.42-1.1
+- Simple rebuild to fix broken dep
+
 * Fri Feb 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.42-1
 - new upstream release 0.6.42
 - remove shebang from default_tweaks.py
