@@ -1,5 +1,7 @@
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+
 Name:           calibre
-Version:        0.6.42
+Version:        0.6.47
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -14,11 +16,10 @@ URL:            http://calibre-ebook.com/
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
 # ./generate-tarball.sh %{version}
-Source0:        %{name}-%{version}-nofonts.tar.gz
+Source0:        %{name}-%{version}-nofonts.tar.bz2
 Source1:        generate-tarball.sh
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
-Patch2:         %{name}-cssprofiles.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -36,6 +37,8 @@ BuildRequires:  python-dateutil
 BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
+BuildRequires:  chmlib-devel
+BuildRequires:  python-cssutils
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -62,8 +65,8 @@ i.e. a single entry in the database that may correspond to ebooks in several
 formats. It also supports conversion to and from a dozen different ebook
 formats.
 
-Supported input formats are: MOBI, LIT, PRC, EPUB, ODT, HTML, CBR, CBZ, RTF,
-TXT, PDF and LRS.
+Supported input formats are: MOBI, LIT, PRC, EPUB, CHM, ODT, HTML, CBR, CBZ,
+RTF, TXT, PDF and LRS.
 
 %prep
 %setup -q -n %{name}
@@ -74,10 +77,6 @@ TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
-
-# we've moved the profiles so we don't have to redistribute cssutils
-# until 0.9.6 comes to fedora
-%patch2 -p1 -b .cssprofiles
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -102,9 +101,6 @@ OVERRIDE_CFLAGS="%{optflags}" python setup.py build
 %install
 rm -rf %{buildroot}
 
-# this is the only file we need from the provided cssutils package
-cp -p src/cssutils/profiles.py src/calibre/css_profiles.py
-
 mkdir -p %{buildroot}%{_datadir}
 
 # create directories for xdg-utils
@@ -116,6 +112,10 @@ mkdir -p %{buildroot}%{_datadir}/mime/packages
 mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/desktop-directories
 
+# create directory for calibre environment module
+# the install script assumes it's there.
+mkdir -p %{buildroot}%{python_sitelib}
+
 XDG_DATA_DIRS="%{buildroot}%{_datadir}" \
 XDG_UTILS_INSTALL_MODE="system" \
 LIBPATH="%{_libdir}" \
@@ -123,7 +123,10 @@ python setup.py install --root=%{buildroot}%{_prefix} \
                         --prefix=%{_prefix} \
                         --libdir=%{_libdir} \
                         --staging-libdir=%{buildroot}%{_libdir} \
-
+# remove shebang from init_calibre.py here because
+# it just got spawned by the install script
+%{__sed} -i -e '/^#!\//, 1d' %{buildroot}%{python_sitelib}/init_calibre.py
+                        
 # icons
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
@@ -240,9 +243,17 @@ fi
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/scalable/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/*
+%{python_sitelib}/init_calibre.py*
 %{_mandir}/man1/*
 
 %changelog
+* Sat Apr 10 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.47-1
+- new upstream release 0.6.47
+- new chmlib requirement
+- create directory for calibre's environment module
+- use bzip2 instead of gzip when preparing tarball in generate-tarball.sh
+- remove cssutils patches (we now have python-cssutils 0.9.6 in Fedora)
+
 * Fri Feb 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.42-1
 - new upstream release 0.6.42
 - remove shebang from default_tweaks.py
