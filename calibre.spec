@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.6.47
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -247,6 +247,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Wed May  5 2010 Marcela Maslanova <mmaslano@redhat.com> - 0.6.47-2
+- Rebuild against new poppler
+
 * Sat Apr 10 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.47-1
 - new upstream release 0.6.47
 - new chmlib requirement
