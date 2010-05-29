@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.6.47
+Version:        0.6.55
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -20,6 +20,7 @@ Source0:        %{name}-%{version}-nofonts.tar.bz2
 Source1:        generate-tarball.sh
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
+Patch2:         %{name}-0.6.53-mounthelper.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -77,6 +78,9 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+
+# Enable mount helper
+%patch2 -p1 -b .mounthelper
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -247,6 +251,18 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri May 28 2010 Kevin Fenzi <kevin@tummy.com> - 0.6.55-1
+- Update to 0.6.55
+
+* Fri May 21 2010 Kevin Fenzi <kevin@tummy.com> - 0.6.54-1
+- Update to 0.6.54
+
+* Fri May 21 2010 Kevin Fenzi <kevin@tummy.com> - 0.6.53-1
+- Update to 0.6.53
+
+* Wed May  5 2010 Marcela Maslanova <mmaslano@redhat.com> - 0.6.47-2
+- Rebuild against new poppler
+
 * Sat Apr 10 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.47-1
 - new upstream release 0.6.47
 - new chmlib requirement
