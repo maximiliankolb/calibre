@@ -1,20 +1,22 @@
-diff -Nur calibre.orig/src/calibre/gui2/ui.py calibre/src/calibre/gui2/ui.py
---- calibre.orig/src/calibre/gui2/ui.py	2010-06-04 22:57:49.000000000 -0600
-+++ calibre/src/calibre/gui2/ui.py	2010-06-04 22:59:59.000000000 -0600
-@@ -265,11 +265,11 @@
-         self.latest_version = ' '
-         self.vanity.setText(self.vanity_template%dict(version=' ', device=' '))
-         self.device_info = ' '
+diff -Nur calibre.orig/src/calibre/gui2/update.py calibre/src/calibre/gui2/update.py
+--- calibre.orig/src/calibre/gui2/update.py	2010-06-21 19:38:04.000000000 -0600
++++ calibre/src/calibre/gui2/update.py	2010-06-21 20:30:50.000000000 -0600
+@@ -39,12 +39,12 @@
+ 
+ class UpdateMixin(object):
+ 
+-    def __init__(self, opts):
 -        if not opts.no_update_check:
 -            self.update_checker = CheckForUpdates(self)
 -            self.update_checker.update_found.connect(self.update_found,
 -                    type=Qt.QueuedConnection)
 -            self.update_checker.start()
++    #def __init__(self, opts):
 +        #if not opts.no_update_check:
 +        #    self.update_checker = CheckForUpdates(self)
 +        #    self.update_checker.update_found.connect(self.update_found,
 +        #            type=Qt.QueuedConnection)
 +        #    self.update_checker.start()
-         ####################### Status Bar #####################
-         self.status_bar.initialize(self.system_tray_icon)
-         self.status_bar.show_book_info.connect(self.show_book_info)
+ 
+     def update_found(self, version):
+         os = 'windows' if iswindows else 'osx' if isosx else 'linux'
