@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.4
+Version:        0.7.5
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Jun 25 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.5-1
+- Update to 0.7.5
+
 * Sun Jun 20 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.4-1
 - Update to 0.7.4
 
