@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.7
+Version:        0.7.8
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -16,7 +16,7 @@ URL:            http://calibre-ebook.com/
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
 # ./generate-tarball.sh %{version}
-Source0:        %{name}-%{version}-nofonts.tar.bz2
+Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
@@ -250,6 +250,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sun Jul 11 2010 Michal Nowak <mnowak@redhat.com> - 0.7.8-1
+- Update to 0.7.8
+- build tar.xz instead of tar.bz2
+
 * Fri Jul 02 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.7-1
 - Update to 0.7.7
 
