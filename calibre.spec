@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.8
+Version:        0.7.9
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sat Jul 17 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.9-1
+- Update to 0.7.9
+
 * Sun Jul 11 2010 Michal Nowak <mnowak@redhat.com> - 0.7.8-1
 - Update to 0.7.8
 - build tar.xz instead of tar.bz2
