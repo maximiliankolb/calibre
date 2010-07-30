@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Jul 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.10-2
+- Rebuilt for python2.7
+
 * Fri Jul 23 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.10-1
 - Update to 0.7.10
 
