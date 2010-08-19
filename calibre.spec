@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.10
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Thu Aug 19 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.10-3
+- rebuild (poppler)
+
 * Fri Jul 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.10-2
 - Rebuilt for python2.7
 
