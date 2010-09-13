@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.18
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -135,8 +135,8 @@ python setup.py install --root=%{buildroot}%{_prefix} \
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
    %{buildroot}%{_datadir}/pixmaps/%{name}-gui.png
-cp -p resources/images/viewer.svg                 \
-   %{buildroot}%{_datadir}/pixmaps/calibre-viewer.svg
+cp -p resources/images/viewer.png                 \
+   %{buildroot}%{_datadir}/pixmaps/calibre-viewer.png
 
 # every file is empty here
 find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f 
@@ -160,10 +160,10 @@ rm -rf %{buildroot}%{_datadir}/icons/hicolor/128x128
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
-cp -p resources/images/mimetypes/lrf.svg \
-      %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-sony-bbeb.svg
-cp -p resources/images/viewer.svg \
-      %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.svg
+cp -p resources/images/mimetypes/lrf.png \
+      %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-sony-bbeb.png
+cp -p resources/images/viewer.png \
+      %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
 # don't put bash completions in /usr/etc
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Mon Sep 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-2
+- Fix svg/png changes. 
+
 * Sun Sep 12 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-1
 - Update to 0.7.18
 - Require > 0.9.6 cssutils
