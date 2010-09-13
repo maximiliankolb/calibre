@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.17
+Version:        0.7.18
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -39,7 +39,7 @@ BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
 BuildRequires:  chmlib-devel
-BuildRequires:  python-cssutils >= 0.9.6
+BuildRequires:  python-cssutils > 0.9.6
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -250,6 +250,10 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sun Sep 12 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-1
+- Update to 0.7.18
+- Require > 0.9.6 cssutils
+
 * Fri Sep 03 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.17-1
 - Update to 0.7.17
 
