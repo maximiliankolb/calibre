@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.18
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Wed Sep 15 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-3
+- Rebuild for new ImageMagick
+
 * Mon Sep 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-2
 - Fix svg/png changes. 
 
