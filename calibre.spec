@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.10
+Version:        0.7.18
 Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -39,7 +39,7 @@ BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
 BuildRequires:  chmlib-devel
-BuildRequires:  python-cssutils >= 0.9.6
+BuildRequires:  python-cssutils > 0.9.6
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -135,8 +135,8 @@ python setup.py install --root=%{buildroot}%{_prefix} \
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
    %{buildroot}%{_datadir}/pixmaps/%{name}-gui.png
-cp -p resources/images/viewer.svg                 \
-   %{buildroot}%{_datadir}/pixmaps/calibre-viewer.svg
+cp -p resources/images/viewer.png                 \
+   %{buildroot}%{_datadir}/pixmaps/calibre-viewer.png
 
 # every file is empty here
 find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f 
@@ -160,10 +160,10 @@ rm -rf %{buildroot}%{_datadir}/icons/hicolor/128x128
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
-cp -p resources/images/mimetypes/lrf.svg \
-      %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-sony-bbeb.svg
-cp -p resources/images/viewer.svg \
-      %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.svg
+cp -p resources/images/mimetypes/lrf.png \
+      %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-sony-bbeb.png
+cp -p resources/images/viewer.png \
+      %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
 # don't put bash completions in /usr/etc
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
@@ -250,8 +250,39 @@ fi
 %{_mandir}/man1/*
 
 %changelog
-* Thu Aug 19 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.10-3
+* Wed Sep 15 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-3
+- Rebuild for new ImageMagick
+
+* Mon Sep 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-2
+- Fix svg/png changes. 
+
+* Sun Sep 12 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-1
+- Update to 0.7.18
+- Require > 0.9.6 cssutils
+
+* Fri Sep 03 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.17-1
+- Update to 0.7.17
+
+* Fri Aug 27 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.16-1
+- Update to 0.7.16
+
+* Sat Aug 21 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.15-1
+- Update to 0.7.15
+
+* Thu Aug 19 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.14-2
 - rebuild (poppler)
+
+* Fri Aug 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.14-1
+- Update to 0.7.14
+
+* Fri Aug 06 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.13-1
+- Update to 0.7.13
+
+* Mon Aug 02 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.12-1
+- Update to 0.7.12
+
+* Fri Jul 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.11-1
+- Update to 0.7.11
 
 * Fri Jul 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.10-2
 - Rebuilt for python2.7
