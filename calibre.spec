@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.18
-Release:        3%{?dist}
+Release:        3%{?dist}.1
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Sep 17 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.18-3.1
+- rebuild (ImageMagick)
+
 * Wed Sep 15 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-3
 - Rebuild for new ImageMagick
 
