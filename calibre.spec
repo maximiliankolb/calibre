@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.18
-Release:        3%{?dist}.1
+Version:        0.7.20
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Sep 24 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.20-1
+- Update to 0.7.20
+
 * Fri Sep 17 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.18-3.1
 - rebuild (ImageMagick)
 
