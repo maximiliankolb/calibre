@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.20
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Wed Sep 29 2010 jkeating - 0.7.20-2
+- Rebuilt for gcc bug 634757
+
 * Fri Sep 24 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.20-1
 - Update to 0.7.20
 
