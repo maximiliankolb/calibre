@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.20
-Release:        2%{?dist}
+Version:        0.7.21
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -250,6 +250,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Oct 01 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.21-1
+- Update to 0.7.21
+
 * Wed Sep 29 2010 jkeating - 0.7.20-2
 - Rebuilt for gcc bug 634757
 
