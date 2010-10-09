@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.20
-Release:        1%{?dist}.1
+Version:        0.7.23
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -18,9 +18,9 @@ URL:            http://calibre-ebook.com/
 # ./generate-tarball.sh %{version}
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
+Source2:	calibre-mount-helper
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
-Patch2:         %{name}-0.6.53-mounthelper.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
@@ -78,9 +78,6 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
-
-# Enable mount helper
-%patch2 -p1 -b .mounthelper
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -214,6 +211,8 @@ done;
 
 %{__rm} -f %{buildroot}%{_bindir}/%{name}-uninstall   
 
+cp -a %{SOURCE2} %{buildroot}%{_bindir}/
+
 %clean
 %{__rm} -rf %{buildroot}
 
@@ -236,8 +235,28 @@ fi
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYRIGHT LICENSE Changelog.yaml
-
-%{_bindir}/*
+%{_bindir}/calibre
+%{_bindir}/calibre-complete
+%{_bindir}/calibre-customize
+%{_bindir}/calibre-debug
+%{_bindir}/calibre-parallel
+%{_bindir}/calibre-server
+%{_bindir}/calibre-smtp
+%{_bindir}/calibre-mount-helper
+%{_bindir}/calibredb
+%{_bindir}/ebook-convert
+%{_bindir}/ebook-device
+%{_bindir}/ebook-meta
+%{_bindir}/ebook-viewer
+%{_bindir}/epub-fix
+%{_bindir}/fetch-ebook-metadata
+%{_bindir}/librarything
+%{_bindir}/lrf2lrs
+%{_bindir}/lrfviewer
+%{_bindir}/lrs2lrf
+%{_bindir}/markdown-calibre
+%{_bindir}/pdfmanipulate
+%{_bindir}/web2disk
 %config(noreplace) %{_sysconfdir}/bash_completion.d/
 %{_libdir}/%{name}
 %{_datadir}/%{name}
@@ -250,14 +269,22 @@ fi
 %{_mandir}/man1/*
 
 %changelog
-* Wed Sep 29 2010 jkeating - 0.7.20-1.1
+* Sat Oct 09 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.23-1
+- Update to 0.7.23
+- Fix up mount helper with our own local script. 
+- Change files to list binaries so missing ones can more easily be noted. 
+
+* Mon Oct 04 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.22-1
+- Update to 0.7.22
+
+* Fri Oct 01 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.21-1
+- Update to 0.7.21
+
+* Wed Sep 29 2010 jkeating - 0.7.20-2
 - Rebuilt for gcc bug 634757
 
 * Fri Sep 24 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.20-1
 - Update to 0.7.20
-
-* Fri Sep 17 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.18-3.1
-- rebuild (ImageMagick)
 
 * Wed Sep 15 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-3
 - Rebuild for new ImageMagick
