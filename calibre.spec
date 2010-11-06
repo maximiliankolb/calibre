@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.26
-Release:        2%{?dist}
+Version:        0.7.27
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -269,6 +269,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Nov 05 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.27-1
+- Update to 0.7.27
+
 * Tue Nov 02 2010 Dan Horák <dan@danny.cz> - 0.7.26-2
 - rebuilt against podofo 0.8.4
 
