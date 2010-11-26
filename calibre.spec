@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.29
+Version:        0.7.30
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -40,6 +40,7 @@ BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
 BuildRequires:  chmlib-devel
 BuildRequires:  python-cssutils > 0.9.6
+BuildRequires:  sqlite-devel
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -269,6 +270,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Fri Nov 26 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.30-1
+- Update to 0.7.30
+
 * Fri Nov 19 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.29-1
 - Update to 0.7.29
 
