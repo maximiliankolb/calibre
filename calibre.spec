@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.23
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -269,6 +269,9 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Sun Jan 02 2011 Rex Dieter <rdieter@fedoraproject.org> - 0.7.23-2
+- rebuild (poppler)
+
 * Sat Oct 09 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.23-1
 - Update to 0.7.23
 - Fix up mount helper with our own local script. 
