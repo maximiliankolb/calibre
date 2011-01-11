@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.38
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -271,6 +271,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Tue Jan 11 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.38-3
+- Fix crash on exit (BZ 559484, 642877, 651727)
+
 * Mon Jan 10 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.38-2
 - Remove obsolete BuildRoot tag and %%clean section
 - Require font packages which contain files which are symlinked

@@ -1,7 +1,19 @@
-diff -Nur calibre.orig/src/calibre/gui2/update.py calibre/src/calibre/gui2/update.py
---- calibre.orig/src/calibre/gui2/update.py	2010-06-21 19:38:04.000000000 -0600
-+++ calibre/src/calibre/gui2/update.py	2010-06-21 20:30:50.000000000 -0600
-@@ -39,12 +39,12 @@
+diff -uNr calibre.old/src/calibre/gui2/ui.py calibre/src/calibre/gui2/ui.py
+--- calibre.old/src/calibre/gui2/ui.py	2011-01-11 22:08:00.684511166 +0100
++++ calibre/src/calibre/gui2/ui.py	2011-01-11 22:11:34.522099663 +0100
+@@ -590,7 +590,7 @@
+         if write_settings:
+             self.write_settings()
+         self.check_messages_timer.stop()
+-        self.update_checker.terminate()
++        # self.update_checker.terminate()
+         self.listener.close()
+         self.job_manager.server.close()
+         while self.spare_servers:
+diff -uNr calibre.old/src/calibre/gui2/update.py calibre/src/calibre/gui2/update.py
+--- calibre.old/src/calibre/gui2/update.py	2011-01-11 22:08:00.684511166 +0100
++++ calibre/src/calibre/gui2/update.py	2011-01-11 22:11:16.678301138 +0100
+@@ -87,12 +87,12 @@
  
  class UpdateMixin(object):
  
