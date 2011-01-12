@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.6.55
-Release:        1%{?dist}
+Version:        0.7.38
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -16,12 +16,11 @@ URL:            http://calibre-ebook.com/
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
 # ./generate-tarball.sh %{version}
-Source0:        %{name}-%{version}-nofonts.tar.bz2
+Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
+Source2:        calibre-mount-helper
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
-Patch2:         %{name}-0.6.53-mounthelper.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -40,11 +39,13 @@ BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
 BuildRequires:  chmlib-devel
 BuildRequires:  python-cssutils
+BuildRequires:  sqlite-devel
+BuildRequires:  libicu-devel
 
 Requires:       PyQt4
 Requires:       pyPdf
 Requires:       python-cherrypy
-Requires:       python-cssutils
+Requires:       python-cssutils > 0.9.6
 Requires:       ImageMagick
 Requires:       odfpy
 Requires:       django-tagging
@@ -54,6 +55,10 @@ Requires:       python-mechanize
 Requires:       python-dateutil
 Requires:       python-genshi
 Requires:       python-BeautifulSoup
+# Require the packages of the files which are symlinked by calibre
+Requires:       liberation-sans-fonts
+Requires:       liberation-serif-fonts
+Requires:       liberation-mono-fonts
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -79,9 +84,6 @@ RTF, TXT, PDF and LRS.
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
 
-# Enable mount helper
-%patch2 -p1 -b .mounthelper
-
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
 
@@ -90,6 +92,7 @@ RTF, TXT, PDF and LRS.
 %{__sed} -i -e '/^#!\//, 1d' src/calibre/*/*/*.py
 %{__sed} -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/calibre/*.py
+%{__sed} -i -e '/^#!\//, 1d' src/templite/*.py
 %{__sed} -i -e '/^#!\//, 1d' resources/recipes/*
 %{__sed} -i -e '/^#!\//, 1d' resources/default_tweaks.py
 
@@ -103,8 +106,6 @@ RTF, TXT, PDF and LRS.
 OVERRIDE_CFLAGS="%{optflags}" python setup.py build 
 
 %install
-rm -rf %{buildroot}
-
 mkdir -p %{buildroot}%{_datadir}
 
 # create directories for xdg-utils
@@ -135,14 +136,15 @@ python setup.py install --root=%{buildroot}%{_prefix} \
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
    %{buildroot}%{_datadir}/pixmaps/%{name}-gui.png
-cp -p resources/images/viewer.svg                 \
-   %{buildroot}%{_datadir}/pixmaps/calibre-viewer.svg
+cp -p resources/images/viewer.png                 \
+   %{buildroot}%{_datadir}/pixmaps/calibre-viewer.png
 
 # every file is empty here
 find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f 
 
 # packages aren't allowed to register mimetypes like this
 rm -f %{buildroot}%{_datadir}/applications/defaults.list
+rm -f %{buildroot}%{_datadir}/applications/mimeinfo.cache
 
 desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-ebook-viewer.desktop
@@ -160,10 +162,10 @@ rm -rf %{buildroot}%{_datadir}/icons/hicolor/128x128
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
-cp -p resources/images/mimetypes/lrf.svg \
-      %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-sony-bbeb.svg
-cp -p resources/images/viewer.svg \
-      %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.svg
+cp -p resources/images/mimetypes/lrf.png \
+      %{buildroot}%{_datadir}/icons/hicolor/scalable/mimetypes/application-x-sony-bbeb.png
+cp -p resources/images/viewer.png \
+      %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
 # don't put bash completions in /usr/etc
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
@@ -214,36 +216,54 @@ done;
 
 %{__rm} -f %{buildroot}%{_bindir}/%{name}-uninstall   
 
-%clean
-%{__rm} -rf %{buildroot}
+cp -a %{SOURCE2} %{buildroot}%{_bindir}/
 
 %post
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor || :
-if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
-%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
-fi
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
 %postun
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor || :
-if [ -x %{_bindir}/gtk-update-icon-cache ] ; then
-%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
+
+%posttrans
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc COPYRIGHT LICENSE Changelog.yaml
-
-%{_bindir}/*
+%{_bindir}/calibre
+%{_bindir}/calibre-complete
+%{_bindir}/calibre-customize
+%{_bindir}/calibre-debug
+%{_bindir}/calibre-parallel
+%{_bindir}/calibre-server
+%{_bindir}/calibre-smtp
+%{_bindir}/calibre-mount-helper
+%{_bindir}/calibredb
+%{_bindir}/ebook-convert
+%{_bindir}/ebook-device
+%{_bindir}/ebook-meta
+%{_bindir}/ebook-viewer
+%{_bindir}/epub-fix
+%{_bindir}/fetch-ebook-metadata
+%{_bindir}/librarything
+%{_bindir}/lrf2lrs
+%{_bindir}/lrfviewer
+%{_bindir}/lrs2lrf
+%{_bindir}/markdown-calibre
+%{_bindir}/pdfmanipulate
+%{_bindir}/web2disk
 %config(noreplace) %{_sysconfdir}/bash_completion.d/
 %{_libdir}/%{name}
-%{_prefix}/lib/udev/rules.d/*
 %{_datadir}/%{name}
 %{_datadir}/pixmaps/*
-%{_datadir}/applications/*
+%{_datadir}/applications/*.desktop
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/scalable/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/*
@@ -251,6 +271,156 @@ fi
 %{_mandir}/man1/*
 
 %changelog
+* Tue Jan 11 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.38-3
+- Fix crash on exit (BZ 559484, 642877, 651727)
+
+* Mon Jan 10 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.38-2
+- Remove obsolete BuildRoot tag and %%clean section
+- Require font packages which contain files which are symlinked
+  by calibre
+- Remove unnecessary shebang from internal python files
+- Update scriptlets for icon cache
+- Don't package mimeinfo.cache, it is auto-generated by
+  update-mime-database
+
+* Fri Jan 07 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.38-1
+- Update to 0.7.38
+
+* Mon Jan 03 2011 Rex Dieter <rdieter@fedoraproject.org> - 0.7.36-2
+- rebuild (poppler)
+
+* Sat Jan 01 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.36-1
+- Update to 0.7.36
+
+* Thu Dec 23 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.35-1
+- Update to 0.7.35
+
+* Fri Dec 17 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.34-1
+- Update to 0.7.34
+
+* Wed Dec 15 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.33-2
+- rebuild (poppler)
+
+* Fri Dec 10 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.33-1
+- Update to 0.7.33
+
+* Fri Dec 03 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.32-1
+- Update to 0.7.32
+
+* Fri Nov 26 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.30-1
+- Update to 0.7.30
+
+* Fri Nov 19 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.29-1
+- Update to 0.7.29
+
+* Sat Nov 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.28-1
+- Update to 0.7.28
+
+* Fri Nov 05 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.27-1
+- Update to 0.7.27
+
+* Tue Nov 02 2010 Dan Horák <dan@danny.cz> - 0.7.26-2
+- rebuilt against podofo 0.8.4
+
+* Fri Oct 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.26-1
+- Update to 0.7.26
+
+* Fri Oct 29 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.25-1
+- Update to 0.7.25
+- http://calibre-ebook.com/whats-new for full changelog
+
+* Fri Oct 22 2010 Dan Horák <dan@danny.cz> - 0.7.24-2
+- rebuilt against podofo 0.8.3
+
+* Tue Oct 19 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.24-1
+- Update to 0.7.24
+
+* Sat Oct 09 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.23-1
+- Update to 0.7.23
+- Fix up mount helper with our own local script. 
+- Change files to list binaries so missing ones can more easily be noted. 
+
+* Mon Oct 04 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.22-1
+- Update to 0.7.22
+
+* Fri Oct 01 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.21-1
+- Update to 0.7.21
+
+* Wed Sep 29 2010 jkeating - 0.7.20-2
+- Rebuilt for gcc bug 634757
+
+* Fri Sep 24 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.20-1
+- Update to 0.7.20
+
+* Wed Sep 15 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-3
+- Rebuild for new ImageMagick
+
+* Mon Sep 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-2
+- Fix svg/png changes. 
+
+* Sun Sep 12 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-1
+- Update to 0.7.18
+- Require > 0.9.6 cssutils
+
+* Fri Sep 03 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.17-1
+- Update to 0.7.17
+
+* Fri Aug 27 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.16-1
+- Update to 0.7.16
+
+* Sat Aug 21 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.15-1
+- Update to 0.7.15
+
+* Thu Aug 19 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.7.14-2
+- rebuild (poppler)
+
+* Fri Aug 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.14-1
+- Update to 0.7.14
+
+* Fri Aug 06 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.13-1
+- Update to 0.7.13
+
+* Mon Aug 02 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.12-1
+- Update to 0.7.12
+
+* Fri Jul 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.11-1
+- Update to 0.7.11
+
+* Fri Jul 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.10-2
+- Rebuilt for python2.7
+
+* Fri Jul 23 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.10-1
+- Update to 0.7.10
+
+* Sat Jul 17 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.9-1
+- Update to 0.7.9
+
+* Sun Jul 11 2010 Michal Nowak <mnowak@redhat.com> - 0.7.8-1
+- Update to 0.7.8
+- build tar.xz instead of tar.bz2
+
+* Fri Jul 02 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.7-1
+- Update to 0.7.7
+
+* Wed Jun 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.6-1
+- Update to 0.7.6 
+
+* Fri Jun 25 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.5-1
+- Update to 0.7.5
+
+* Sun Jun 20 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.4-1
+- Update to 0.7.4
+
+* Tue Jun 08 2010 Dan Horák <dan@danny.cz> - 0.7.1-2
+- rebuilt with podofo 0.8.1
+
+* Mon Jun 07 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.1-1
+- Update to 0.7.1
+- Added versioned dep on python-cssutils to make sure at least 0.9.6 is installed.
+
+* Fri Jun 04 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.0-1
+- Update to 0.7.0
+
 * Fri May 28 2010 Kevin Fenzi <kevin@tummy.com> - 0.6.55-1
 - Update to 0.6.55
 
