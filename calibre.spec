@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.40
+Version:        0.7.42
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -82,7 +82,7 @@ RTF, TXT, PDF and LRS.
 %patch0 -p1 -b .manpages
 
 # don't check for new upstream version (that's what packagers do)
-%patch1 -p1 -b .no-update
+%patch1 -F 2 -p1 -b .no-update
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -271,6 +271,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sat Jan 22 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.42-1
+- Update to 0.7.42
+
 * Fri Jan 14 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.40-1
 - Update to 0.7.40
 
