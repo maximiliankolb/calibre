@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.42
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -59,6 +59,8 @@ Requires:       python-BeautifulSoup
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
+%{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
+
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -271,6 +273,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Thu Jan 27 2011 Rex Dieter <rdieter@fedoraproject.org> - 0.7.42-2
+- track sip-api
+
 * Sat Jan 22 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.42-1
 - Update to 0.7.42
 
