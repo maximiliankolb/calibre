@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.47
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -273,6 +273,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Mon Mar 07 2011 Caolán McNamara <caolam@redhat.com> - 0.7.47-2
+- rebuild for icu 4.6
+
 * Fri Feb 25 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.47-1
 - Update to 0.7.47
 
