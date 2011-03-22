@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.44
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -21,6 +21,9 @@ Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
+# Patch to fix crash on pdf export (BZ #673604)
+# (use the correct API for the external pyPdf library)
+Patch2:         %{name}-0.7.38-pyPdf-fix.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -85,6 +88,9 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -F 2 -p1 -b .no-update
+
+# fix crash on pdf export (BZ #673604)
+%patch2 -p1 -b .pdf-export-fix
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -273,6 +279,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Wed Mar 23 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.44-4
+- Add patch to fix crash on pdf export (BZ #673604)
+
 * Sun Mar 13 2011 Marek Kasik <mkasik@redhat.com> - 0.7.44-3
 - Rebuild (poppler-0.16.3)
 
