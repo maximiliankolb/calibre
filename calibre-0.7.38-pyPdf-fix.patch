@@ -1,0 +1,96 @@
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/crop.py calibre/src/calibre/ebooks/pdf/manipulate/crop.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/crop.py	2011-03-21 00:04:16.946217391 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/crop.py	2011-03-21 00:08:54.324717632 +0100
+@@ -102,7 +102,7 @@
+         if len(bounding_lines) != input_pdf.numPages:
+             raise Exception('Error bounding file %s page count does not correspond to specified pdf' % opts.bounding)
+ 
+-    output_pdf = PdfFileWriter(title=title,author=author)
++    output_pdf = PdfFileWriter()
+     blines = iter(bounding_lines)
+     for page in input_pdf.pages:
+         if bounding_lines != []:
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/decrypt.py calibre/src/calibre/ebooks/pdf/manipulate/decrypt.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/decrypt.py	2011-03-21 00:04:16.947217310 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/decrypt.py	2011-03-21 00:08:23.849195389 +0100
+@@ -72,7 +72,7 @@
+ 
+     title = pdf.documentInfo.title if pdf.documentInfo.title else _('Unknown')
+     author = pdf.documentInfo.author if pdf.documentInfo.author else _('Unknown')
+-    out_pdf = PdfFileWriter(title=title, author=author)
++    out_pdf = PdfFileWriter()
+ 
+     for page in pdf.pages:
+         out_pdf.addPage(page)
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/encrypt.py calibre/src/calibre/ebooks/pdf/manipulate/encrypt.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/encrypt.py	2011-03-21 00:04:16.948217229 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/encrypt.py	2011-03-21 00:09:05.909775518 +0100
+@@ -66,7 +66,7 @@
+         title = metadata.title
+         author = authors_to_string(metadata.authors)
+ 
+-    out_pdf = PdfFileWriter(title=title, author=author)
++    out_pdf = PdfFileWriter()
+ 
+     pdf = PdfFileReader(open(os.path.abspath(pdf_path), 'rb'))
+     for page in pdf.pages:
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/merge.py calibre/src/calibre/ebooks/pdf/manipulate/merge.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/merge.py	2011-03-21 00:04:16.949217148 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/merge.py	2011-03-21 00:08:32.281510009 +0100
+@@ -68,7 +68,7 @@
+         title = metadata.title
+         author = authors_to_string(metadata.authors)
+ 
+-    out_pdf = PdfFileWriter(title=title, author=author)
++    out_pdf = PdfFileWriter()
+ 
+     for pdf_path in in_paths:
+         pdf = PdfFileReader(open(os.path.abspath(pdf_path), 'rb'))
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/reverse.py calibre/src/calibre/ebooks/pdf/manipulate/reverse.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/reverse.py	2011-03-21 00:04:16.949217148 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/reverse.py	2011-03-21 00:08:06.841577565 +0100
+@@ -66,7 +66,7 @@
+         title = metadata.title
+         author = authors_to_string(metadata.authors)
+ 
+-    out_pdf = PdfFileWriter(title=title, author=author)
++    out_pdf = PdfFileWriter()
+ 
+     pdf = PdfFileReader(open(os.path.abspath(pdf_path), 'rb'))
+     for page in reversed(pdf.pages):
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/rotate.py calibre/src/calibre/ebooks/pdf/manipulate/rotate.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/rotate.py	2011-03-21 00:04:16.950217067 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/rotate.py	2011-03-21 00:08:15.289891163 +0100
+@@ -65,7 +65,7 @@
+         title = metadata.title
+         author = authors_to_string(metadata.authors)
+ 
+-    out_pdf = PdfFileWriter(title=title, author=author)
++    out_pdf = PdfFileWriter()
+ 
+     pdf = PdfFileReader(open(os.path.abspath(pdf_path), 'rb'))
+     for page in pdf.pages:
+diff -uNr calibre.old/src/calibre/ebooks/pdf/manipulate/split.py calibre/src/calibre/ebooks/pdf/manipulate/split.py
+--- calibre.old/src/calibre/ebooks/pdf/manipulate/split.py	2011-03-21 00:04:16.951216986 +0100
++++ calibre/src/calibre/ebooks/pdf/manipulate/split.py	2011-03-21 00:08:42.917645418 +0100
+@@ -84,7 +84,7 @@
+         title = metadata.title
+         author = authors_to_string(metadata.authors)
+     
+-    out_pdf = PdfFileWriter(title=title, author=author)
++    out_pdf = PdfFileWriter()
+     for page_num in range(start, end + 1):
+         out_pdf.addPage(pdf.getPage(page_num))
+     with open('%s%s.pdf' % (name, suffix), 'wb') as out_file:
+diff -uNr calibre.old/src/calibre/ebooks/pdf/writer.py calibre/src/calibre/ebooks/pdf/writer.py
+--- calibre.old/src/calibre/ebooks/pdf/writer.py	2011-03-21 00:04:17.228194487 +0100
++++ calibre/src/calibre/ebooks/pdf/writer.py	2011-03-21 00:07:52.059778357 +0100
+@@ -193,7 +193,7 @@
+         self.insert_cover()
+ 
+         try:
+-            outPDF = PdfFileWriter(title=self.metadata.title, author=self.metadata.author)
++            outPDF = PdfFileWriter()
+             for item in self.combine_queue:
+                 inputPDF = PdfFileReader(open(item, 'rb'))
+                 for page in inputPDF.pages:
