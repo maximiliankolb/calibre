@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.38
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -277,6 +277,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Wed Mar 23 2011 Rex Dieter <rdieter@fedoraproject.org> - 0.7.38-5
+- rebuild (sip)
+
 * Tue Mar 22 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.38-4
 - Add patch to fix crash on pdf export (BZ #673604)
 
