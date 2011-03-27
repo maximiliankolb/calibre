@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.50
-Release:        2%{?dist}
+Version:        0.7.52
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -101,14 +101,12 @@ RTF, TXT, PDF and LRS.
 %{__sed} -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/calibre/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/templite/*.py
-%{__sed} -i -e '/^#!\//, 1d' resources/recipes/*
 %{__sed} -i -e '/^#!\//, 1d' resources/default_tweaks.py
 
 %{__chmod} -x src/calibre/*/*/*/*.py
 %{__chmod} -x src/calibre/*/*/*.py
 %{__chmod} -x src/calibre/*/*.py
 %{__chmod} -x src/calibre/*.py
-%{__chmod} -x resources/recipes/*
 
 %build
 OVERRIDE_CFLAGS="%{optflags}" python setup.py build 
@@ -279,6 +277,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sat Mar 26 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.52-1
+- Update to 0.7.52
+
 * Tue Mar 22 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.50-2
 - Add patch to fix crash on pdf export (BZ #673604)
 
