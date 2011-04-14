@@ -64,6 +64,8 @@ Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
+%define __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
+
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
