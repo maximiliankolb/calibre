@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.44
-Release:        4%{?dist}
+Version:        0.7.56
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -64,6 +64,8 @@ Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
+%define __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
+
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -101,14 +103,12 @@ RTF, TXT, PDF and LRS.
 %{__sed} -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/calibre/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/templite/*.py
-%{__sed} -i -e '/^#!\//, 1d' resources/recipes/*
 %{__sed} -i -e '/^#!\//, 1d' resources/default_tweaks.py
 
 %{__chmod} -x src/calibre/*/*/*/*.py
 %{__chmod} -x src/calibre/*/*/*.py
 %{__chmod} -x src/calibre/*/*.py
 %{__chmod} -x src/calibre/*.py
-%{__chmod} -x resources/recipes/*
 
 %build
 OVERRIDE_CFLAGS="%{optflags}" python setup.py build 
@@ -279,11 +279,47 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
-* Wed Mar 23 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.44-4
+* Sun Apr 16 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.56-1
+- Update to 0.7.56
+
+* Sat Apr 16 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.55-1
+- Update to 0.7.55
+
+* Thu Apr 14 2011 Dan Horák <dan@danny.cz> - 0.7.54-2
+- rebuilt against podofo 0.9.0
+
+* Fri Apr 08 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.54-1
+- Update to 0.7.54
+
+* Sat Apr 02 2011 Kevin Fenzi <kevin@scrye.com> - 0.7.53-1
+- Update to 0.7.53
+
+* Sat Mar 26 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.52-1
+- Update to 0.7.52
+
+* Tue Mar 22 2011 Christian Krause <chkr@fedoraproject.org> - 0.7.50-2
 - Add patch to fix crash on pdf export (BZ #673604)
 
-* Sun Mar 13 2011 Marek Kasik <mkasik@redhat.com> - 0.7.44-3
+* Sun Mar 20 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.50-1
+- Update to 0.7.50
+
+* Sun Mar 13 2011 Marek Kasik <mkasik@redhat.com> - 0.7.49-2
 - Rebuild (poppler-0.16.3)
+
+* Fri Mar 11 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.49-1
+- Update to 0.7.49
+
+* Mon Mar 07 2011 Caolán McNamara <caolam@redhat.com> - 0.7.47-2
+- rebuild for icu 4.6
+
+* Fri Feb 25 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.47-1
+- Update to 0.7.47
+
+* Fri Feb 18 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.46-1
+- Update to 0.7.46
+
+* Sat Feb 12 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.45-1
+- Update to 0.7.45
 
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.44-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
