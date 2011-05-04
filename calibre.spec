@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.7.59
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -279,6 +279,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Wed May 04 2011 Dan Horák <dan@danny.cz> - 0.7.59-2
+- rebuilt against podofo 0.9.1
+
 * Sat Apr 30 2011 Kevin Fenzi <kevin@scrye.com> - 0.7.59-1
 - Update to 0.7.59
 
