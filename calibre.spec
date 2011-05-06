@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.7.59
-Release:        2%{?dist}
+Version:        0.8.0
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -279,6 +279,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Fri May 06 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.0-1
+- Update to 0.8.0
+
 * Wed May 04 2011 Dan Horák <dan@danny.cz> - 0.7.59-2
 - rebuilt against podofo 0.9.1
 
