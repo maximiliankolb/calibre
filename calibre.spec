@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.4
+Version:        0.8.7
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -19,7 +19,7 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
-Patch0:		%{name}-manpages.patch
+Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
 # Patch to fix crash on pdf export (BZ #673604)
 # (use the correct API for the external pyPdf library)
@@ -89,7 +89,7 @@ RTF, TXT, PDF and LRS.
 %patch0 -p1 -b .manpages
 
 # don't check for new upstream version (that's what packagers do)
-%patch1 -F 2 -p1 -b .no-update
+%patch1 -p1 -b .no-update
 
 # fix crash on pdf export (BZ #673604)
 %patch2 -p1 -b .pdf-export-fix
@@ -104,6 +104,7 @@ RTF, TXT, PDF and LRS.
 %{__sed} -i -e '/^#!\//, 1d' src/calibre/*.py
 %{__sed} -i -e '/^#!\//, 1d' src/templite/*.py
 %{__sed} -i -e '/^#!\//, 1d' resources/default_tweaks.py
+%{__sed} -i -e '/^#!\//, 1d' resources/catalog/section_list_templates.py
 
 %{__chmod} -x src/calibre/*/*/*/*.py
 %{__chmod} -x src/calibre/*/*/*.py
@@ -196,35 +197,12 @@ ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
 # man pages
 mv %{buildroot}%{_datadir}/%{name}/man %{buildroot}%{_mandir}
 
-# move locales
-mv %{buildroot}%{_datadir}/%{name}/localization/locales \
-   %{buildroot}%{_datadir}/locale
-for file in %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/messages.mo; do
-    lang=$(echo $file|%{__sed} 's:.*locale/\(.*\)/LC_MESSAGES.*:\1:')
-    mv %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/messages.mo \
-       %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/%{name}.mo
-done;
-for file in %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/iso639.mo; do
-    lang=$(echo $file|%{__sed} 's:.*locale/\(.*\)/LC_MESSAGES.*:\1:')
-    mv %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/iso639.mo \
-       %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/%{name}_iso639.mo
-done;
-for file in %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/qt.qm; do
-    lang=$(echo $file|%{__sed} 's:.*locale/\(.*\)/LC_MESSAGES.*:\1:')
-    mv $file %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/%{name}_$lang.qm
-done;
-
-%find_lang %{name} --with-qt --all-name
-
-# locales should be looked for in the proper place
-%{__sed} -i -e "s:P('localization/locales:('/usr/share/locale:" \
-            -e "s/messages.mo/calibre.mo/"                   \
-            -e "s/iso639.mo/calibre_iso639.mo/"              \
-            %{buildroot}%{_libdir}/%{name}/%{name}/utils/localization.py
+# delete locales, calibre stores them in a zip file now
+rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
 
 %{__rm} -f %{buildroot}%{_bindir}/%{name}-uninstall   
 
-cp -a %{SOURCE2} %{buildroot}%{_bindir}/
+install -m 755 %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
 %post
 update-desktop-database &> /dev/null ||:
@@ -242,7 +220,7 @@ fi
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
-%files -f %{name}.lang
+%files
 %defattr(-,root,root,-)
 %doc COPYRIGHT LICENSE Changelog.yaml
 %{_bindir}/calibre
@@ -260,7 +238,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/ebook-viewer
 %{_bindir}/epub-fix
 %{_bindir}/fetch-ebook-metadata
-%{_bindir}/librarything
 %{_bindir}/lrf2lrs
 %{_bindir}/lrfviewer
 %{_bindir}/lrs2lrf
@@ -279,6 +256,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Mon Jun 27 2011 Christian Krause <chkr@fedoraproject.org> - 0.8.7-1
+- Update to 0.8.7
+- Update no-update patch
+- Adapt locales handling to upstream changes
+  (locale files are now placed into a single zip file)
+
 * Sat Jun 04 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.4-1
 - Update to 0.8.4
 
