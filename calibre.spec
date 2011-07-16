@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.8
+Version:        0.8.10
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -24,6 +24,7 @@ Patch1:         %{name}-no-update.patch
 # Patch to fix crash on pdf export (BZ #673604)
 # (use the correct API for the external pyPdf library)
 Patch2:         %{name}-0.7.38-pyPdf-fix.patch
+Patch3:         calibre-0.8.10-poppler.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -93,6 +94,9 @@ RTF, TXT, PDF and LRS.
 
 # fix crash on pdf export (BZ #673604)
 %patch2 -p1 -b .pdf-export-fix
+
+# work with poppler 0.17
+%patch3 -p1 -b .poppler-fix
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -256,6 +260,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sat Jul 16 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.10-1
+- Update to 0.8.10
+- Add patch to work with poppler 0.17
+
 * Fri Jul 01 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.8-1
 - Update to 0.8.8
 
