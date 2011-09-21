@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.11
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -25,6 +25,7 @@ Patch1:         %{name}-no-update.patch
 # (use the correct API for the external pyPdf library)
 Patch2:         %{name}-0.7.38-pyPdf-fix.patch
 Patch3:         calibre-0.8.10-poppler.patch
+Patch4:         calibre-0.8.11-poppler-0.17.3.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -97,6 +98,9 @@ RTF, TXT, PDF and LRS.
 
 # work with poppler 0.17
 %patch3 -p1 -b .poppler-fix
+
+# fix for poppler 0.17.3
+%patch4 -p1 -b .poppler-0.17.3
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -260,6 +264,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Wed Sep 21 2011 Marek Kasik <mkasik@redhat.com> - 0.8.11-3
+- Add patch to work with poppler 0.17.3
+
 * Wed Sep 21 2011 Marek Kasik <mkasik@redhat.com> - 0.8.11-2
 - Rebuild (poppler-0.17.3)
 
