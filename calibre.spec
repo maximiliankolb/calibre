@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -260,6 +260,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Wed Sep 21 2011 Marek Kasik <mkasik@redhat.com> - 0.8.11-2
+- Rebuild (poppler-0.17.3)
+
 * Fri Jul 22 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.11-1
 - Update to 0.8.11
 
