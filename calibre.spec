@@ -261,6 +261,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Fri Sep 23 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.20-1
 - Update to 0.8.20
 
+* Mon Sep 19 2011 Marek Kasik <mkasik@redhat.com> - 0.8.19-2
+- Rebuild (poppler-0.17.3)
+
 * Fri Sep 16 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.19-1
 - Update to 0.8.19
 
