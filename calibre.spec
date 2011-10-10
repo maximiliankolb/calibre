@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.20
-Release:        2%{?dist}
+Version:        0.8.21
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -21,8 +21,7 @@ Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
-Patch3:         calibre-0.8.10-poppler.patch
-Patch4:		calibre-0.8.18-poppler-0.17.3.patch
+Patch2:		calibre-0.8.21-poppler.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -90,11 +89,8 @@ RTF, TXT, PDF and LRS.
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
 
-# work with poppler 0.17
-%patch3 -p1 -b .poppler-fix
-
-# fix for poppler 0.17.3
-%patch4 -p1 -b .poppler-0.17.3
+# modify poppler checks
+%patch2 -p1 -b .poppler
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -258,6 +254,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sat Oct 09 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.21-1
+- Update to 0.8.21
+
 * Fri Sep 30 2011 Marek Kasik <mkasik@redhat.com> - 0.8.20-2
 - Rebuild (poppler-0.18.0)
 
