@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.22
-Release:        2%{?dist}
+Version:        0.8.24
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -254,6 +254,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Fri Oct 28 2011 Kevin Fenzi <kevin@scrye.com> 0.8.24-1
+- Update to 0.8.24
+
 * Fri Oct 28 2011 Rex Dieter <rdieter@fedoraproject.org> - 0.8.22-2
 - rebuild(poppler)
 
