@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.0
-Release:        1%{?dist}
+Release:        1%{?dist}.1
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -279,6 +279,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Mon Nov 21 2011 Rex Dieter <rdieter@fedoraproject.org> 0.8.0-1.1
+- rebuild (sip/PyQt4)
+
 * Fri May 06 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.0-1
 - Update to 0.8.0
 
