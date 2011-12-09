@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.29
+Version:        0.8.30
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -42,6 +42,7 @@ BuildRequires:  chmlib-devel
 BuildRequires:  python-cssutils > 0.9.6
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
+BuildRequires:  libpng-devel
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -254,10 +255,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
-* Fri Dec 02 2011 Kevin Fenzi <kevin@scrye.com> 0.8.29-1
+* Fri Dec 09 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.30-1
+- Update to 0.8.30
+
+* Fri Dec 02 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.29-1
 - Update to 0.8.29
 
-* Fri Nov 25 2011 Kevin Fenzi <kevin@scrye.com> 0.8.28-1
+* Fri Nov 25 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.28-1
 - Update to 0.8.28
 
 * Fri Nov 18 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.27-1
