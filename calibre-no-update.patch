@@ -1,31 +1,28 @@
 diff -uNr calibre.old/src/calibre/gui2/ui.py calibre/src/calibre/gui2/ui.py
---- calibre.old/src/calibre/gui2/ui.py	2011-06-26 19:51:17.912975862 +0200
-+++ calibre/src/calibre/gui2/ui.py	2011-06-26 19:52:21.156346644 +0200
-@@ -647,7 +647,7 @@
+--- calibre.old/src/calibre/gui2/ui.py	2011-12-30 17:12:37.909499254 +0100
++++ calibre/src/calibre/gui2/ui.py	2011-12-30 17:14:33.899450513 +0100
+@@ -681,7 +681,8 @@
          if write_settings:
              self.write_settings()
          self.check_messages_timer.stop()
 -        self.update_checker.terminate()
-+        # self.update_checker.terminate()
++        if self.update_checker:
++            self.update_checker.terminate()
          self.listener.close()
          self.job_manager.server.close()
          self.job_manager.threaded_server.close()
 diff -uNr calibre.old/src/calibre/gui2/update.py calibre/src/calibre/gui2/update.py
---- calibre.old/src/calibre/gui2/update.py	2011-06-26 19:51:17.913975852 +0200
-+++ calibre/src/calibre/gui2/update.py	2011-06-26 19:56:50.608665533 +0200
-@@ -121,13 +121,13 @@
+--- calibre.old/src/calibre/gui2/update.py	2011-12-30 17:12:37.910499245 +0100
++++ calibre/src/calibre/gui2/update.py	2011-12-30 17:14:11.307655638 +0100
+@@ -122,11 +122,11 @@
  
- class UpdateMixin(object):
- 
--    def __init__(self, opts):
--        self.last_newest_calibre_version = NO_CALIBRE_UPDATE
+     def __init__(self, opts):
+         self.last_newest_calibre_version = NO_CALIBRE_UPDATE
 -        if not opts.no_update_check:
 -            self.update_checker = CheckForUpdates(self)
 -            self.update_checker.update_found.connect(self.update_found,
 -                    type=Qt.QueuedConnection)
 -            self.update_checker.start()
-+    #def __init__(self, opts):
-+        #self.last_newest_calibre_version = NO_CALIBRE_UPDATE
 +        #if not opts.no_update_check:
 +        #    self.update_checker = CheckForUpdates(self)
 +        #    self.update_checker.update_found.connect(self.update_found,
