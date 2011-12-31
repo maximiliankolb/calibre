@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.25
-Release:        1%{?dist}
+Version:        0.8.33
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -42,6 +42,7 @@ BuildRequires:  chmlib-devel
 BuildRequires:  python-cssutils > 0.9.6
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
+BuildRequires:  libpng-devel
 
 Requires:       PyQt4
 Requires:       pyPdf
@@ -254,6 +255,37 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sat Dec 31 2011 Christian Krause <chkr@fedoraproject.org> - 0.8.33-2
+- Fix no-update patch to prevent exception when trying to close
+  the Plugin Preferences dialog (BZ #769714)
+
+* Fri Dec 30 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.33-1
+- Update to 0.8.33
+
+* Fri Dec 23 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.32-1
+- Update to 0.8.32
+
+* Fri Dec 23 2011 Rex Dieter <rdieter@fedoraproject.org> 0.8.31-2
+- rebuild (sip/PyQt4)
+
+* Fri Dec 16 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.31-1
+- Update to 0.8.31
+
+* Fri Dec 09 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.30-1
+- Update to 0.8.30
+
+* Fri Dec 02 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.29-1
+- Update to 0.8.29
+
+* Fri Nov 25 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.28-1
+- Update to 0.8.28
+
+* Fri Nov 18 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.27-1
+- Update to 0.8.27
+
+* Sat Nov 12 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.26-1
+- Update to 0.8.26
+
 * Sun Nov 06 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.25-1
 - Update to 0.8.25
 - Rebuild for new libpng
