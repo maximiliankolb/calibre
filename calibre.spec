@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.33
-Release:        2%{?dist}
+Version:        0.8.34
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -255,6 +255,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Fri Jan 06 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.34-1
+- Update to 0.8.34
+
 * Sat Dec 31 2011 Christian Krause <chkr@fedoraproject.org> - 0.8.33-2
 - Fix no-update patch to prevent exception when trying to close
   the Plugin Preferences dialog (BZ #769714)
