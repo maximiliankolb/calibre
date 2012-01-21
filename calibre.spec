@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.35
+Version:        0.8.36
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -30,6 +30,7 @@ BuildRequires:  python-setuptools-devel
 BuildRequires:  qt-devel 
 BuildRequires:  PyQt4-devel
 BuildRequires:  poppler-qt4-devel >= 0.12
+BuildRequires:  poppler-glib-devel
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -255,7 +256,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
-* Tue Jan 17 2012 Kevin Fenzi <kevin@scrye.com> 0.8.35-1
+* Fri Jan 20 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.36-1
+- Update to 0.8.36
+
+* Tue Jan 17 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.35-1
 - Update to 0.8.35
 
 * Fri Jan 06 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.34-1
