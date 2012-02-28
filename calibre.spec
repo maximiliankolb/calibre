@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.39
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -256,6 +256,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.39-2
+- Rebuilt for c++ ABI breakage
+
 * Fri Feb 10 2012 Kevin Fenzi <kevin@scrye.com> 0.8.39-1
 - Update to 0.8.39
 
