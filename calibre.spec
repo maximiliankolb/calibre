@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.41
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -256,6 +256,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Thu Mar 01 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.41-2
+- Rebuild for new ImageMagick
+
 * Fri Feb 24 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.41-1
 - Update to 0.8.41
 
