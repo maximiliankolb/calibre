@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.45
+Version:        0.8.47
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -256,6 +256,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Fri Apr 13 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.47-1
+- Update to 0.8.47
+
+* Fri Apr 06 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.46-1
+- Update to 0.8.46
+
 * Fri Mar 30 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.45-1
 - Update to 0.8.45
 
