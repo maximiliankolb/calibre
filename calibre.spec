@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.48
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -46,7 +46,6 @@ BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 
 Requires:       PyQt4
-Requires:       pyPdf
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
@@ -180,7 +179,7 @@ cp -p resources/images/viewer.png \
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
 
 # these are provided as separate packages
-rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,pyPdf,encutils,cssutils}
+rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
 
@@ -256,6 +255,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Wed Apr 25 2012 Kevin Fenzi <kevin@scrye.com> 0.8.48-2
+- Use bundled pyPdf. Approved by  FPC at: https://fedorahosted.org/fpc/ticket/167
+
 * Mon Apr 23 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.48-1
 - Update to 0.8.48
 
