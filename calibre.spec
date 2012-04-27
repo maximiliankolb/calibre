@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.48
-Release:        2%{?dist}
+Version:        0.8.49
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -255,6 +255,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Fri Apr 27 2012 Kevin Fenzi <kevin@scrye.com> 0.8.49-1
+- Update to 0.8.49
+
 * Wed Apr 25 2012 Kevin Fenzi <kevin@scrye.com> 0.8.48-2
 - Use bundled pyPdf. Approved by  FPC at: https://fedorahosted.org/fpc/ticket/167
 
