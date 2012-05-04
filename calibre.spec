@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.49
+Version:        0.8.50
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -40,7 +40,7 @@ BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
 BuildRequires:  chmlib-devel
-BuildRequires:  python-cssutils > 0.9.6
+BuildRequires:  python-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
@@ -255,10 +255,14 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
-* Fri Apr 27 2012 Kevin Fenzi <kevin@scrye.com> 0.8.49-1
+* Fri May 04 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.50-1
+- Update to 0.8.50. 
+- Add python-cssutils 0.9.9 requirement. 
+
+* Fri Apr 27 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.49-1
 - Update to 0.8.49
 
-* Wed Apr 25 2012 Kevin Fenzi <kevin@scrye.com> 0.8.48-2
+* Wed Apr 25 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.48-2
 - Use bundled pyPdf. Approved by  FPC at: https://fedorahosted.org/fpc/ticket/167
 
 * Mon Apr 23 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.48-1
