@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.42
+Version:        0.8.50
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -40,13 +40,12 @@ BuildRequires:  python-imaging
 BuildRequires:  xdg-utils
 BuildRequires:  python-BeautifulSoup
 BuildRequires:  chmlib-devel
-BuildRequires:  python-cssutils > 0.9.6
+BuildRequires:  python-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 
 Requires:       PyQt4
-Requires:       pyPdf
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
@@ -180,7 +179,7 @@ cp -p resources/images/viewer.png \
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
 
 # these are provided as separate packages
-rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,pyPdf,encutils,cssutils}
+rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
 
@@ -256,6 +255,34 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Fri May 04 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.50-1
+- Update to 0.8.50. 
+- Add python-cssutils 0.9.9 requirement. 
+
+* Fri Apr 27 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.49-1
+- Update to 0.8.49
+
+* Wed Apr 25 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.48-2
+- Use bundled pyPdf. Approved by  FPC at: https://fedorahosted.org/fpc/ticket/167
+
+* Mon Apr 23 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.48-1
+- Update to 0.8.48
+
+* Fri Apr 13 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.47-1
+- Update to 0.8.47
+
+* Fri Apr 06 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.46-1
+- Update to 0.8.46
+
+* Fri Mar 30 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.45-1
+- Update to 0.8.45
+
+* Fri Mar 23 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.44-1
+- Update to 0.8.44
+
+* Sat Mar 17 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.43-1
+- Update to 0.8.43
+
 * Mon Mar 12 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.42-1
 - Update to 0.8.42
 
