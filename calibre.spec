@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.50
+Version:        0.8.51
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -255,6 +255,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sat May 12 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-1
+- Update to 0.5.51
+
 * Fri May 04 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.50-1
 - Update to 0.8.50. 
 - Add python-cssutils 0.9.9 requirement. 
