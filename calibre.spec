@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.51
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -22,6 +22,10 @@ Source2:        calibre-mount-helper
 Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
 Patch2:		calibre-0.8.21-poppler.patch
+# Patch for popplet 0.20.0.
+%if 0%{?fedora} > 17
+Patch3:		calibre-0.8.51-poppler-0.20.patch
+%endif
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -92,6 +96,10 @@ RTF, TXT, PDF and LRS.
 
 # modify poppler checks
 %patch2 -p1 -b .poppler
+
+%if 0%{?fedora} > 17
+%patch3 -p1
+%endif
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -255,6 +263,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Thu May 17 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-2
+- Add patch for new poppler 0.20.0 
+
 * Sat May 12 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-1
 - Update to 0.5.51
 
