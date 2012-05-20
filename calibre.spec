@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.51
-Release:        2%{?dist}
+Version:        0.8.52
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -19,7 +19,6 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
-Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
 Patch2:		calibre-0.8.21-poppler.patch
 # Patch for popplet 0.20.0.
@@ -86,10 +85,6 @@ RTF, TXT, PDF and LRS.
 
 %prep
 %setup -q -n %{name}
-
-# don't append calibre1 to the name of the manpages. No need to compress either
-# upstream won't fix: http://bugs.calibre-ebook.com/ticket/3770#comment:7
-%patch0 -p1 -b .manpages
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
@@ -200,10 +195,6 @@ ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
 ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0419m_.ttf
 
-# http://bugs.calibre-ebook.com/ticket/3770#comment:7
-# man pages
-mv %{buildroot}%{_datadir}/%{name}/man %{buildroot}%{_mandir}
-
 # delete locales, calibre stores them in a zip file now
 rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
 
@@ -260,9 +251,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/scalable/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/*
 %{python_sitelib}/init_calibre.py*
-%{_mandir}/man1/*
 
 %changelog
+* Sun May 20 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.52-1
+- Update to 0.8.52
+- Drop man pages patch, as upstream no longer ships man pages. 
+
 * Thu May 17 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-2
 - Add patch for new poppler 0.20.0 
 
