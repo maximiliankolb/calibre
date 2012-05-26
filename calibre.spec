@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.52
+Version:        0.8.53
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -21,10 +21,6 @@ Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
 Patch2:		calibre-0.8.21-poppler.patch
-# Patch for popplet 0.20.0.
-%if 0%{?fedora} > 17
-Patch3:		calibre-0.8.51-poppler-0.20.patch
-%endif
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -91,10 +87,6 @@ RTF, TXT, PDF and LRS.
 
 # modify poppler checks
 %patch2 -p1 -b .poppler
-
-%if 0%{?fedora} > 17
-%patch3 -p1
-%endif
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -253,6 +245,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat May 26 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.53-1
+- Update to 0.8.53
+- Drop upstreamed poppler 0.20.0 patch. 
+
 * Sun May 20 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.52-1
 - Update to 0.8.52
 - Drop man pages patch, as upstream no longer ships man pages. 
