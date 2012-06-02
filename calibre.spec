@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.33
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -255,6 +255,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_mandir}/man1/*
 
 %changelog
+* Sun Jun 3 2012 Pavel Alexeev <Pahan@Hubbitus.info> - 0.8.33-2
+- Rebuild for ImageMagick update http://lists.fedoraproject.org/pipermail/devel/2012-May/167462.html
+
 * Sat Dec 31 2011 Christian Krause <chkr@fedoraproject.org> - 0.8.33-2
 - Fix no-update patch to prevent exception when trying to close
   the Plugin Preferences dialog (BZ #769714)
