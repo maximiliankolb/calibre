@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.53
+Version:        0.8.54
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -20,7 +20,6 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
-Patch2:		calibre-0.8.21-poppler.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -28,8 +27,6 @@ BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools-devel
 BuildRequires:  qt-devel 
 BuildRequires:  PyQt4-devel
-BuildRequires:  poppler-qt4-devel >= 0.12
-BuildRequires:  poppler-glib-devel
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -56,6 +53,7 @@ Requires:       python-mechanize
 Requires:       python-dateutil
 Requires:       python-genshi
 Requires:       python-BeautifulSoup
+Requires:       poppler-utils
 # Require the packages of the files which are symlinked by calibre
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
@@ -84,9 +82,6 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
-
-# modify poppler checks
-%patch2 -p1 -b .poppler
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -245,6 +240,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Jun 02 2012 Kevin Fenzi <kevin@scrye.com> 0.8.54-1
+- Update to 0.8.54
+- No longer BuildRequires poppler, instead uses poppler-tools from python.
+
 * Sat May 26 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.53-1
 - Update to 0.8.53
 - Drop upstreamed poppler 0.20.0 patch. 
