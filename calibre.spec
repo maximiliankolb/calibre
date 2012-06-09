@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.54
+Version:        0.8.55
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -240,6 +240,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Jun 09 2012 Kevin Fenzi <kevin@scrye.com> 0.8.55-1
+- Update to 0.8.55
+
 * Sat Jun 02 2012 Kevin Fenzi <kevin@scrye.com> 0.8.54-1
 - Update to 0.8.54
 - No longer BuildRequires poppler, instead uses poppler-tools from python.
