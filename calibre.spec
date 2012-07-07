@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.56
+Version:        0.8.59
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -237,9 +237,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/scalable/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/*
+%{_datadir}/icons/hicolor/256x256/apps/calibre-gui.png
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Jul 06 2012 Kevin Fenzi <kevin@scrye.com> 0.8.59-1
+- Update to 0.8.59
+
 * Fri Jun 15 2012 Kevin Fenzi <kevin@scrye.com> 0.8.56-1
 - Update to 0.8.56
 
