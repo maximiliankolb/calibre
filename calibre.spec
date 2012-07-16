@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.59
+Version:        0.8.60
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -181,6 +181,30 @@ ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0011m_.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0419m_.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Bold.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Italic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Regular.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Bold.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Italic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Regular.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Bold.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
 
 # delete locales, calibre stores them in a zip file now
 rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
@@ -241,6 +265,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sun Jul 15 2012 Kevin Fenzi <kevin@scrye.com> 0.8.60-1
+- Update to 0.8.60
+- Fix new font links. Fixes bug 840319
+
 * Fri Jul 06 2012 Kevin Fenzi <kevin@scrye.com> 0.8.59-1
 - Update to 0.8.59
 
