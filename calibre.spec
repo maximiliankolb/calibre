@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.60
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -265,6 +265,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.60-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Sun Jul 15 2012 Kevin Fenzi <kevin@scrye.com> 0.8.60-1
 - Update to 0.8.60
 - Fix new font links. Fixes bug 840319
