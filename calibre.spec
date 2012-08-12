@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.63
+Version:        0.8.64
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -40,6 +40,7 @@ BuildRequires:  python-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
+BuildRequires:  libmtp-devel
 
 Requires:       PyQt4
 Requires:       python-cherrypy
@@ -265,6 +266,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Aug 11 2012 Kevin Fenzi <kevin@scrye.com> 0.8.64-1
+- Update to 0.8.64
+- Add libmtp-devel to BuildRequires
+
 * Sun Aug 05 2012 Kevin Fenzi <kevin@scrye.com> 0.8.63-1
 - Update to 0.8.63
 
