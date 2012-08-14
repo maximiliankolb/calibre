@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.50
+Version:        0.8.63
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -19,9 +19,7 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
-Patch0:         %{name}-manpages.patch
 Patch1:         %{name}-no-update.patch
-Patch2:		calibre-0.8.21-poppler.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -29,8 +27,6 @@ BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools-devel
 BuildRequires:  qt-devel 
 BuildRequires:  PyQt4-devel
-BuildRequires:  poppler-qt4-devel >= 0.12
-BuildRequires:  poppler-glib-devel
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -57,6 +53,7 @@ Requires:       python-mechanize
 Requires:       python-dateutil
 Requires:       python-genshi
 Requires:       python-BeautifulSoup
+Requires:       poppler-utils
 # Require the packages of the files which are symlinked by calibre
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
@@ -83,15 +80,8 @@ RTF, TXT, PDF and LRS.
 %prep
 %setup -q -n %{name}
 
-# don't append calibre1 to the name of the manpages. No need to compress either
-# upstream won't fix: http://bugs.calibre-ebook.com/ticket/3770#comment:7
-%patch0 -p1 -b .manpages
-
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
-
-# modify poppler checks
-%patch2 -p1 -b .poppler
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -191,10 +181,30 @@ ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0011m_.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0419m_.ttf
-
-# http://bugs.calibre-ebook.com/ticket/3770#comment:7
-# man pages
-mv %{buildroot}%{_datadir}/%{name}/man %{buildroot}%{_mandir}
+ln -s %{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Bold.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Italic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Regular.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Bold.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Italic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Regular.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Bold.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
+ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
 
 # delete locales, calibre stores them in a zip file now
 rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
@@ -251,10 +261,53 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/scalable/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/*
+%{_datadir}/icons/hicolor/256x256/apps/calibre-gui.png
 %{python_sitelib}/init_calibre.py*
-%{_mandir}/man1/*
 
 %changelog
+* Sun Aug 05 2012 Kevin Fenzi <kevin@scrye.com> 0.8.63-1
+- Update to 0.8.63
+
+* Fri Jul 27 2012 Kevin Fenzi <kevin@scrye.com> 0.8.62-1
+- Update to 0.8.62
+
+* Sat Jul 21 2012 Kevin Fenzi <kevin@scrye.com> 0.8.61-1
+- Update to 0.8.61
+
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8.60-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Sun Jul 15 2012 Kevin Fenzi <kevin@scrye.com> 0.8.60-1
+- Update to 0.8.60
+- Fix new font links. Fixes bug 840319
+
+* Fri Jul 06 2012 Kevin Fenzi <kevin@scrye.com> 0.8.59-1
+- Update to 0.8.59
+
+* Fri Jun 15 2012 Kevin Fenzi <kevin@scrye.com> 0.8.56-1
+- Update to 0.8.56
+
+* Sat Jun 09 2012 Kevin Fenzi <kevin@scrye.com> 0.8.55-1
+- Update to 0.8.55
+
+* Sat Jun 02 2012 Kevin Fenzi <kevin@scrye.com> 0.8.54-1
+- Update to 0.8.54
+- No longer BuildRequires poppler, instead uses poppler-tools from python.
+
+* Sat May 26 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.53-1
+- Update to 0.8.53
+- Drop upstreamed poppler 0.20.0 patch. 
+
+* Sun May 20 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.52-1
+- Update to 0.8.52
+- Drop man pages patch, as upstream no longer ships man pages. 
+
+* Thu May 17 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-2
+- Add patch for new poppler 0.20.0 
+
+* Sat May 12 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-1
+- Update to 0.5.51
+
 * Fri May 04 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.50-1
 - Update to 0.8.50. 
 - Add python-cssutils 0.9.9 requirement. 
