@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.64
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -20,6 +20,8 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
+# Unbundle the copy of feedparser. See bug #847825
+Patch2:		calibre-0.8.64-unbundle-feedparser.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -59,6 +61,7 @@ Requires:       poppler-utils
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
+Requires:       python-feedparser
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %define __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
@@ -83,6 +86,8 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+# unbundle feedparser
+%patch2 -p1 -b .unbundle-feedparser
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -266,6 +271,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Mon Aug 13 2012 Kevin Fenzi <kevin@scrye.com> 0.8.64-2
+- Unbundle feedparser. Fixes bug #847825
+
 * Sat Aug 11 2012 Kevin Fenzi <kevin@scrye.com> 0.8.64-1
 - Update to 0.8.64
 - Add libmtp-devel to BuildRequires
