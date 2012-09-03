@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.66
+Version:        0.8.67
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -257,7 +257,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/lrfviewer
 %{_bindir}/lrs2lrf
 %{_bindir}/markdown-calibre
-%{_bindir}/pdfmanipulate
 %{_bindir}/web2disk
 %config(noreplace) %{_sysconfdir}/bash_completion.d/
 %{_libdir}/%{name}
@@ -271,6 +270,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Mon Sep 03 2012 Kevin Fenzi <kevin@scrye.com> 0.8.67-1
+- Update to 0.8.67
+
 * Fri Aug 24 2012 Kevin Fenzi <kevin@scrye.com> 0.8.66-1
 - Update to 0.8.66
 
