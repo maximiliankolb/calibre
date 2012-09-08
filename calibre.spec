@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.8.68
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -62,6 +62,7 @@ Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
 Requires:       python-feedparser
+Requires:       python-netifaces
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %define __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
@@ -270,6 +271,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Sep 08 2012 Kevin Fenzi <kevin@scrye.com> 0.8.68-2
+- Add requires for python-netifaces which is needed now.
+
 * Sat Sep 08 2012 Kevin Fenzi <kevin@scrye.com> 0.8.68-1
 - Update to 0.8.68
 
