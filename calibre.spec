@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.69
+Version:        0.8.70
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -150,6 +150,8 @@ find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f
 # packages aren't allowed to register mimetypes like this
 rm -f %{buildroot}%{_datadir}/applications/defaults.list
 rm -f %{buildroot}%{_datadir}/applications/mimeinfo.cache
+rm -f %{buildroot}%{_datadir}/mime/application/*.xml
+rm -f %{buildroot}%{_datadir}/mime/text/*.xml
 
 desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-ebook-viewer.desktop
@@ -157,10 +159,6 @@ desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-gui.desktop
 desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-lrfviewer.desktop
-
-
-mv %{buildroot}%{_datadir}/mime/packages/calibre-mimetypes \
-   %{buildroot}%{_datadir}/mime/packages/calibre-mimetypes.xml
 
 # mimetype icon for lrf
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/128x128
@@ -271,6 +269,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Sep 21 2012 Kevin Fenzi <kevin@scrye.com> 0.8.70-1
+- Update to 0.8.70
+
 * Sun Sep 16 2012 Kevin Fenzi <kevin@scrye.com> 0.8.69-1
 - Update to 0.8.69
 
