@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.8.63
+Version:        0.9.1
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -20,6 +20,8 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
+# Unbundle the copy of feedparser. See bug #847825
+Patch2:		calibre-0.8.64-unbundle-feedparser.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -40,6 +42,7 @@ BuildRequires:  python-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
+BuildRequires:  libmtp-devel
 
 Requires:       PyQt4
 Requires:       python-cherrypy
@@ -58,6 +61,9 @@ Requires:       poppler-utils
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
+Requires:       python-feedparser
+Requires:       python-netifaces
+Requires:       python-dns
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %define __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
@@ -82,6 +88,8 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+# unbundle feedparser
+%patch2 -p1 -b .unbundle-feedparser
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -143,6 +151,8 @@ find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f
 # packages aren't allowed to register mimetypes like this
 rm -f %{buildroot}%{_datadir}/applications/defaults.list
 rm -f %{buildroot}%{_datadir}/applications/mimeinfo.cache
+rm -f %{buildroot}%{_datadir}/mime/application/*.xml
+rm -f %{buildroot}%{_datadir}/mime/text/*.xml
 
 desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-ebook-viewer.desktop
@@ -150,10 +160,6 @@ desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-gui.desktop
 desktop-file-validate \
 %{buildroot}%{_datadir}/applications/calibre-lrfviewer.desktop
-
-
-mv %{buildroot}%{_datadir}/mime/packages/calibre-mimetypes \
-   %{buildroot}%{_datadir}/mime/packages/calibre-mimetypes.xml
 
 # mimetype icon for lrf
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/128x128
@@ -251,7 +257,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/lrfviewer
 %{_bindir}/lrs2lrf
 %{_bindir}/markdown-calibre
-%{_bindir}/pdfmanipulate
 %{_bindir}/web2disk
 %config(noreplace) %{_sysconfdir}/bash_completion.d/
 %{_libdir}/%{name}
@@ -265,6 +270,46 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Oct 06 2012 Kevin Fenzi <kevin@scrye.com> 0.9.1-1
+- Update to 0.9.1
+
+* Wed Oct 03 2012 Kevin Fenzi <kevin@scrye.com> 0.9.0-3
+- Add requires on python-dns. Fixes bug #862921
+
+* Tue Oct 02 2012 Kevin Fenzi <kevin@scrye.com> 0.9.0-2
+- Rebuild for new sip version
+
+* Fri Sep 28 2012 Kevin Fenzi <kevin@scrye.com> 0.9.0-1
+- Update to 0.9.0
+
+* Fri Sep 21 2012 Kevin Fenzi <kevin@scrye.com> 0.8.70-1
+- Update to 0.8.70
+
+* Sun Sep 16 2012 Kevin Fenzi <kevin@scrye.com> 0.8.69-1
+- Update to 0.8.69
+
+* Sat Sep 08 2012 Kevin Fenzi <kevin@scrye.com> 0.8.68-2
+- Add requires for python-netifaces which is needed now.
+
+* Sat Sep 08 2012 Kevin Fenzi <kevin@scrye.com> 0.8.68-1
+- Update to 0.8.68
+
+* Mon Sep 03 2012 Kevin Fenzi <kevin@scrye.com> 0.8.67-1
+- Update to 0.8.67
+
+* Fri Aug 24 2012 Kevin Fenzi <kevin@scrye.com> 0.8.66-1
+- Update to 0.8.66
+
+* Sat Aug 18 2012 Kevin Fenzi <kevin@scrye.com> 0.8.65-1
+- Update to 0.8.65
+
+* Mon Aug 13 2012 Kevin Fenzi <kevin@scrye.com> 0.8.64-2
+- Unbundle feedparser. Fixes bug #847825
+
+* Sat Aug 11 2012 Kevin Fenzi <kevin@scrye.com> 0.8.64-1
+- Update to 0.8.64
+- Add libmtp-devel to BuildRequires
+
 * Sun Aug 05 2012 Kevin Fenzi <kevin@scrye.com> 0.8.63-1
 - Update to 0.8.63
 
