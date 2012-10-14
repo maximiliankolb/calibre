@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.1
+Version:        0.9.2
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -270,6 +270,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Oct 13 2012 Kevin Fenzi <kevin@scrye.com> 0.9.2-1
+- Update to 0.9.2
+
 * Sat Oct 06 2012 Kevin Fenzi <kevin@scrye.com> 0.9.1-1
 - Update to 0.9.1
 
