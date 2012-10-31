@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.1
+Version:        0.9.4
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -179,6 +179,9 @@ rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
 
+# rm empty feedparser files. 
+rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
+
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
 ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
@@ -270,6 +273,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Tue Oct 30 2012 Kevin Fenzi <kevin@scrye.com> 0.9.4-1
+- Update to 0.9.4
+- Removed 0 length feedparser python files. Fixes bug #868108
+
+* Sat Oct 13 2012 Kevin Fenzi <kevin@scrye.com> 0.9.2-1
+- Update to 0.9.2
+
 * Sat Oct 06 2012 Kevin Fenzi <kevin@scrye.com> 0.9.1-1
 - Update to 0.9.1
 
