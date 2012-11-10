@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.5
-Release:        2%{?dist}
+Version:        0.9.6
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -274,6 +274,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Nov 09 2012 Kevin Fenzi <kevin@scrye.com> 0.9.6-1
+- Update to 0.9.6
+
 * Fri Nov 09 2012 Kevin Fenzi <kevin@scrye.com> 0.9.5-2
 - add python-cssselect to requires. Fixes bug #874332
 
