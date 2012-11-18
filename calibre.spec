@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.5
+Version:        0.9.6
 Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -20,8 +20,6 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
-# Unbundle the copy of feedparser. See bug #847825
-Patch2:		calibre-0.8.64-unbundle-feedparser.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -89,8 +87,6 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
-# unbundle feedparser
-%patch2 -p1 -b .unbundle-feedparser
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -183,6 +179,13 @@ rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
 # rm empty feedparser files. 
 rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
 
+ln -s %{python_sitelib}/feedparser.py \
+      %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.py
+ln -s %{python_sitelib}/feedparser.pyc \
+      %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.pyc
+ln -s %{python_sitelib}/feedparser.pyo \
+      %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.pyo
+
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
 ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
@@ -274,6 +277,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sun Nov 18 2012 Kevin Fenzi <kevin@scrye.com> 0.9.6-2
+- Another better approach to unbundling feedparser. 
+
+* Fri Nov 09 2012 Kevin Fenzi <kevin@scrye.com> 0.9.6-1
+- Update to 0.9.6
+
 * Fri Nov 09 2012 Kevin Fenzi <kevin@scrye.com> 0.9.5-2
 - add python-cssselect to requires. Fixes bug #874332
 
