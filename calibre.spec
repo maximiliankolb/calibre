@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.9.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -20,12 +20,15 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
+# https://bugzilla.redhat.com/887511
+# http://bazaar.launchpad.net/~kovid/calibre/trunk/revision/13885
+Patch2:         calibre-pyqt496.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
 BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools-devel
-BuildRequires:  qt-devel 
+BuildRequires:  qt4-devel
 BuildRequires:  PyQt4-devel
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
@@ -87,6 +90,7 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+%patch2 -p0 -b .pyqt496
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -130,7 +134,8 @@ LIBPATH="%{_libdir}" \
 python setup.py install --root=%{buildroot}%{_prefix} \
                         --prefix=%{_prefix} \
                         --libdir=%{_libdir} \
-                        --staging-libdir=%{buildroot}%{_libdir} \
+                        --staging-libdir=%{buildroot}%{_libdir}
+
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
 %{__sed} -i -e '/^#!\//, 1d' %{buildroot}%{python_sitelib}/init_calibre.py
@@ -277,6 +282,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Mon Dec 17 2012 Rex Dieter <rdieter@fedoraproject.org> 0.9.9-2
+- PyQt4 0.9.6 build regression in calibre (#887511)
+
 * Sun Dec 09 2012 Kevin Fenzi <kevin@scrye.com> 0.9.9-1
 - Update to 0.9.9
 
