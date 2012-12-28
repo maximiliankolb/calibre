@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.11
+Version:        0.9.12
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -41,6 +41,7 @@ BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libmtp-devel
+BuildRequires:  qt-devel-private
 
 Requires:       PyQt4
 Requires:       python-cherrypy
@@ -278,6 +279,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Thu Dec 27 2012 Kevin Fenzi <kevin@scrye.com> 0.9.12-1
+- Update to 0.9.12
+
 * Sun Dec 23 2012 Kevin Fenzi <kevin@scrye.com> 0.9.11-1
 - Update to 0.9.11
 
@@ -494,7 +498,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Fri Oct 14 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.22-1
 - Update to 0.8.22
 
-* Sat Oct 09 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.21-1
+* Sun Oct 09 2011 Kevin Fenzi <kevin@scrye.com> - 0.8.21-1
 - Update to 0.8.21
 
 * Fri Sep 30 2011 Marek Kasik <mkasik@redhat.com> - 0.8.20-2
@@ -573,7 +577,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Fri Apr 22 2011 Kevin Fenzi <kevin@scrye.com> - 0.7.57-1
 - Update to 0.7.57
 
-* Sun Apr 16 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.56-1
+* Sat Apr 16 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.56-1
 - Update to 0.7.56
 
 * Sat Apr 16 2011 Kevin Fenzi <kevin@tummy.com> - 0.7.55-1
@@ -684,7 +688,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Tue Nov 02 2010 Dan Horák <dan@danny.cz> - 0.7.26-2
 - rebuilt against podofo 0.8.4
 
-* Fri Oct 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.26-1
+* Sat Oct 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.26-1
 - Update to 0.7.26
 
 * Fri Oct 29 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.25-1
