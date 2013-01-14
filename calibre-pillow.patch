@@ -1,0 +1,13 @@
+Index: calibre/src/calibre/ebooks/textile/functions.py
+===================================================================
+--- calibre.orig/src/calibre/ebooks/textile/functions.py
++++ calibre/src/calibre/ebooks/textile/functions.py
+@@ -86,7 +86,7 @@ def getimagesize(url):
+     """
+ 
+     try:
+-        import ImageFile
++        from PIL import ImageFile
+         import urllib2
+     except ImportError:
+         return None
