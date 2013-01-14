@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.13
+Version:        0.9.14
 Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -286,8 +286,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
-* Mon Jan 14 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.9.13-2
+* Mon Jan 14 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.9.14-2
 - Fix import of PIL in bundled textile so it will work with python-pillow
+
+* Fri Jan 11 2013 Kevin Fenzi <kevin@scrye.com> 0.9.14-1
+- Update to 0.9.14
 
 * Fri Jan 04 2013 Kevin Fenzi <kevin@scrye.com> 0.9.13-1
 - Update to 0.9.13
