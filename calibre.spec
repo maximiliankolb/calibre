@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.9.17
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -51,7 +51,6 @@ Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
 Requires:       odfpy
-Requires:       django-tagging
 Requires:       python-lxml
 Requires:       python-imaging
 Requires:       python-mechanize
@@ -286,6 +285,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Tue Feb 05 2013 Kevin Fenzi <kevin@scrye.com> 0.9.17-2
+- Drop django-tagging Requires. Fixes bug #908122
+
 * Fri Feb 01 2013 Kevin Fenzi <kevin@scrye.com> 0.9.17-1
 - Update to 0.9.17
 
