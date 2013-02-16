@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.18
+Version:        0.9.19
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -266,13 +266,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/ebook-device
 %{_bindir}/ebook-meta
 %{_bindir}/ebook-viewer
-%{_bindir}/epub-fix
 %{_bindir}/fetch-ebook-metadata
 %{_bindir}/lrf2lrs
 %{_bindir}/lrfviewer
 %{_bindir}/lrs2lrf
 %{_bindir}/markdown-calibre
 %{_bindir}/web2disk
+%{_bindir}/ebook-polish
 %config(noreplace) %{_sysconfdir}/bash_completion.d/
 %{_libdir}/%{name}
 %{_datadir}/%{name}
@@ -285,6 +285,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Feb 16 2013 Kevin Fenzi <kevin@scrye.com> 0.9.19-1
+- Update to 0.9.19
+- Drop no longer shipped epub-fix in place of new ebook-polish
+
 * Fri Feb 08 2013 Kevin Fenzi <kevin@scrye.com> 0.9.18-1
 - Update to 0.9.18
 
