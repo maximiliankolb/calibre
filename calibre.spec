@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.9.6
-Release:        2%{?dist}
+Release:        2%{?dist}.1
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -20,6 +20,7 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Patch1:         %{name}-no-update.patch
+Patch2:         calibre-pyqt496.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -87,6 +88,7 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+%patch2 -p0 -b .pyqt486
 
 # dos2unix newline conversion
 %{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -277,6 +279,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Mar 08 2013 Rex Dieter <rdieter@fedoraproject.org> 0.9.6-2.1
+- rebuild (sip)
+
 * Sun Nov 18 2012 Kevin Fenzi <kevin@scrye.com> 0.9.6-2
 - Another better approach to unbundling feedparser. 
 
