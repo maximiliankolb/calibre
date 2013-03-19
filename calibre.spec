@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.9.23
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -285,6 +285,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Mon Mar 18 2013 Kevin Fenzi <kevin@scrye.com> 0.9.23-2
+- Rebuild for new ImageMagick
+
 * Fri Mar 15 2013 Kevin Fenzi <kevin@scrye.com> 0.9.23-1
 - Update to 0.9.23
 
