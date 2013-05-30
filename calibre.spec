@@ -9,7 +9,6 @@ License:        GPLv3
 URL:            http://calibre-ebook.com/
 
 # SourceURL: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-
 # Upstream packages some unfree fonts which we cannot redistribute.
 # While we're at it, also delete the liberation fonts which we already have.
 #
