@@ -2,7 +2,7 @@
 
 Name:           calibre
 Version:        0.9.35
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -284,6 +284,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Mon Jun 17 2013 Rex Dieter <rdieter@fedoraproject.org> 0.9.35-2
+- rebuild (sip)
+
 * Sat Jun 15 2013 Kevin Fenzi <kevin@scrye.com> 0.9.35-1
 - Update to 0.9.35
 
