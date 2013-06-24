@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.35
-Release:        2%{?dist}
+Version:        0.9.36
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -18,9 +18,6 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
-# The bundled textile needs to be modified to import python-pillow properly.
-# This could go away if we unbundle textile
-Patch0:         %{name}-pillow.patch
 Patch1:         %{name}-no-update.patch
 
 BuildRequires:  python >= 2.6
@@ -86,10 +83,6 @@ RTF, TXT, PDF and LRS.
 
 %prep
 %setup -q -n %{name}
-
-# The bundled textile needs to be modified to import python-pillow properly.
-# This could go away if we unbundle textile
-%patch0 -p1
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
@@ -284,6 +277,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sun Jun 23 2013 Kevin Fenzi <kevin@scrye.com> 0.9.36-1
+- Update to 0.9.36
+
 * Mon Jun 17 2013 Rex Dieter <rdieter@fedoraproject.org> 0.9.35-2
 - rebuild (sip)
 
