@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.38
+Version:        0.9.39
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -280,6 +280,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Jul 12 2013 Kevin Fenzi <kevin@scrye.com> 0.9.39-1
+- Update to 0.9.39
+
 * Fri Jul 05 2013 Kevin Fenzi <kevin@scrye.com> 0.9.38-1
 - Update to 0.9.38
 - Add patch for new python-pillow
