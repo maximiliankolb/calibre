@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        0.9.43
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -171,9 +171,6 @@ cp -p resources/images/mimetypes/lrf.png \
 cp -p resources/images/viewer.png \
       %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
-# don't put bash completions in /usr/etc
-mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}
-
 # these are provided as separate packages
 rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
@@ -268,7 +265,6 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/markdown-calibre
 %{_bindir}/web2disk
 %{_bindir}/ebook-polish
-%config(noreplace) %{_sysconfdir}/bash_completion.d/
 %{_libdir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/pixmaps/*
@@ -280,6 +276,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Aug 23 2013 Kevin Fenzi <kevin@scrye.com> 1.0.0-1
+- Update to 1.0.0
+
 * Wed Aug 14 2013 Kevin Fenzi <kevin@scrye.com> 0.9.43-1
 - Update to 0.9.43
 
