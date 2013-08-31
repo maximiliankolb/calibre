@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        1.0.0
+Version:        1.1.0
 Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -277,6 +277,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Aug 30 2013 Kevin Fenzi <kevin@scrye.com> 1.1.0-2
+- Update to 1.1.0
+
 * Mon Aug 26 2013 Kevin Fenzi <kevin@scrye.com> 1.0.0-2
 - Add requires on python-apsw. Fixes bug #1000835
 
