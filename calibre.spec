@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        1.3.0
-Release:        2%{?dist}
+Version:        1.4.0
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -277,6 +277,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Fri Sep 20 2013 Kevin Fenzi <kevin@scrye.com> 1.4.0-1
+- Update to 1.4.0
+
 * Fri Sep 13 2013 Kevin Fenzi <kevin@scrye.com> 1.3.0-2
 - Update to 1.3.0
 
