@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           calibre
-Version:        1.4.0
+Version:        1.5.0
 Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
@@ -189,12 +189,6 @@ ln -s %{python_sitelib}/feedparser.pyo \
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0003m_.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0011m_.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/prs500/tt0419m_.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
@@ -277,6 +271,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Sat Sep 28 2013 Kevin Fenzi <kevin@scrye.com> 1.5.0-1
+- Update to 1.5.0
+
 * Fri Sep 20 2013 Kevin Fenzi <kevin@scrye.com> 1.4.0-1
 - Update to 1.4.0
 
