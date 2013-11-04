@@ -1,5 +1,9 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
+%{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
+
+%global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
+
 Name:           calibre
 Version:        1.9.0
 Release:        1%{?dist}
@@ -64,10 +68,6 @@ Requires:       python-netifaces
 Requires:       python-dns
 Requires:       python-cssselect
 Requires:       python-apsw
-%{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
-
-%define __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
-
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -92,24 +92,24 @@ RTF, TXT, PDF and LRS.
 %patch2 -p1 -b .no-update
 
 # dos2unix newline conversion
-%{__sed} -i 's/\r//' src/calibre/web/feeds/recipes/*
+sed -i 's/\r//' src/calibre/web/feeds/recipes/*
 
 # remove shebangs
-%{__sed} -i -e '/^#!\//, 1d' src/calibre/*/*/*/*.py
-%{__sed} -i -e '/^#!\//, 1d' src/calibre/*/*/*.py
-%{__sed} -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
-%{__sed} -i -e '/^#!\//, 1d' src/calibre/*.py
-%{__sed} -i -e '/^#!\//, 1d' src/templite/*.py
-%{__sed} -i -e '/^#!\//, 1d' resources/default_tweaks.py
-%{__sed} -i -e '/^#!\//, 1d' resources/catalog/section_list_templates.py
+sed -i -e '/^#!\//, 1d' src/calibre/*/*/*/*.py
+sed -i -e '/^#!\//, 1d' src/calibre/*/*/*.py
+sed -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
+sed -i -e '/^#!\//, 1d' src/calibre/*.py
+sed -i -e '/^#!\//, 1d' src/templite/*.py
+sed -i -e '/^#!\//, 1d' resources/default_tweaks.py
+sed -i -e '/^#!\//, 1d' resources/catalog/section_list_templates.py
 
-%{__chmod} -x src/calibre/*/*/*/*.py
-%{__chmod} -x src/calibre/*/*/*.py
-%{__chmod} -x src/calibre/*/*.py
-%{__chmod} -x src/calibre/*.py
+chmod -x src/calibre/*/*/*/*.py \
+    src/calibre/*/*/*.py \
+    src/calibre/*/*.py \
+    src/calibre/*.py
 
 %build
-OVERRIDE_CFLAGS="%{optflags}" python setup.py build 
+OVERRIDE_CFLAGS="%{optflags}" python setup.py build
 
 %install
 mkdir -p %{buildroot}%{_datadir}
@@ -137,8 +137,8 @@ python setup.py install --root=%{buildroot}%{_prefix} \
 
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
-%{__sed} -i -e '/^#!\//, 1d' %{buildroot}%{python_sitelib}/init_calibre.py
-                        
+sed -i -e '/^#!\//, 1d' %{buildroot}%{python_sitelib}/init_calibre.py
+
 # icons
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
@@ -147,7 +147,7 @@ cp -p resources/images/viewer.png                 \
    %{buildroot}%{_datadir}/pixmaps/calibre-viewer.png
 
 # every file is empty here
-find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f|xargs rm -f 
+find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f -print -delete
 
 # packages aren't allowed to register mimetypes like this
 rm -f %{buildroot}%{_datadir}/applications/defaults.list
@@ -177,7 +177,7 @@ rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
 rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
 
-# rm empty feedparser files. 
+# rm empty feedparser files.
 rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
 
 ln -s %{python_sitelib}/feedparser.py \
@@ -217,9 +217,9 @@ ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
 # delete locales, calibre stores them in a zip file now
 rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
 
-%{__rm} -f %{buildroot}%{_bindir}/%{name}-uninstall   
+rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 
-install -m 755 %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
+cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
 %post
 update-desktop-database &> /dev/null ||:
@@ -238,7 +238,6 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files
-%defattr(-,root,root,-)
 %doc COPYRIGHT LICENSE Changelog.yaml
 %{_bindir}/calibre
 %{_bindir}/calibre-complete
@@ -421,7 +420,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Update to 0.9.7
 
 * Sun Nov 18 2012 Kevin Fenzi <kevin@scrye.com> 0.9.6-2
-- Another better approach to unbundling feedparser. 
+- Another better approach to unbundling feedparser.
 
 * Fri Nov 09 2012 Kevin Fenzi <kevin@scrye.com> 0.9.6-1
 - Update to 0.9.6
@@ -510,21 +509,21 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 * Sat May 26 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.53-1
 - Update to 0.8.53
-- Drop upstreamed poppler 0.20.0 patch. 
+- Drop upstreamed poppler 0.20.0 patch.
 
 * Sun May 20 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.52-1
 - Update to 0.8.52
-- Drop man pages patch, as upstream no longer ships man pages. 
+- Drop man pages patch, as upstream no longer ships man pages.
 
 * Thu May 17 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-2
-- Add patch for new poppler 0.20.0 
+- Add patch for new poppler 0.20.0
 
 * Sat May 12 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.51-1
 - Update to 0.5.51
 
 * Fri May 04 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.50-1
-- Update to 0.8.50. 
-- Add python-cssutils 0.9.9 requirement. 
+- Update to 0.8.50.
+- Add python-cssutils 0.9.9 requirement.
 
 * Fri Apr 27 2012 Kevin Fenzi <kevin@scrye.com> - 0.8.49-1
 - Update to 0.8.49
@@ -826,8 +825,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 * Sat Oct 09 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.23-1
 - Update to 0.7.23
-- Fix up mount helper with our own local script. 
-- Change files to list binaries so missing ones can more easily be noted. 
+- Fix up mount helper with our own local script.
+- Change files to list binaries so missing ones can more easily be noted.
 
 * Mon Oct 04 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.22-1
 - Update to 0.7.22
@@ -845,7 +844,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Rebuild for new ImageMagick
 
 * Mon Sep 13 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-2
-- Fix svg/png changes. 
+- Fix svg/png changes.
 
 * Sun Sep 12 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.18-1
 - Update to 0.7.18
@@ -892,7 +891,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - Update to 0.7.7
 
 * Wed Jun 30 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.6-1
-- Update to 0.7.6 
+- Update to 0.7.6
 
 * Fri Jun 25 2010 Kevin Fenzi <kevin@tummy.com> - 0.7.5-1
 - Update to 0.7.5
@@ -941,7 +940,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - fixed a cssprofiles issue with loading the profiles
 
 * Tue Jan 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-3
-- added -cssprofiles patch to cvs 
+- added -cssprofiles patch to cvs
 
 * Tue Jan 26 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 0.6.35-2
 - remove python-cssutils 0.9.6 dependency
