@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -46,6 +46,7 @@ BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libmtp-devel
 BuildRequires:  qt-devel-private
+BuildRequires:  web-assets-devel
 
 Requires:       PyQt4
 Requires:       python-cherrypy
@@ -68,6 +69,7 @@ Requires:       python-netifaces
 Requires:       python-dns
 Requires:       python-cssselect
 Requires:       python-apsw
+Requires:       mathjax
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -108,6 +110,8 @@ chmod -x src/calibre/*/*/*/*.py \
     src/calibre/*/*.py \
     src/calibre/*.py
 
+rm -rvf resources/viewer/mathjax
+
 %build
 OVERRIDE_CFLAGS="%{optflags}" python setup.py build
 
@@ -134,6 +138,8 @@ python setup.py install --root=%{buildroot}%{_prefix} \
                         --prefix=%{_prefix} \
                         --libdir=%{_libdir} \
                         --staging-libdir=%{buildroot}%{_libdir}
+
+ln -s %{_jsdir}/mathjax %{buildroot}%{_datadir}/%{name}/viewer/
 
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
@@ -270,6 +276,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{python_sitelib}/init_calibre.py*
 
 %changelog
+* Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-2
+- Unbundle MathJax (#1017204)
+
 * Fri Nov 01 2013 Kevin Fenzi <kevin@scrye.com> 1.9.0-1
 - Update to 1.9.0
 
