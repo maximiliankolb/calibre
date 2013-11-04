@@ -131,6 +131,11 @@ mkdir -p %{buildroot}%{_datadir}/desktop-directories
 # the install script assumes it's there.
 mkdir -p %{buildroot}%{python_sitelib}
 
+# create directory for completion files, so calibre knows where
+# to install them
+mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
+mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
+
 XDG_DATA_DIRS="%{buildroot}%{_datadir}" \
 XDG_UTILS_INSTALL_MODE="system" \
 LIBPATH="%{_libdir}" \
@@ -227,6 +232,9 @@ rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
+# fix the location of bash completion file
+mv %{buildroot}%{_datadir}/bash-completion/%{name} %{buildroot}%{_datadir}/bash-completion/completions/
+
 %post
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
@@ -274,10 +282,13 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/scalable/apps/*
 %{_datadir}/icons/hicolor/256x256/apps/calibre-gui.png
 %{python_sitelib}/init_calibre.py*
+%{_datadir}/bash-completion/completions/%{name}
+%{_datadir}/zsh/site-functions/_%{name}
 
 %changelog
 * Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-2
 - Unbundle MathJax (#1017204)
+- Package zsh completion script, move bash completion script to /usr/share
 
 * Fri Nov 01 2013 Kevin Fenzi <kevin@scrye.com> 1.9.0-1
 - Update to 1.9.0
