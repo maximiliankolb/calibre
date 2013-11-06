@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.9.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -47,6 +47,10 @@ BuildRequires:  libpng-devel
 BuildRequires:  libmtp-devel
 BuildRequires:  qt-devel-private
 BuildRequires:  web-assets-devel
+# calibre installer is so smart that it check for the presence of the
+# directory (and then installs in the wrong place)
+BuildRequires:  bash-completion
+BuildRequires:  python-apsw
 
 Requires:       PyQt4
 Requires:       python-cherrypy
@@ -233,6 +237,7 @@ rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
 # fix the location of bash completion file
+find %{buildroot}%{_datadir}/bash-completion/
 mv %{buildroot}%{_datadir}/bash-completion/%{name} %{buildroot}%{_datadir}/bash-completion/completions/
 
 %post
@@ -286,6 +291,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/zsh/site-functions/_%{name}
 
 %changelog
+* Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-3
+- Fix bash completion directory detection
+
 * Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-2
 - Unbundle MathJax (#1017204)
 - Package zsh completion script, move bash completion script to /usr/share
