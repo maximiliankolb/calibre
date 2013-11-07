@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.9.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -148,8 +148,6 @@ python setup.py install --root=%{buildroot}%{_prefix} \
                         --libdir=%{_libdir} \
                         --staging-libdir=%{buildroot}%{_libdir}
 
-ln -s %{_jsdir}/mathjax %{buildroot}%{_datadir}/%{name}/viewer/
-
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
 sed -i -e '/^#!\//, 1d' %{buildroot}%{python_sitelib}/init_calibre.py
@@ -245,6 +243,9 @@ update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
+%preun
+rm %{_datadir}/%{name}/viewer/mathjax
+
 %postun
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
@@ -255,6 +256,7 @@ fi
 
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 
 %files
 %doc COPYRIGHT LICENSE Changelog.yaml
@@ -291,6 +293,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/zsh/site-functions/_%{name}
 
 %changelog
+* Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-4
+- Work around rpm's inability to replace directory with a symlink
+
 * Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-3
 - Fix bash completion directory detection
 
