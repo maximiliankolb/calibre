@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.9.0
-Release:        4%{?dist}
+Version:        1.11.0
+Release:        1%{?dist}
 Summary:        E-book converter and library management
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -293,6 +293,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/zsh/site-functions/_%{name}
 
 %changelog
+* Sat Nov 16 2013 Kevin Fenzi <kevin@scrye.com> 1.11.0-1
+- Update to 1.11.0
+
 * Mon Nov 04 2013 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.9.0-4
 - Work around rpm's inability to replace directory with a symlink
 
