@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.20.0
-Release:        2%{?dist}
+Version:        1.21.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -304,6 +304,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jan 24 2014 Kevin Fenzi <kevin@scrye.com> 1.21.0-1
+- Update to 1.21.0
+
 * Fri Jan 24 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.20.0-2
 - Add appdata
 
