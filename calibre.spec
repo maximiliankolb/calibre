@@ -6,8 +6,8 @@
 
 Name:           calibre
 Version:        1.20.0
-Release:        1%{?dist}
-Summary:        E-book converter and library management
+Release:        2%{?dist}
+Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
 URL:            http://calibre-ebook.com/
@@ -22,6 +22,10 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
+Source3:        calibre-gui.appdata.xml
+Source4:        calibre-ebook-viewer.appdata.xml
+Source5:        calibre-lrfviewer.appdata.xml
+Source6:        calibre-ebook-edit.appdata.xml
 Patch1:         %{name}-no-update.patch
 Patch2:         calibre-0.9.38-pillow.patch
 
@@ -131,6 +135,9 @@ mkdir -p %{buildroot}%{_datadir}/mime/packages
 mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/desktop-directories
 
+# create directory for gnome software data
+mkdir -p %{buildroot}%{_datadir}/appdata
+
 # create directory for calibre environment module
 # the install script assumes it's there.
 mkdir -p %{buildroot}%{python_sitelib}
@@ -234,6 +241,8 @@ rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
+cp -p %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_datadir}/appdata/
+
 # fix the location of bash completion file
 find %{buildroot}%{_datadir}/bash-completion/
 mv %{buildroot}%{_datadir}/bash-completion/%{name} %{buildroot}%{_datadir}/bash-completion/completions/
@@ -292,8 +301,12 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{python_sitelib}/init_calibre.py*
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/zsh/site-functions/_%{name}
+%{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jan 24 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.20.0-2
+- Add appdata
+
 * Sat Jan 18 2014 Kevin Fenzi <kevin@scrye.com> 1.20.0-1
 - Update to 1.20.0
 

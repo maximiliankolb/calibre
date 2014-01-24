@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> -->
+<application>
+  <id type="desktop">calibre-lrfviewer.desktop</id>
+  <licence>CC0</licence>
+  <description>
+    <p>
+      Calibre LRF viewer can be used to read e-books in SONY
+      e-book format (LRF).
+    </p>
+
+    <p>
+      This viewer is launched by calibre for LRF e-books.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default" width="1024" height="580">http://in.waw.pl/~zbyszek/calibre/calibre-rlfviewer.png</screenshot>
+  </screenshots>
+  <url type="homepage">http://calibre-ebook.com/</url>
+  <updatecontact>zbyszek@in.waw.pl</updatecontact>
+</application>

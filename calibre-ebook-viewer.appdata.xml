@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> -->
+<application>
+  <id type="desktop">calibre-ebook-viewer.desktop</id>
+  <licence>CC0</licence>
+  <description>
+    <p>
+      Calibre ebook viewer can be used to read e-books in many
+      formats, including e-pub, MOBI, PDF, HTML, djvu, plain text,
+      and popular office formats.
+    </p>
+
+    <p>
+      This is the viewer launched by calibre.
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default" width="1024" height="576">http://in.waw.pl/~zbyszek/calibre/calibre-viewer-epub.png</screenshot>
+    <screenshot width="1200" height="675">http://in.waw.pl/~zbyszek/calibre/calibre-viewer-math.png</screenshot>
+  </screenshots>
+  <url type="homepage">http://calibre-ebook.com/</url>
+  <updatecontact>zbyszek@in.waw.pl</updatecontact>
+</application>
