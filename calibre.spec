@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.22.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -165,6 +165,8 @@ cp -p resources/images/library.png                \
    %{buildroot}%{_datadir}/pixmaps/%{name}-gui.png
 cp -p resources/images/viewer.png                 \
    %{buildroot}%{_datadir}/pixmaps/calibre-viewer.png
+cp -p resources/images/tweak.png                 \
+   %{buildroot}%{_datadir}/pixmaps/calibre-ebook-edit.png
 
 # every file is empty here
 find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f -print -delete
@@ -304,6 +306,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sun Feb 02 2014 Kevin Fenzi <kevin@scrye.com> 1.22.0-2
+- Install calibre-ebook-edit icon properly. Fixes bug #1060556
+
 * Fri Jan 31 2014 Kevin Fenzi <kevin@scrye.com> 1.22.0-1
 - Update to 1.22.0
 
