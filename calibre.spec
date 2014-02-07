@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.22.0
-Release:        2%{?dist}
+Version:        1.23.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -55,6 +55,10 @@ BuildRequires:  web-assets-devel
 # directory (and then installs in the wrong place)
 BuildRequires:  bash-completion
 BuildRequires:  python-apsw
+#
+# If python-feedparser is installed at build time there's problems with links. 
+# See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
+BuildConflicts: python-feedparser
 
 Requires:       PyQt4
 Requires:       python-cherrypy
@@ -306,6 +310,10 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Feb 07 2014 Kevin Fenzi <kevin@scrye.com> 1.23.0-1
+- Update to 1.23.0
+- Add BuildConflicts: python-feedparser. Bug #1026469
+
 * Sun Feb 02 2014 Kevin Fenzi <kevin@scrye.com> 1.22.0-2
 - Install calibre-ebook-edit icon properly. Fixes bug #1060556
 
