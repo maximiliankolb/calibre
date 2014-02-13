@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.23.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -310,6 +310,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Thu Feb 13 2014 Kevin Fenzi <kevin@scrye.com> 1.23.0-2
+- Rebuild for new icu
+
 * Fri Feb 07 2014 Kevin Fenzi <kevin@scrye.com> 1.23.0-1
 - Update to 1.23.0
 - Add BuildConflicts: python-feedparser. Bug #1026469
