@@ -310,6 +310,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Feb 14 2014 Kevin Fenzi <kevin@scrye.com> 1.24.0-1
+- Update to 1.24.0
+
 * Thu Feb 13 2014 Kevin Fenzi <kevin@scrye.com> 1.23.0-2
 - Rebuild for new icu
 
