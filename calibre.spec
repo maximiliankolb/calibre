@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.27.0
+Version:        1.28.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -304,12 +304,17 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/icons/hicolor/scalable/mimetypes/*
 %{_datadir}/icons/hicolor/scalable/apps/*
 %{_datadir}/icons/hicolor/256x256/apps/calibre-gui.png
+%{_datadir}/icons/hicolor/256x256/apps/calibre-ebook-edit.png
+%{_datadir}/icons/hicolor/256x256/apps/calibre-viewer.png
 %{python_sitelib}/init_calibre.py*
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Mar 15 2014 Kevin Fenzi <kevin@scrye.com> 1.28.0-1
+- Update to 1.28.0
+
 * Fri Mar 07 2014 Kevin Fenzi <kevin@scrye.com> 1.27.0-1
 - Update to 1.27.0
 
