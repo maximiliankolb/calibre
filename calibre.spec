@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sun Mar 16 2014 Rex Dieter <rdieter@fedoraproject.org> 1.28.0-2
+- rebuild (sip)
+
 * Sat Mar 15 2014 Kevin Fenzi <kevin@scrye.com> 1.28.0-1
 - Update to 1.28.0
 
