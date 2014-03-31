@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.30.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Mar 31 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.30.0-2
+- Rebuild for libMagickWand and libMagickCore
+
 * Sun Mar 30 2014 Kevin Fenzi <kevin@scrye.com> 1.30.0-1
 - Update to 1.30.0
 
