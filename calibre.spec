@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.30.0
-Release:        2%{?dist}
+Version:        1.32.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sun Apr 13 2014 Kevin Fenzi <kevin@scrye.com> 1.32.0-1
+- Update to 1.32.0
+
 * Mon Mar 31 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> 1.30.0-2
 - Rebuild for libMagickWand and libMagickCore
 
