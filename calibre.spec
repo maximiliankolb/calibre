@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.34.0
+Version:        1.35.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -53,6 +53,7 @@ BuildRequires:  qt-devel-private
 BuildRequires:  web-assets-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
+BuildRequires:  bash-completion
 BuildRequires:  python-apsw
 #
 # If python-feedparser is installed at build time there's problems with links. 
@@ -144,6 +145,11 @@ mkdir -p %{buildroot}%{_datadir}/appdata
 # create directory for calibre environment module
 # the install script assumes it's there.
 mkdir -p %{buildroot}%{python_sitelib}
+
+# create directory for completion files, so calibre knows where
+# to install them
+mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
+mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
 
 XDG_DATA_DIRS="%{buildroot}%{_datadir}" \
 XDG_UTILS_INSTALL_MODE="system" \
@@ -243,6 +249,10 @@ cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
 cp -p %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_datadir}/appdata/
 
+# fix the location of bash completion file
+find %{buildroot}%{_datadir}/bash-completion/
+mv %{buildroot}%{_datadir}/bash-completion/%{name} %{buildroot}%{_datadir}/bash-completion/completions/
+
 %post
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
@@ -297,9 +307,14 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/icons/hicolor/256x256/apps/calibre-ebook-edit.png
 %{_datadir}/icons/hicolor/256x256/apps/calibre-viewer.png
 %{python_sitelib}/init_calibre.py*
+%{_datadir}/bash-completion/completions/%{name}
+%{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Thu May 08 2014 Kevin Fenzi <kevin@scrye.com> 1.35.0-1
+- Update to 1.35.0
+
 * Thu Apr 24 2014 Kevin Fenzi <kevin@scrye.com> 1.34.0-1
 - Update to 1.34.0
 
