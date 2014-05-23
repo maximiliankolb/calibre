@@ -19,6 +19,7 @@ URL:            http://calibre-ebook.com/
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
 # ./generate-tarball.sh %{version}
+
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
