@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.43.0
+Version:        1.45.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -250,10 +250,6 @@ cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
 cp -p %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_datadir}/appdata/
 
-# fix the location of bash completion file
-find %{buildroot}%{_datadir}/bash-completion/
-mv %{buildroot}%{_datadir}/bash-completion/%{name} %{buildroot}%{_datadir}/bash-completion/completions/
-
 %post
 update-desktop-database &> /dev/null ||:
 update-mime-database %{_datadir}/mime &> /dev/null || :
@@ -313,6 +309,12 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jul 18 2014 Kevin Fenzi <kevin@scrye.com> 1.45.0-1
+- Update to 1.45.0
+
+* Fri Jul 11 2014 Kevin Fenzi <kevin@scrye.com> 1.44.0-1
+- Update to 1.44.0
+
 * Fri Jul 04 2014 Kevin Fenzi <kevin@scrye.com> 1.43.0-1
 - Update to 1.43.0
 
