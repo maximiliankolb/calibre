@@ -1,0 +1,27 @@
+diff -up calibre/src/calibre/linux.py.orig calibre/src/calibre/linux.py
+--- calibre/src/calibre/linux.py.orig	2014-08-01 19:18:33.227016144 +0200
++++ calibre/src/calibre/linux.py	2014-08-01 19:21:42.575143513 +0200
+@@ -934,6 +934,7 @@ Comment=Viewer for LRF files (SONY ebook
+ TryExec=lrfviewer
+ Exec=lrfviewer %f
+ Icon=calibre-viewer
++NoDisplay=true
+ MimeType=application/x-sony-bbeb;
+ Categories=Graphics;Viewer;
+ '''
+@@ -948,6 +949,7 @@ Comment=Viewer for E-books in all the ma
+ TryExec=ebook-viewer
+ Exec=ebook-viewer --detach %f
+ Icon=calibre-viewer
++NoDisplay=true
+ Categories=Graphics;Viewer;
+ '''
+ 
+@@ -961,6 +963,7 @@ Comment=Edit e-books in various formats
+ TryExec=ebook-edit
+ Exec=ebook-edit --detach %f
+ Icon=calibre-ebook-edit
++NoDisplay=true
+ Categories=Office;
+ '''
+ 

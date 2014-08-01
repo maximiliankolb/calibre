@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.46.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -24,11 +24,9 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Source3:        calibre-gui.appdata.xml
-Source4:        calibre-ebook-viewer.appdata.xml
-Source5:        calibre-lrfviewer.appdata.xml
-Source6:        calibre-ebook-edit.appdata.xml
 Patch1:         %{name}-no-update.patch
 Patch2:         calibre-0.9.38-pillow.patch
+Patch3:         calibre-nodisplay.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -105,6 +103,9 @@ RTF, TXT, PDF and LRS.
 %patch1 -p1 -b .no-update
 # Remove some old pillow imports
 %patch2 -p1 -b .no-update
+# Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
+# are all accessible in the main calibre GUI.
+%patch3 -p1 -b .nodisplay
 
 # dos2unix newline conversion
 sed -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -248,7 +249,7 @@ rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
-cp -p %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_datadir}/appdata/
+cp -p %{SOURCE3} %{buildroot}%{_datadir}/appdata/
 
 %post
 update-desktop-database &> /dev/null ||:
@@ -309,6 +310,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Aug 01 2014 Kalev Lember <kalevlember@gmail.com> 1.46.0-2
+- Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer
+
 * Fri Jul 25 2014 Kevin Fenzi <kevin@scrye.com> 1.46.0-1
 - Update to 1.46.0
 
