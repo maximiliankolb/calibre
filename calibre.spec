@@ -261,7 +261,6 @@ rm %{_datadir}/%{name}/viewer/mathjax
 
 %postun
 update-desktop-database &> /dev/null ||:
-update-mime-database %{_datadir}/mime &> /dev/null || :
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
