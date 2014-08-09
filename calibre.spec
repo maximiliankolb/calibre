@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.46.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -253,8 +253,8 @@ cp -p %{SOURCE3} %{buildroot}%{_datadir}/appdata/
 
 %post
 update-desktop-database &> /dev/null ||:
-update-mime-database %{_datadir}/mime &> /dev/null || :
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+touch --no-create %{_datadir}/mime/packages &> /dev/null || :
 
 %preun
 rm %{_datadir}/%{name}/viewer/mathjax
@@ -265,10 +265,13 @@ update-mime-database %{_datadir}/mime &> /dev/null || :
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    touch --no-create %{_datadir}/mime/packages &> /dev/null || :
+    update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 fi
 
 %posttrans
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+update-mime-database %{?fedora:-n} %{_datadir}/mime &> /dev/null || :
 ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 
 %files
@@ -310,6 +313,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Aug 09 2014 Rex Dieter <rdieter@fedoraproject.org> 1.46.0-3
+- update mime scriptlet
+
 * Fri Aug 01 2014 Kalev Lember <kalevlember@gmail.com> 1.46.0-2
 - Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer
 
