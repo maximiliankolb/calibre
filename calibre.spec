@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        1.46.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Aug 15 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.46.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Sat Aug 09 2014 Rex Dieter <rdieter@fedoraproject.org> 1.46.0-3
 - update mime scriptlet
 
