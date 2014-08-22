@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        1.48.0
+Version:        2.0.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -25,15 +25,13 @@ Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Source3:        calibre-gui.appdata.xml
 Patch1:         %{name}-no-update.patch
-Patch2:         calibre-0.9.38-pillow.patch
 Patch3:         calibre-nodisplay.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
 BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools
-BuildRequires:  qt4-devel
-BuildRequires:  PyQt4-devel
+BuildRequires:  python-qt5-devel
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -48,20 +46,25 @@ BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libmtp-devel
-BuildRequires:  qt-devel-private
+BuildRequires:  qt5-qtbase-devel
 BuildRequires:  web-assets-devel
+BuildRequires:  qt5-qtbase-static
+BuildRequires:  libXrender-devel
+BuildRequires:  systemd-devel
+BuildRequires:  qt5-qtwebkit-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
 BuildRequires:  bash-completion
 BuildRequires:  python-apsw
-# Remove this once bug 1131723 is fixed.
-BuildRequires:  openjpeg2
+BuildRequires:  glib2-devel
+BuildRequires:  fontconfig-devel
 #
 # If python-feedparser is installed at build time there's problems with links. 
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
 BuildConflicts: python-feedparser
 
-Requires:       PyQt4
+Requires:       python-qt5
+Requires:       qt5-qtwebkit
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
@@ -99,12 +102,10 @@ Supported input formats are: MOBI, LIT, PRC, EPUB, CHM, ODT, HTML, CBR, CBZ,
 RTF, TXT, PDF and LRS.
 
 %prep
-%setup -q -n %{name}
+%setup -q -n %{name}-%{version}
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
-# Remove some old pillow imports
-%patch2 -p1 -b .no-update
 # Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
 # are all accessible in the main calibre GUI.
 %patch3 -p1 -b .nodisplay
@@ -314,6 +315,10 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Aug 22 2014 Kevin Fenzi <kevin@scrye.com> 2.0.0-1
+- Update to 2.0.0 fixes bug #1133091
+- Move to Qt5 interface.
+
 * Tue Aug 19 2014 Kevin Fenzi <kevin@scrye.com> 1.48.0-1
 - Update to 1.48.0
 

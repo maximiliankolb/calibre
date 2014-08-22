@@ -1,26 +1,24 @@
-diff -Nur calibre.orig/src/calibre/gui2/ui.py calibre/src/calibre/gui2/ui.py
---- calibre.orig/src/calibre/gui2/ui.py	2014-08-19 15:21:03.631159912 -0600
-+++ calibre/src/calibre/gui2/ui.py	2014-08-19 15:21:47.033416065 -0600
-@@ -883,7 +883,6 @@
-         if write_settings:
-             self.write_settings()
-         self.check_messages_timer.stop()
--        self.update_checker.terminate()
-         self.listener.close()
-         self.job_manager.server.close()
-         self.job_manager.threaded_server.close()
 diff -Nur calibre.orig/src/calibre/gui2/update.py calibre/src/calibre/gui2/update.py
---- calibre.orig/src/calibre/gui2/update.py	2014-08-19 15:21:03.632159894 -0600
-+++ calibre/src/calibre/gui2/update.py	2014-08-19 15:22:25.305760137 -0600
-@@ -136,11 +136,6 @@
+--- calibre.orig/src/calibre/gui2/update.py	2014-08-22 13:38:27.921743385 -0600
++++ calibre/src/calibre/gui2/update.py	2014-08-22 13:50:47.003149256 -0600
+@@ -56,20 +56,6 @@
+         while True:
+             calibre_update_version = NO_CALIBRE_UPDATE
+             plugins_update_found = 0
+-            try:
+-                version = get_newest_version()
+-                if version[:2] > numeric_version[:2]:
+-                    calibre_update_version = version
+-            except Exception as e:
+-                prints('Failed to check for calibre update:', as_unicode(e))
+-            try:
+-                update_plugins = get_plugin_updates_available(raise_error=True)
+-                if update_plugins is not None:
+-                    plugins_update_found = len(update_plugins)
+-            except Exception as e:
+-                prints('Failed to check for plugin update:', as_unicode(e))
+-            if calibre_update_version != NO_CALIBRE_UPDATE or plugins_update_found > 0:
+-                self.update_found.emit(calibre_update_version, plugins_update_found)
+             self.sleep(self.INTERVAL)
  
-     def __init__(self, opts):
-         self.last_newest_calibre_version = NO_CALIBRE_UPDATE
--        if not opts.no_update_check:
--            self.update_checker = CheckForUpdates(self)
--            self.update_checker.update_found.connect(self.update_found,
--                    type=Qt.QueuedConnection)
--            self.update_checker.start()
- 
-     def recalc_update_label(self, number_of_plugin_updates):
-         self.update_found(self.last_newest_calibre_version, number_of_plugin_updates)
+ class UpdateNotification(QDialog):
