@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -65,6 +65,7 @@ BuildConflicts: python-feedparser
 
 Requires:       python-qt5
 Requires:       qt5-qtwebkit
+Requires:       qt5-qtsvg
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
@@ -315,6 +316,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Aug 23 2014 Kevin Fenzi <kevin@scrye.com> 2.0.0-2
+- Add missing qt5-qtsvg Requires. Fixes bug #1133234
+
 * Fri Aug 22 2014 Kevin Fenzi <kevin@scrye.com> 2.0.0-1
 - Update to 2.0.0 fixes bug #1133091
 - Move to Qt5 interface.
