@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -316,6 +316,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Tue Aug 26 2014 David Tardon <dtardon@redhat.com> - 2.0.0-3
+- rebuild for ICU 53.1
+
 * Sat Aug 23 2014 Kevin Fenzi <kevin@scrye.com> 2.0.0-2
 - Add missing qt5-qtsvg Requires. Fixes bug #1133234
 
