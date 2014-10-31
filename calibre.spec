@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.7.0
+Version:        2.8.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -316,6 +316,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Oct 31 2014 Kevin Fenzi <kevin@scrye.com> 2.8.0-1
+- Update to 2.8.0
+
 * Mon Oct 27 2014 Kevin Fenzi <kevin@scrye.com> 2.7.0-1
 - Update to 2.7.0
 
