@@ -1,8 +1,8 @@
-diff -Nur calibre.orig/src/calibre/gui2/update.py calibre/src/calibre/gui2/update.py
---- calibre.orig/src/calibre/gui2/update.py	2014-08-22 13:38:27.921743385 -0600
-+++ calibre/src/calibre/gui2/update.py	2014-08-22 13:50:47.003149256 -0600
-@@ -56,20 +56,6 @@
-         while True:
+diff -Nur calibre-2.9.0.orig/src/calibre/gui2/update.py calibre-2.9.0/src/calibre/gui2/update.py
+--- calibre-2.9.0.orig/src/calibre/gui2/update.py	2014-11-08 21:43:22.888681538 -0700
++++ calibre-2.9.0/src/calibre/gui2/update.py	2014-11-08 21:45:27.363383815 -0700
+@@ -63,20 +63,6 @@
+         while not self.shutdown_event.is_set():
              calibre_update_version = NO_CALIBRE_UPDATE
              plugins_update_found = 0
 -            try:
@@ -18,7 +18,7 @@ diff -Nur calibre.orig/src/calibre/gui2/update.py calibre/src/calibre/gui2/updat
 -            except Exception as e:
 -                prints('Failed to check for plugin update:', as_unicode(e))
 -            if calibre_update_version != NO_CALIBRE_UPDATE or plugins_update_found > 0:
--                self.update_found.emit(calibre_update_version, plugins_update_found)
-             self.sleep(self.INTERVAL)
+-                self.signal.update_found.emit(calibre_update_version, plugins_update_found)
+             self.shutdown_event.wait(self.INTERVAL)
  
- class UpdateNotification(QDialog):
+     def shutdown(self):
