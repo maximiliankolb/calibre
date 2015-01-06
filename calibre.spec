@@ -65,7 +65,7 @@ BuildRequires:  fontconfig-devel
 BuildConflicts: python-feedparser
 
 %{?pyqt5_requires}
-# once ^^ %pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
+# once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
 Requires:       python-qt5
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
