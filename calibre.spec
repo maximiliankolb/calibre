@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.17.0
-Release:        2%{?dist}
+Version:        2.18.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -319,6 +319,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jan 30 2015 Kevin Fenzi <kevin@scrye.com> 2.18.0-1
+- Update to 2.18.0
+
 * Mon Jan 26 2015 David Tardon <dtardon@redhat.com> - 2.17.0-2
 - rebuild for ICU 54.1
 
