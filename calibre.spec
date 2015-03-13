@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.20.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -24,7 +24,19 @@ Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
 Source2:        calibre-mount-helper
 Source3:        calibre-gui.appdata.xml
+#
+# Disable auto update from inside the app
+#
 Patch1:         %{name}-no-update.patch
+#
+# 
+# Already upstream: fix cover metadata generation
+# https://github.com/kovidgoyal/calibre/commit/72d47ba9377d70e786bf3d93b323544188c894bd.patch
+Patch2:         calibre-2.20.0-cover-metadata-edit.patch
+#
+# Do not display multiple apps in desktop files, only the main app
+# This is so gnome-software only 'sees' calibre once. 
+# 
 Patch3:         calibre-nodisplay.patch
 
 BuildRequires:  python >= 2.6
@@ -110,6 +122,8 @@ RTF, TXT, PDF and LRS.
 
 # don't check for new upstream version (that's what packagers do)
 %patch1 -p1 -b .no-update
+# fix cover metadata editing
+%patch2 -p1
 # Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
 # are all accessible in the main calibre GUI.
 %patch3 -p1 -b .nodisplay
@@ -319,6 +333,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Mar 13 2015 Kevin Fenzi <kevin@scrye.com> 2.20.0-2
+- Apply upstream patch to fix metadata cover editing. Fixes bug #1199836
+
 * Fri Feb 20 2015 Kevin Fenzi <kevin@scrye.com> 2.20.0-1
 - Update to 2.20.0
 
