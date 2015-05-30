@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.28.0
+Version:        2.29.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -60,6 +60,7 @@ BuildRequires:  qt5-qtbase-static
 BuildRequires:  libXrender-devel
 BuildRequires:  systemd-devel
 BuildRequires:  qt5-qtwebkit-devel
+BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
 BuildRequires:  bash-completion
@@ -326,6 +327,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat May 30 2015 Kevin Fenzi <kevin@scrye.com> 2.29.0-1
+- Update to 2.29.0. Fixes bug #1226315
+
 * Fri May 15 2015 Kevin Fenzi <kevin@scrye.com> 2.28.0-1
 - Update to 2.28.0. Fixes bug #1221988
 
