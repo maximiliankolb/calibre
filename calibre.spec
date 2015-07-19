@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.31.0
+Version:        2.32.1
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -67,6 +67,8 @@ BuildRequires:  bash-completion
 BuildRequires:  python-apsw
 BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
+BuildRequires:  libinput-devel
+BuildRequires:  libxkbcommon-devel
 #
 # If python-feedparser is installed at build time there's problems with links. 
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
@@ -174,7 +176,8 @@ LIBPATH="%{_libdir}" \
 python setup.py install --root=%{buildroot}%{_prefix} \
                         --prefix=%{_prefix} \
                         --libdir=%{_libdir} \
-                        --staging-libdir=%{buildroot}%{_libdir}
+                        --staging-libdir=%{buildroot}%{_libdir} \
+                        --staging-sharedir=%{buildroot}%{_datadir}
 
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
@@ -327,6 +330,12 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Jul 18 2015 Kevin Fenzi <kevin@scrye.com> 2.32.1-1
+- Update to 2.32.1. Fixes bug #1244180
+
+* Fri Jul 17 2015 Kevin Fenzi <kevin@scrye.com> 2.32.0-1
+- Update to 2.32.0. Fixed bug #1244180
+
 * Sat Jun 20 2015 Kevin Fenzi <kevin@scrye.com> 2.31.0-1
 - Update to 2.31.0. Fixes bug #1233674
 
