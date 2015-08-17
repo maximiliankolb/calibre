@@ -5,20 +5,20 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.34.0
+Version:        2.35.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
 URL:            http://calibre-ebook.com/
 
-# SourceURL: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+# SourceURL: curl -L http://code.calibre-ebook.com/dist/src > calibre-%%{version}.tar.xz
 # Upstream packages some unfree fonts which we cannot redistribute.
 # While we're at it, also delete the liberation fonts which we already have.
 #
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
-# ./generate-tarball.sh %{version}
+# ./generate-tarball.sh %%{version}
 
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        generate-tarball.sh
@@ -337,6 +337,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Aug 17 2015 Kevin Fenzi <kevin@scrye.com> 2.35.0-1
+- Update to 2.35.0. Fixes bug #1253863
+
 * Fri Aug 07 2015 Kevin Fenzi <kevin@scrye.com> 2.34.0-1
 - Update to 2.34.0. Fixes bug #1251473
 
