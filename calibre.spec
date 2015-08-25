@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.35.0
-Release:        1%{?dist}.1
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -337,6 +337,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Tue Aug 25 2015 Rex Dieter <rdieter@fedoraproject.org> 2.35.0-2
+- bump release
+
 * Tue Aug 25 2015 Rex Dieter <rdieter@fedoraproject.org> 2.35.0-1.1
 - rebuild (for f22 python-qt5)
 
