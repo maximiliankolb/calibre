@@ -2,7 +2,9 @@
 <!-- Copyright 2014 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> -->
 <application>
   <id type="desktop">calibre-gui.desktop</id>
+  <name>Calibre</name>
   <licence>CC0</licence>
+  <summary>E-book library management: Convert, view, share, catalogue all your e-books</summary>
   <description>
     <p>
       Calibre is used to manage a collections of e-books in many popular

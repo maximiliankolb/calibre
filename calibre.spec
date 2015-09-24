@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.35.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -337,6 +337,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Thu Sep 24 2015 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.35.0-2
+- Tweak appdata file to pass validation
+
 * Mon Aug 17 2015 Kevin Fenzi <kevin@scrye.com> 2.35.0-1
 - Update to 2.35.0. Fixes bug #1253863
 
