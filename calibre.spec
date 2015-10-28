@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.41.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -337,6 +337,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Wed Oct 28 2015 David Tardon <dtardon@redhat.com> - 2.41.0-2
+- rebuild for ICU 56.1
+
 * Fri Oct 16 2015 Kevin Fenzi <kevin@scrye.com> 2.41.0-1
 - Update to 3.41.0. Fixes bug #1272439
 
