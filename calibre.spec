@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.45.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -337,6 +337,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sun Dec 06 2015 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.45.0-2
+- Rebuild for qt5-qtbase
+
 * Fri Nov 27 2015 Kevin Fenzi <kevin@scrye.com> - 2.45.0-1
 - Update to 2.45.0. Fixes bug #1286161
 
