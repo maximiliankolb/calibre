@@ -1,0 +1,10 @@
+--- calibre-2.45.0/src/calibre/headless/fontconfig_database.cpp.orig	2015-12-03 20:23:42.966968311 +0100
++++ calibre-2.45.0/src/calibre/headless/fontconfig_database.cpp	2015-12-03 20:23:51.271015225 +0100
+@@ -272,7 +272,6 @@
+ #endif
+ 
+ };
+-Q_STATIC_ASSERT(sizeof(specialLanguages) / sizeof(const char *) == QChar::ScriptCount);
+ 
+ // this could become a list of all languages used for each writing
+ // system, instead of using the single most common language.
