@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.42.0
+Version:        2.47.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -33,13 +33,13 @@ Patch1:         %{name}-no-update.patch
 # This is so gnome-software only 'sees' calibre once. 
 # 
 Patch3:         calibre-nodisplay.patch
+# Remove invalid assert, temporarily
+Patch4:         calibre-2.45.0-invalid_assert.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
 BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools
-BuildRequires:  python-qt5-devel
-BuildRequires:  python-qt5
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -54,12 +54,9 @@ BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libmtp-devel
-BuildRequires:  qt5-qtbase-devel
 BuildRequires:  web-assets-devel
-BuildRequires:  qt5-qtbase-static
 BuildRequires:  libXrender-devel
 BuildRequires:  systemd-devel
-BuildRequires:  qt5-qtwebkit-devel
 BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
@@ -69,6 +66,11 @@ BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5WebKit)
+BuildRequires:  pkgconfig(Qt5OpenGLExtensions)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  python-qt5-devel
 #
 # If python-feedparser is installed at build time there's problems with links. 
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
@@ -82,10 +84,7 @@ BuildConflicts: python-feedparser
 # Project MESSAGE: Running this project against other versions of the Qt modules may crash at any arbitrary point.
 # Project MESSAGE: This is not a bug, but a result of using Qt internals. You have been warned!
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
-
 Requires:       python-qt5
-Requires:       qt5-qtwebkit
-Requires:       qt5-qtsvg
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
@@ -130,6 +129,8 @@ RTF, TXT, PDF and LRS.
 # Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
 # are all accessible in the main calibre GUI.
 %patch3 -p1 -b .nodisplay
+# ! assert
+%patch4 -p1 -b .assert
 
 # dos2unix newline conversion
 sed -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -328,15 +329,31 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/icons/hicolor/*/apps/calibre-gui.png
-%{_datadir}/icons/hicolor/*/apps/calibre-ebook-edit.png
-%{_datadir}/icons/hicolor/*/apps/calibre-viewer.png
 %{python_sitelib}/init_calibre.py*
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Dec 11 2015 Kevin Fenzi <kevin@scrye.com> - 2.46.0-1
+- Update to 2.46.0. Fixes bug #1290767
+
+* Mon Dec 07 2015 Helio Chissini de Castro <helio@kde.org> - 2.45.0-3
+- Remove invalid static that breaks compilation againt qt 5.6.0. Deserve review due real necessity
+- %%files: remove redundant icon references
+
+* Sun Dec 06 2015 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.45.0-2
+- Rebuild for qt5-qtbase
+
+* Fri Nov 27 2015 Kevin Fenzi <kevin@scrye.com> - 2.45.0-1
+- Update to 2.45.0. Fixes bug #1286161
+
+* Fri Nov 13 2015 Kevin Fenzi <kevin@scrye.com> - 2.44.0-1
+- Update to 2.44.0. Fixes bug #1281767
+
+* Fri Nov 06 2015 Kevin Fenzi <kevin@scrye.com> - 2.43.0-1
+- Update to 2.43.0.
+
 * Sun Nov 01 2015 Kevin Fenzi <kevin@scrye.com> 2.42.0-1
 - Update to 2.42.0. Fixes bug #1276799
 
