@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.47.0
+Version:        2.46.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -40,6 +40,8 @@ BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
 BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools
+BuildRequires:  python-qt5-devel
+BuildRequires:  python-qt5
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -54,9 +56,12 @@ BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libmtp-devel
+BuildRequires:  qt5-qtbase-devel
 BuildRequires:  web-assets-devel
+BuildRequires:  qt5-qtbase-static
 BuildRequires:  libXrender-devel
 BuildRequires:  systemd-devel
+BuildRequires:  qt5-qtwebkit-devel
 BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
@@ -66,11 +71,6 @@ BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(Qt5WebKit)
-BuildRequires:  pkgconfig(Qt5OpenGLExtensions)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  python-qt5-devel
 #
 # If python-feedparser is installed at build time there's problems with links. 
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
@@ -84,7 +84,10 @@ BuildConflicts: python-feedparser
 # Project MESSAGE: Running this project against other versions of the Qt modules may crash at any arbitrary point.
 # Project MESSAGE: This is not a bug, but a result of using Qt internals. You have been warned!
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
+
 Requires:       python-qt5
+Requires:       qt5-qtwebkit
+Requires:       qt5-qtsvg
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
