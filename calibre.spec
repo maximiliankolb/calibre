@@ -88,10 +88,7 @@ BuildConflicts: python-feedparser
 Requires:       python-qt5
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
-<<<<<<< HEAD
-=======
 Requires:       qt5-qtsensors
->>>>>>> master
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
