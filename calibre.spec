@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.46.0
-Release:        1%{?dist}
+Version:        2.48.0
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -88,6 +88,10 @@ BuildConflicts: python-feedparser
 Requires:       python-qt5
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
+<<<<<<< HEAD
+=======
+Requires:       qt5-qtsensors
+>>>>>>> master
 Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       ImageMagick
@@ -338,6 +342,12 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Jan 04 2016 Helio Chissini de Castro <helio@kde.org> - 2.48.0-2
+- Add missing qt5-qtsensors dependency. Package don't do proper autodeps
+
+* Fri Jan 01 2016 Kevin Fenzi <kevin@scrye.com> - 2.48.0-1
+- Update to 2.48.0. Fixes bug #1295048
+
 * Fri Dec 11 2015 Kevin Fenzi <kevin@scrye.com> - 2.46.0-1
 - Update to 2.46.0. Fixes bug #1290767
 
