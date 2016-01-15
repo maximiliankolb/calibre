@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.48.0
-Release:        2%{?dist}
+Version:        2.49.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -339,6 +339,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jan 15 2016 Helio Chissini de Castro <helio@kde.org> - 2.49.0-1
+- Update to 2.49.0 release. Close bug #1298908
+
 * Mon Jan 04 2016 Helio Chissini de Castro <helio@kde.org> - 2.48.0-2
 - Add missing qt5-qtsensors dependency. Package don't do proper autodeps
 
