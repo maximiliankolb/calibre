@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.50.1
-Release:        2%{?dist}
+Version:        2.51.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -33,8 +33,6 @@ Patch1:         %{name}-no-update.patch
 # This is so gnome-software only 'sees' calibre once. 
 # 
 Patch3:         calibre-nodisplay.patch
-# Remove invalid assert, temporarily
-Patch4:         calibre-2.45.0-invalid_assert.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -133,8 +131,6 @@ RTF, TXT, PDF and LRS.
 # Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
 # are all accessible in the main calibre GUI.
 %patch3 -p1 -b .nodisplay
-# ! assert
-%patch4 -p1 -b .assert
 
 # dos2unix newline conversion
 sed -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -339,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Feb 12 2016 Kevin Fenzi <kevin@scrye.com> - 2.51.0-1
+- Update to 2.51.0. Fixes bug #1306996
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.50.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
