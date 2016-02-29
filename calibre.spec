@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.52.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Feb 29 2016 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.52.0-2
+- Repack the sources w/o fonts
+
 * Sat Feb 27 2016 Kevin Fenzi <kevin@scrye.com> - 2.52.0-1
 - Update to 2.52.0. Fixes bug #1312514
 
