@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.52.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -84,6 +84,7 @@ BuildConflicts: python-feedparser
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 Requires:       python-qt5
+Requires:       python-qt5-webkit
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
@@ -335,6 +336,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Wed Mar 02 2016 Rex Dieter <rdieter@fedoraproject.org> 2.52.0-3
+- +Requires: python-qt5-webkit
+
 * Mon Feb 29 2016 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.52.0-2
 - Repack the sources w/o fonts
 
