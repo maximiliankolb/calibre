@@ -40,6 +40,7 @@ BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-qt5-devel
 BuildRequires:  python-qt5
+BuildRequires:  python-qt5-webkit
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -337,7 +338,7 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 
 %changelog
 * Wed Mar 02 2016 Rex Dieter <rdieter@fedoraproject.org> 2.52.0-3
-- +Requires: python-qt5-webkit
+- +(Build)Requires: python-qt5-webkit
 
 * Mon Feb 29 2016 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.52.0-2
 - Repack the sources w/o fonts
