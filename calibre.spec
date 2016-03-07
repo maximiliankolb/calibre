@@ -18,10 +18,10 @@ URL:            http://calibre-ebook.com/
 #
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
-# ./generate-tarball.sh %%{version}
+# ./getsources.sh %%{version}
 
 Source0:        %{name}-%{version}-nofonts.tar.xz
-Source1:        generate-tarball.sh
+Source1:        getsources.sh
 Source2:        calibre-mount-helper
 Source3:        calibre-gui.appdata.xml
 #
