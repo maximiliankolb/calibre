@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.49.0
+Version:        2.53.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -18,10 +18,10 @@ URL:            http://calibre-ebook.com/
 #
 # Download the upstream tarball and invoke this script while in the tarball's
 # directory:
-# ./generate-tarball.sh %%{version}
+# ./getsources.sh %%{version}
 
 Source0:        %{name}-%{version}-nofonts.tar.xz
-Source1:        generate-tarball.sh
+Source1:        getsources.sh
 Source2:        calibre-mount-helper
 Source3:        calibre-gui.appdata.xml
 #
@@ -33,8 +33,6 @@ Patch1:         %{name}-no-update.patch
 # This is so gnome-software only 'sees' calibre once. 
 # 
 Patch3:         calibre-nodisplay.patch
-# Remove invalid assert, temporarily
-Patch4:         calibre-2.45.0-invalid_assert.patch
 
 BuildRequires:  python >= 2.6
 BuildRequires:  python-devel >= 2.6
@@ -42,6 +40,7 @@ BuildRequires:  ImageMagick-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-qt5-devel
 BuildRequires:  python-qt5
+BuildRequires:  python-qt5-webkit
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  python-mechanize
@@ -86,6 +85,7 @@ BuildConflicts: python-feedparser
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 Requires:       python-qt5
+Requires:       python-qt5-webkit
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
@@ -133,8 +133,6 @@ RTF, TXT, PDF and LRS.
 # Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
 # are all accessible in the main calibre GUI.
 %patch3 -p1 -b .nodisplay
-# ! assert
-%patch4 -p1 -b .assert
 
 # dos2unix newline conversion
 sed -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -339,6 +337,27 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Mar 11 2016 Kevin Fenzi <kevin@scrye.com> - 2.53.0-1
+- Update to 2.53.0. Fixes bug #1316887
+
+* Wed Mar 02 2016 Rex Dieter <rdieter@fedoraproject.org> 2.52.0-3
+- +(Build)Requires: python-qt5-webkit
+
+* Mon Feb 29 2016 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.52.0-2
+- Repack the sources w/o fonts
+
+* Sat Feb 27 2016 Kevin Fenzi <kevin@scrye.com> - 2.52.0-1
+- Update to 2.52.0. Fixes bug #1312514
+
+* Fri Feb 12 2016 Kevin Fenzi <kevin@scrye.com> - 2.51.0-1
+- Update to 2.51.0. Fixes bug #1306996
+
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.50.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Fri Jan 29 2016 Kevin Fenzi <kevin@scrye.com> - 2.50.1-1
+- Update to 2.50.1
+
 * Fri Jan 15 2016 Helio Chissini de Castro <helio@kde.org> - 2.49.0-1
 - Update to 2.49.0 release. Close bug #1298908
 

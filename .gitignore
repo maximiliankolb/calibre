@@ -1,3 +1,5 @@
+.build-*.log
+/calibre-*.src.rpm
 calibre-0.7.10-nofonts.tar.xz
 calibre-0.7.11-nofonts.tar.xz
 calibre-0.7.12-nofonts.tar.xz
@@ -223,3 +225,8 @@ calibre-0.7.14-nofonts.tar.xz
 /calibre-2.46.0-nofonts.tar.xz
 /calibre-2.48.0-nofonts.tar.xz
 /calibre-2.49.0-nofonts.tar.xz
+/calibre-2.50.1-nofonts.tar.xz
+/calibre-2.51.0-nofonts.tar.xz
+/calibre-2.52.0.tar.xz
+/calibre-2.52.0-nofonts.tar.xz
+/calibre-2.53.0-nofonts.tar.xz
