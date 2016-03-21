@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.49.0
-Release:        1%{?dist}.1
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -339,9 +339,6 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
-* Mon Mar 21 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.49.0-1.1
-- rebuild (Qt-5.6.0)
-
 * Fri Jan 15 2016 Helio Chissini de Castro <helio@kde.org> - 2.49.0-1
 - Update to 2.49.0 release. Close bug #1298908
 
