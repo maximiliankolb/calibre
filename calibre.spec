@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.55.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -82,6 +82,7 @@ BuildConflicts: python-feedparser
 # Project MESSAGE: This project is using private headers and will therefore be tied to this specific Qt module build version.
 # Project MESSAGE: Running this project against other versions of the Qt modules may crash at any arbitrary point.
 # Project MESSAGE: This is not a bug, but a result of using Qt internals. You have been warned!
+BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 Requires:       python-qt5
@@ -337,6 +338,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sun Apr 17 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.55.0-3
+- BR: qt5-qtbase-private-devel
+
 * Fri Apr 15 2016 David Tardon <dtardon@redhat.com> - 2.55.0-2
 - rebuild for ICU 57.1
 
