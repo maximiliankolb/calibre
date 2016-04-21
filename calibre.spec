@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.55.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -338,6 +338,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Wed Apr 20 2016 Kevin Fenzi <kevin@scrye.com> - 2.55.0-4
+- Rebuild again for libicu
+
 * Sun Apr 17 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.55.0-3
 - BR: qt5-qtbase-private-devel
 
