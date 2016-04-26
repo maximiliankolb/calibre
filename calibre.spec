@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.55.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -338,6 +338,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Tue Apr 26 2016 Kevin Fenzi <kevin@scrye.com> - 2.55.0-5
+- Rebuild again for qt oddness. Fixes bug #1330750
+
 * Wed Apr 20 2016 Kevin Fenzi <kevin@scrye.com> - 2.55.0-4
 - Rebuild again for libicu
 
