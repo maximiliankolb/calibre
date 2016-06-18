@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.58.0
-Release:        2%{?dist}
+Version:        2.59.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -338,6 +338,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Jun 18 2016 Kevin Fenzi <kevin@scrye.com> - 2.59.0-1
+- Update to 2.59.0. Fixes bug #1347688
+
 * Fri Jun 10 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.58.0-2
 - rebuild (qt5-qtbase)
 
