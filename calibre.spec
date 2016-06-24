@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.59.0
+Version:        2.60.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -34,9 +34,8 @@ Patch1:         %{name}-no-update.patch
 # 
 Patch3:         calibre-nodisplay.patch
 
-BuildRequires:  python >= 2.6
-BuildRequires:  python-devel >= 2.6
-BuildRequires:  ImageMagick-devel
+BuildRequires:  python >= 2.7
+BuildRequires:  python-devel >= 2.7
 BuildRequires:  python-setuptools
 BuildRequires:  python-qt5-devel
 BuildRequires:  python-qt5
@@ -70,10 +69,6 @@ BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
-#
-# If python-feedparser is installed at build time there's problems with links. 
-# See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
-BuildConflicts: python-feedparser
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
@@ -92,7 +87,6 @@ Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
 Requires:       python-cherrypy
 Requires:       python-cssutils
-Requires:       ImageMagick
 Requires:       odfpy
 Requires:       python-lxml
 Requires:       python-imaging
@@ -111,6 +105,9 @@ Requires:       python-dns
 Requires:       python-cssselect
 Requires:       python-apsw
 Requires:       mathjax
+Requires:       python2-psutil
+Requires:       python-pygments
+Requires:       optipng
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -338,6 +335,10 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jun 24 2016 Kevin Fenzi <kevin@scrye.com> - 2.60.0-1
+- Update to 2.60.0. Fixes bug #1349870
+- Fix Requires. Fixes bug #1347961
+
 * Sat Jun 18 2016 Kevin Fenzi <kevin@scrye.com> - 2.59.0-1
 - Update to 2.59.0. Fixes bug #1347688
 
