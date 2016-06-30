@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.53.0
-Release:        1%{?dist}
+Version:        2.60.0
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -34,9 +34,8 @@ Patch1:         %{name}-no-update.patch
 # 
 Patch3:         calibre-nodisplay.patch
 
-BuildRequires:  python >= 2.6
-BuildRequires:  python-devel >= 2.6
-BuildRequires:  ImageMagick-devel
+BuildRequires:  python >= 2.7
+BuildRequires:  python-devel >= 2.7
 BuildRequires:  python-setuptools
 BuildRequires:  python-qt5-devel
 BuildRequires:  python-qt5
@@ -70,10 +69,6 @@ BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
-#
-# If python-feedparser is installed at build time there's problems with links. 
-# See https://bugzilla.redhat.com/show_bug.cgi?id=1026469
-BuildConflicts: python-feedparser
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
@@ -82,6 +77,7 @@ BuildConflicts: python-feedparser
 # Project MESSAGE: This project is using private headers and will therefore be tied to this specific Qt module build version.
 # Project MESSAGE: Running this project against other versions of the Qt modules may crash at any arbitrary point.
 # Project MESSAGE: This is not a bug, but a result of using Qt internals. You have been warned!
+BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 Requires:       python-qt5
@@ -91,7 +87,6 @@ Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
 Requires:       python-cherrypy
 Requires:       python-cssutils
-Requires:       ImageMagick
 Requires:       odfpy
 Requires:       python-lxml
 Requires:       python-imaging
@@ -110,6 +105,9 @@ Requires:       python-dns
 Requires:       python-cssselect
 Requires:       python-apsw
 Requires:       mathjax
+Requires:       python2-psutil
+Requires:       python-pygments
+Requires:       optipng
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -337,6 +335,46 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Thu Jun 30 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.60.0-2
+- rebuild (qt5)
+
+* Fri Jun 24 2016 Kevin Fenzi <kevin@scrye.com> - 2.60.0-1
+- Update to 2.60.0. Fixes bug #1349870
+- Fix Requires. Fixes bug #1347961
+
+* Sat Jun 18 2016 Kevin Fenzi <kevin@scrye.com> - 2.59.0-1
+- Update to 2.59.0. Fixes bug #1347688
+
+* Fri Jun 10 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.58.0-2
+- rebuild (qt5-qtbase)
+
+* Fri Jun 03 2016 Kevin Fenzi <kevin@scrye.com> - 2.58.0-1
+- Update to 2.58.0. Fixes bug #1342516
+
+* Sat May 21 2016 Kevin Fenzi <kevin@scrye.com> - 2.57.1-1
+- Update to 2.57.1. Fixes bug #1338386
+
+* Fri Apr 29 2016 Kevin Fenzi <kevin@scrye.com> - 2.56.0-1
+- Update to 2.56.0. Fixes bug #1331734
+
+* Tue Apr 26 2016 Kevin Fenzi <kevin@scrye.com> - 2.55.0-5
+- Rebuild again for qt oddness. Fixes bug #1330750
+
+* Wed Apr 20 2016 Kevin Fenzi <kevin@scrye.com> - 2.55.0-4
+- Rebuild again for libicu
+
+* Sun Apr 17 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.55.0-3
+- BR: qt5-qtbase-private-devel
+
+* Fri Apr 15 2016 David Tardon <dtardon@redhat.com> - 2.55.0-2
+- rebuild for ICU 57.1
+
+* Fri Apr 15 2016 Kevin Fenzi <kevin@scrye.com> - 2.55.0-1
+- Update to 2.55.0. Fixes bug #1327565
+
+* Sat Apr 02 2016 Kevin Fenzi <kevin@scrye.com> - 2.54.0-1
+- Update to 2.54.0. Fixes bug #1323395
+
 * Fri Mar 11 2016 Kevin Fenzi <kevin@scrye.com> - 2.53.0-1
 - Update to 2.53.0. Fixes bug #1316887
 
