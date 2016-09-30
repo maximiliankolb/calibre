@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.68.0
-Release:        2%{?dist}
+Version:        2.69.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Sep 30 2016 Kevin Fenzi <kevin@scrye.com> - 2.69.0-1
+- Update to 2.69.0. Fixes bugs #1380712 and #1379156
+
 * Fri Sep 23 2016 Jon Ciesla <limburgher@gmail.com> - 2.68.0-2
 - podofo rebuild.
 
