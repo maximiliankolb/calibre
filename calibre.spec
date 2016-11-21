@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.60.0
-Release:        2%{?dist}
+Release:        2%{?dist}.1
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Nov 21 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.60.0-2.1
+- branch rebuild (qt5)
+
 * Thu Jun 30 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.60.0-2
 - rebuild (qt5)
 
