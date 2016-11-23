@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.60.0
-Release:        2%{?dist}
+Version:        2.71.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,51 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Oct 31 2016 Kevin Fenzi <kevin@scrye.com> - 2.71.0-1
+- Update to 2.71.0. Fixes bug #1390174
+
+* Sat Oct 15 2016 Kevin Fenzi <kevin@scrye.com> - 2.70.0-1
+- Update to 2.70.0. Fixes bug #1385274
+
+* Fri Sep 30 2016 Kevin Fenzi <kevin@scrye.com> - 2.69.0-1
+- Update to 2.69.0. Fixes bugs #1380712 and #1379156
+
+* Fri Sep 23 2016 Jon Ciesla <limburgher@gmail.com> - 2.68.0-2
+- podofo rebuild.
+
+* Sat Sep 17 2016 Kevin Fenzi <kevin@scrye.com> - 2.68.0-1
+- Update to 2.68.0. Fixes bug #1376793
+
+* Thu Sep 08 2016 Kevin Fenzi <kevin@scrye.com> - 2.67.0-1
+- Update to 2.67.0. Fixes bug #1374303
+
+* Fri Sep 02 2016 Kevin Fenzi <kevin@scrye.com> - 2.66.0-1
+- Update to 2.66.0. Fixes bug #1372696
+
+* Fri Aug 26 2016 Kevin Fenzi <kevin@scrye.com> - 2.65.1-1
+- Update to 2.65.1. Fixes bug #1370676
+
+* Sun Aug 14 2016 Kevin Fenzi <kevin@scrye.com> - 2.64.0-1
+- Update to 2.64.0. Fixes bug #1366588
+
+* Mon Aug 08 2016 Kevin Fenzi <kevin@scrye.com> - 2.63.0-2
+- Rebuild for qt5
+
+* Sat Jul 23 2016 Kevin Fenzi <kevin@scrye.com> - 2.63.0-1
+- Update to 2.63.0
+
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.62.0-3
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
+* Sun Jul 17 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.62.0-2
+- rebuild (qt5)
+
+* Sat Jul 09 2016 Kevin Fenzi <kevin@scrye.com> - 2.62.0-1
+- Update to 2.62. Fixes bug #1354088
+
+* Mon Jul 04 2016 Kevin Fenzi <kevin@scrye.com> - 2.61.0-1
+- Update to 2.61. Fixes bug #1351380
+
 * Thu Jun 30 2016 Rex Dieter <rdieter@fedoraproject.org> - 2.60.0-2
 - rebuild (qt5)
 
