@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.78.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Thu Feb 02 2017 Sandro Mani <manisandro@gmail.com> - 2.78.0-2
+- Rebuild (podofo)
+
 * Fri Jan 27 2017 Kevin Fenzi <kevin@scrye.com> - 2.78.0-1
 - Update to 2.78.0. Fixes bug #1409216
 
