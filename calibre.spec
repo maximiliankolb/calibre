@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.78.0
-Release:        3%{?dist}
+Version:        2.79.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Feb 10 2017 Kevin Fenzi <kevin@scrye.com> - 2.79.0-1
+- Update to 2.79.0. Fixes bug #1421124
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.78.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
