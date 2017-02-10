@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.78.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.78.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Thu Feb 02 2017 Sandro Mani <manisandro@gmail.com> - 2.78.0-2
 - Rebuild (podofo)
 
