@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        2.80.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -87,7 +87,7 @@ Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
 Requires:       python-cherrypy
 Requires:       python-cssutils
-Requires:       odfpy
+Requires:       python2-odfpy
 Requires:       python-lxml
 Requires:       python-imaging
 Requires:       python-mechanize
@@ -335,6 +335,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Mar 11 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.80.0-2
+- Update to new name of python2-odfpy
+
 * Fri Feb 24 2017 Kevin Fenzi <kevin@scrye.com> - 2.80.0-1
 - Update to 2.80.0. Fixes bug #1426586
 
