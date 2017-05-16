@@ -33,6 +33,7 @@ Patch1:         %{name}-no-update.patch
 # This is so gnome-software only 'sees' calibre once. 
 # 
 Patch3:         calibre-nodisplay.patch
+Patch4:         0001-Compatibility-with-qt5-5.9.0.patch
 
 BuildRequires:  python >= 2.7
 BuildRequires:  python-devel >= 2.7
@@ -124,13 +125,7 @@ Supported input formats are: MOBI, LIT, PRC, EPUB, CHM, ODT, HTML, CBR, CBZ,
 RTF, TXT, PDF and LRS.
 
 %prep
-%setup -q -n %{name}-%{version}
-
-# don't check for new upstream version (that's what packagers do)
-%patch1 -p1 -b .no-update
-# Hide individual launchers for ebook-edit, ebook-viewer and lrfviewer as they
-# are all accessible in the main calibre GUI.
-%patch3 -p1 -b .nodisplay
+%autosetup -n %{name}-%{version} -p1
 
 # dos2unix newline conversion
 sed -i 's/\r//' src/calibre/web/feeds/recipes/*
@@ -335,6 +330,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Tue May 16 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 2.83.0-2
+- Add patch to build under qt 5.9.0
+
 * Fri May 12 2017 Rex Dieter <rdieter@fedoraproject.org> - 2.83.0-2
 - rebuild (qt5)
 
