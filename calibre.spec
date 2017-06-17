@@ -5,7 +5,7 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        2.85.1
+Version:        3.0.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -33,7 +33,6 @@ Patch1:         %{name}-no-update.patch
 # This is so gnome-software only 'sees' calibre once. 
 # 
 Patch3:         calibre-nodisplay.patch
-Patch4:         0001-Compatibility-with-qt5-5.9.0.patch
 
 BuildRequires:  python >= 2.7
 BuildRequires:  python-devel >= 2.7
@@ -70,6 +69,8 @@ BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
+BuildRequires:  python2-msgpack
+BuildRequires:  python2-regex
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
@@ -330,6 +331,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Fri Jun 16 2017 Kevin Fenzi <kevin@scrye.com> - 3.0.0-1
+- Update to 3.0.0.
+
 * Fri May 19 2017 Kevin Fenzi <kevin@scrye.com> - 2.85.1-1
 - Update to 2.85.1. Fixes bug #1448630
 
