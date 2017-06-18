@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -110,6 +110,8 @@ Requires:       mathjax
 Requires:       python2-psutil
 Requires:       python-pygments
 Requires:       optipng
+Requires:       python2-msgpack
+Requires:       python2-regex
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -331,6 +333,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sun Jun 18 2017 Kevin Fenzi <kevin@scrye.com> - 3.0.0-2
+- Fix Requires for 3.0.0. Fixes bug #1462534
+
 * Fri Jun 16 2017 Kevin Fenzi <kevin@scrye.com> - 3.0.0-1
 - Update to 3.0.0.
 
