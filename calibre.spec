@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        3.0.0
-Release:        2%{?dist}
+Version:        3.1.1
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -333,6 +333,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Sat Jun 24 2017 Kevin Fenzi <kevin@scrye.com> - 3.1.1-1
+- Update to 3.1.1. Fixes bug #1464428
+
 * Sun Jun 18 2017 Kevin Fenzi <kevin@scrye.com> - 3.0.0-2
 - Fix Requires for 3.0.0. Fixes bug #1462534
 
