@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -87,14 +87,12 @@ Requires:       python-qt5-webkit
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
-Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       python2-odfpy
 Requires:       python-lxml
 Requires:       python-imaging
 Requires:       python-mechanize
 Requires:       python-dateutil
-Requires:       python-genshi
 Requires:       python-BeautifulSoup
 Requires:       poppler-utils
 # Require the packages of the files which are symlinked by calibre
@@ -104,7 +102,6 @@ Requires:       liberation-mono-fonts
 Requires:       python-feedparser
 Requires:       python-netifaces
 Requires:       python-dns
-Requires:       python-cssselect
 Requires:       python-apsw
 Requires:       mathjax
 Requires:       python2-psutil
@@ -129,9 +126,6 @@ RTF, TXT, PDF and LRS.
 
 %prep
 %autosetup -n %{name}-%{version} -p1
-
-# dos2unix newline conversion
-sed -i 's/\r//' src/calibre/web/feeds/recipes/*
 
 # remove shebangs
 sed -i -e '/^#!\//, 1d' src/calibre/*/*/*/*.py
@@ -225,9 +219,7 @@ cp -p resources/images/viewer.png \
       %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
 # these are provided as separate packages
-rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
-rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
-rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
+rm -rf %{buildroot}%{_libdir}/%{name}/odf
 
 # rm empty feedparser files.
 rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
@@ -333,6 +325,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Mon Jul 24 2017 Kevin Fenzi <kevin@scrye.com> - 3.4.0-2
+- Fix dependencies. Bug #1473976
+
 * Thu Jul 20 2017 Kevin Fenzi <kevin@scrye.com> - 3.4.0-1
 - Update to 3.4.0. Fixes bug #1471092
 
