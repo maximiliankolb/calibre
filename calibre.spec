@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.4.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -325,6 +325,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Tue Oct 10 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.4.0-5
+- rebuild (qt5)
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.4.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
