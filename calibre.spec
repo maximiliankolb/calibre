@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -30,8 +30,8 @@ Source3:        calibre-gui.appdata.xml
 Patch1:         %{name}-no-update.patch
 #
 # Do not display multiple apps in desktop files, only the main app
-# This is so gnome-software only 'sees' calibre once. 
-# 
+# This is so gnome-software only 'sees' calibre once.
+#
 Patch3:         calibre-nodisplay.patch
 
 BuildRequires:  python >= 2.7
@@ -333,6 +333,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/appdata/calibre*.appdata.xml
 
 %changelog
+* Thu Oct 12 2017 Jan Grulich <jgrulich@redhat.com> - 3.1.1-2
+- rebuild (qt5)
+
 * Sat Jun 24 2017 Kevin Fenzi <kevin@scrye.com> - 3.1.1-1
 - Update to 3.1.1. Fixes bug #1464428
 
@@ -388,7 +391,7 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 - rebuild (sip)
 
 * Fri Dec 30 2016 Kevin Fenzi <kevin@scrye.com> - 2.76.0-1
-- Update to 2.76.0. 
+- Update to 2.76.0.
 
 * Sun Dec 25 2016 Kevin Fenzi <kevin@scrye.com> - 2.75.1-1
 - Update to 2.75.1. Fixes bug #1408585
