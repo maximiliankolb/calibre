@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        3.4.0
-Release:        5%{?dist}
+Version:        3.10.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -23,7 +23,6 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        getsources.sh
 Source2:        calibre-mount-helper
-Source3:        calibre-gui.appdata.xml
 #
 # Disable auto update from inside the app
 #
@@ -71,6 +70,8 @@ BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  python2-msgpack
 BuildRequires:  python2-regex
+BuildRequires:  python2-html5-parser
+BuildRequires:  libappstream-glib
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
@@ -109,6 +110,7 @@ Requires:       python-pygments
 Requires:       optipng
 Requires:       python2-msgpack
 Requires:       python2-regex
+Requires:       python2-html5-parser
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -157,9 +159,6 @@ mkdir -p %{buildroot}%{_datadir}/mime
 mkdir -p %{buildroot}%{_datadir}/mime/packages
 mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/desktop-directories
-
-# create directory for gnome software data
-mkdir -p %{buildroot}%{_datadir}/appdata
 
 # create directory for calibre environment module
 # the install script assumes it's there.
@@ -265,7 +264,11 @@ rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
-cp -p %{SOURCE3} %{buildroot}%{_datadir}/appdata/
+# Remove these 2 appdata files, we can only include one
+rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
+rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
+
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
 
 %post
 update-desktop-database &> /dev/null ||:
@@ -322,9 +325,12 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{python_sitelib}/init_calibre.py*
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/zsh/site-functions/_%{name}
-%{_datadir}/appdata/calibre*.appdata.xml
+%{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Oct 20 2017 Kevin Fenzi <kevin@scrye.com> - 3.10.0-1
+- Update to 3.10.0. Fixes bug #1480024
+
 * Tue Oct 10 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.4.0-5
 - rebuild (qt5)
 
