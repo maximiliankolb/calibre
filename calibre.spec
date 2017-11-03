@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        3.10.0
-Release:        2%{?dist}
+Version:        3.11.1
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -328,6 +328,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Nov 02 2017 Kevin Fenzi <kevin@scrye.com> - 3.11.1-1
+- Update to 3.11.1. Fixes bug #1508861
+
 * Mon Oct 23 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.10.0-2
 - rebuild (qt5)
 
