@@ -5,8 +5,8 @@
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
 Name:           calibre
-Version:        3.1.1
-Release:        2%{?dist}
+Version:        3.11.1
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -23,15 +23,14 @@ URL:            http://calibre-ebook.com/
 Source0:        %{name}-%{version}-nofonts.tar.xz
 Source1:        getsources.sh
 Source2:        calibre-mount-helper
-Source3:        calibre-gui.appdata.xml
 #
 # Disable auto update from inside the app
 #
 Patch1:         %{name}-no-update.patch
 #
 # Do not display multiple apps in desktop files, only the main app
-# This is so gnome-software only 'sees' calibre once.
-#
+# This is so gnome-software only 'sees' calibre once. 
+# 
 Patch3:         calibre-nodisplay.patch
 
 BuildRequires:  python >= 2.7
@@ -71,6 +70,8 @@ BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  python2-msgpack
 BuildRequires:  python2-regex
+BuildRequires:  python2-html5-parser
+BuildRequires:  libappstream-glib
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
@@ -87,14 +88,12 @@ Requires:       python-qt5-webkit
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
-Requires:       python-cherrypy
 Requires:       python-cssutils
 Requires:       python2-odfpy
 Requires:       python-lxml
 Requires:       python-imaging
 Requires:       python-mechanize
 Requires:       python-dateutil
-Requires:       python-genshi
 Requires:       python-BeautifulSoup
 Requires:       poppler-utils
 # Require the packages of the files which are symlinked by calibre
@@ -104,7 +103,6 @@ Requires:       liberation-mono-fonts
 Requires:       python-feedparser
 Requires:       python-netifaces
 Requires:       python-dns
-Requires:       python-cssselect
 Requires:       python-apsw
 Requires:       mathjax
 Requires:       python2-psutil
@@ -112,6 +110,7 @@ Requires:       python-pygments
 Requires:       optipng
 Requires:       python2-msgpack
 Requires:       python2-regex
+Requires:       python2-html5-parser
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -129,9 +128,6 @@ RTF, TXT, PDF and LRS.
 
 %prep
 %autosetup -n %{name}-%{version} -p1
-
-# dos2unix newline conversion
-sed -i 's/\r//' src/calibre/web/feeds/recipes/*
 
 # remove shebangs
 sed -i -e '/^#!\//, 1d' src/calibre/*/*/*/*.py
@@ -163,9 +159,6 @@ mkdir -p %{buildroot}%{_datadir}/mime
 mkdir -p %{buildroot}%{_datadir}/mime/packages
 mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/desktop-directories
-
-# create directory for gnome software data
-mkdir -p %{buildroot}%{_datadir}/appdata
 
 # create directory for calibre environment module
 # the install script assumes it's there.
@@ -225,9 +218,7 @@ cp -p resources/images/viewer.png \
       %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
 # these are provided as separate packages
-rm -rf %{buildroot}%{_libdir}/%{name}/{odf,cherrypy,encutils,cssutils}
-rm -rf %{buildroot}%{_libdir}/%{name}/cal/utils/genshi
-rm -rf %{buildroot}%{_libdir}/%{name}/cal/trac
+rm -rf %{buildroot}%{_libdir}/%{name}/odf
 
 # rm empty feedparser files.
 rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
@@ -273,7 +264,11 @@ rm -f %{buildroot}%{_bindir}/%{name}-uninstall
 
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
-cp -p %{SOURCE3} %{buildroot}%{_datadir}/appdata/
+# Remove these 2 appdata files, we can only include one
+rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
+rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
+
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
 
 %post
 update-desktop-database &> /dev/null ||:
@@ -330,11 +325,44 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{python_sitelib}/init_calibre.py*
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/zsh/site-functions/_%{name}
-%{_datadir}/appdata/calibre*.appdata.xml
+%{_datadir}/metainfo/*.appdata.xml
 
 %changelog
-* Thu Oct 12 2017 Jan Grulich <jgrulich@redhat.com> - 3.1.1-2
+* Thu Nov 02 2017 Kevin Fenzi <kevin@scrye.com> - 3.11.1-1
+- Update to 3.11.1. Fixes bug #1508861
+
+* Mon Oct 23 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.10.0-2
 - rebuild (qt5)
+
+* Fri Oct 20 2017 Kevin Fenzi <kevin@scrye.com> - 3.10.0-1
+- Update to 3.10.0. Fixes bug #1480024
+
+* Tue Oct 10 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.4.0-5
+- rebuild (qt5)
+
+* Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.4.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.4.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Mon Jul 24 2017 Kevin Fenzi <kevin@scrye.com> - 3.4.0-2
+- Fix dependencies. Bug #1473976
+
+* Thu Jul 20 2017 Kevin Fenzi <kevin@scrye.com> - 3.4.0-1
+- Update to 3.4.0. Fixes bug #1471092
+
+* Wed Jul 19 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.3.0-2
+- rebuild (qt5)
+
+* Fri Jul 07 2017 Kevin Fenzi <kevin@scrye.com> - 3.3.0-1
+- Update to 3.3.0. Fixes bug #1468560
+
+* Thu Jul 06 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.2.1-2
+- rebuild (sip)
+
+* Fri Jun 30 2017 Kevin Fenzi <kevin@scrye.com> - 3.2.1-1
+- Update to 3.2.1. Fixes bug #1466763
 
 * Sat Jun 24 2017 Kevin Fenzi <kevin@scrye.com> - 3.1.1-1
 - Update to 3.1.1. Fixes bug #1464428
@@ -391,7 +419,7 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 - rebuild (sip)
 
 * Fri Dec 30 2016 Kevin Fenzi <kevin@scrye.com> - 2.76.0-1
-- Update to 2.76.0.
+- Update to 2.76.0. 
 
 * Sun Dec 25 2016 Kevin Fenzi <kevin@scrye.com> - 2.75.1-1
 - Update to 2.75.1. Fixes bug #1408585
