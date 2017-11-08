@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.11.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -328,6 +328,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Wed Nov 08 2017 Kevin Fenzi <kevin@scrye.com> - 3.11.1-2
+- Rebuild for upgrade path.
+
 * Thu Nov 02 2017 Kevin Fenzi <kevin@scrye.com> - 3.11.1-1
 - Update to 3.11.1. Fixes bug #1508861
 
