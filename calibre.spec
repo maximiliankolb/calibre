@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.12.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -328,6 +328,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Nov 30 2017 Pete Walter <pwalter@fedoraproject.org> - 3.12.0-3
+- Rebuild for ICU 60.1
+
 * Mon Nov 27 2017 Rex Dieter <rdieter@fedoraproject.org> - 3.12.0-2
 - rebuild (qt5)
 
