@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.19.0
-Release:        1%{?dist}
+Release:        1%{?dist}.1
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Jun 15 2018 Rex Dieter <rdieter@fedoraproject.org> - 3.19.0-1.1
+- branch rebuild (qt5)
+
 * Fri Mar 09 2018 Kevin Fenzi <kevin@scrye.com> - 3.19.0-1
 - Update to 3.19.0. Fixes bug #1553719
 - Fix for CVE-2018-7889 - bug #1553917,1553919
