@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.26.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Jun 21 2018 Rex Dieter <rdieter@fedoraproject.org> - 3.26.1-2
+- rebuild (qt5)
+
 * Fri Jun 15 2018 Kevin Fenzi <kevin@scrye.com> - 3.26.1-1
 - Update to 2.26.1. Fixes bug #1591735
 
