@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.27.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Jul 10 2018 Pete Walter <pwalter@fedoraproject.org> - 3.27.1-2
+- Rebuild for ICU 62
+
 * Sat Jul  7 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.27.1-1
 - Update to 3.27.1. Fixes bug #1598761
 
