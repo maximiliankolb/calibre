@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.27.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -312,6 +312,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.27.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Wed Jul 11 2018 Sandro Mani <manisandro@gmail.com> - 3.27.1-3
 - Rebuild (podofo)
 
