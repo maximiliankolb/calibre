@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.27.1
-Release:        5%{?dist}
+Version:        3.28.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -317,6 +317,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Jul 26 2018 Kevin Fenzi <kevin@scrye.com> - 3.28.0-1
+- Update to 3.28.0. Fixes bug #1605186
+
 * Thu Jul 26 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.27.1-5
 - Use versioned python macros
 - Do explicit byte compilation to conform to new guidelines
