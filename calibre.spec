@@ -2,6 +2,8 @@
 
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
+%global _python_bytecompile_extra 0
+
 Name:           calibre
 Version:        3.27.1
 Release:        5%{?dist}
@@ -182,6 +184,9 @@ LIBPATH="%{_libdir}" \
 # it just got spawned by the install script
 sed -i -e '/^#!\//, 1d' %{buildroot}%{python2_sitelib}/init_calibre.py
 
+# there are some python files there, do byte-compilation on them
+%py_byte_compile %{__python2} %{buildroot}%{_datadir}/%{name}
+
 # icons
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
@@ -314,6 +319,7 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %changelog
 * Thu Jul 26 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.27.1-5
 - Use versioned python macros
+- Do explicit byte compilation to conform to new guidelines
 
 * Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.27.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
