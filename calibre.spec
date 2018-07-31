@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.28.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -317,6 +317,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 3.28.0-3
+- Rebuild with fixed binutils
+
 * Fri Jul 27 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.28.0-2
 - Rebuild for new binutils
 
