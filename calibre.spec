@@ -1,11 +1,11 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
 
+%global _python_bytecompile_extra 0
+
 Name:           calibre
-Version:        3.19.0
+Version:        3.29.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -33,22 +33,22 @@ Patch1:         %{name}-no-update.patch
 #
 Patch3:         calibre-nodisplay.patch
 
-BuildRequires:  python >= 2.7
-BuildRequires:  python-devel >= 2.7
-BuildRequires:  python-setuptools
-BuildRequires:  python-qt5-devel
-BuildRequires:  python-qt5
-BuildRequires:  python-qt5-webkit
+BuildRequires:  python2 >= 2.7
+BuildRequires:  python2-devel >= 2.7
+BuildRequires:  python2-setuptools
+BuildRequires:  python2-qt5-devel
+BuildRequires:  python2-qt5
+BuildRequires:  python2-qt5-webkit
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:  python-mechanize
-BuildRequires:  python-lxml
-BuildRequires:  python-dateutil
-BuildRequires:  python-imaging
+BuildRequires:  python2-mechanize
+BuildRequires:  python2-lxml
+BuildRequires:  python2-dateutil
+BuildRequires:  python2-imaging
 BuildRequires:  xdg-utils
-BuildRequires:  python-BeautifulSoup
+BuildRequires:  python2-beautifulsoup
 BuildRequires:  chmlib-devel
-BuildRequires:  python-cssutils >= 0.9.9
+BuildRequires:  python2-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
@@ -63,7 +63,8 @@ BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
 BuildRequires:  bash-completion
-BuildRequires:  python-apsw
+BuildRequires:  python2-apsw
+BuildRequires:  python2-enum34
 BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
@@ -83,34 +84,35 @@ BuildRequires:  libappstream-glib
 BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
-Requires:       python-qt5
-Requires:       python-qt5-webkit
+Requires:       python2-qt5
+Requires:       python2-qt5-webkit
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
-Requires:       python-cssutils
+Requires:       python2-cssutils
 Requires:       python2-odfpy
-Requires:       python-lxml
-Requires:       python-imaging
-Requires:       python-mechanize
-Requires:       python-dateutil
-Requires:       python-BeautifulSoup
+Requires:       python2-lxml
+Requires:       python2-imaging
+Requires:       python2-mechanize
+Requires:       python2-dateutil
+Requires:       python2-beautifulsoup
 Requires:       poppler-utils
 # Require the packages of the files which are symlinked by calibre
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
-Requires:       python-feedparser
-Requires:       python-netifaces
-Requires:       python-dns
-Requires:       python-apsw
+Requires:       python2-feedparser
+Requires:       python2-netifaces
+Requires:       python2-dns
+Requires:       python2-apsw
 Requires:       mathjax
 Requires:       python2-psutil
-Requires:       python-pygments
+Requires:       python2-pygments
 Requires:       optipng
 Requires:       python2-msgpack
 Requires:       python2-regex
 Requires:       python2-html5-parser
+Requires:       python2-enum34
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -146,7 +148,7 @@ chmod -x src/calibre/*/*/*/*.py \
 rm -rvf resources/viewer/mathjax
 
 %build
-OVERRIDE_CFLAGS="%{optflags}" python setup.py build
+OVERRIDE_CFLAGS="%{optflags}" %__python2 setup.py build
 
 %install
 mkdir -p %{buildroot}%{_datadir}
@@ -162,7 +164,7 @@ mkdir -p %{buildroot}%{_datadir}/desktop-directories
 
 # create directory for calibre environment module
 # the install script assumes it's there.
-mkdir -p %{buildroot}%{python_sitelib}
+mkdir -p %{buildroot}%{python2_sitelib}
 
 # create directory for completion files, so calibre knows where
 # to install them
@@ -172,15 +174,18 @@ mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
 XDG_DATA_DIRS="%{buildroot}%{_datadir}" \
 XDG_UTILS_INSTALL_MODE="system" \
 LIBPATH="%{_libdir}" \
-python setup.py install --root=%{buildroot}%{_prefix} \
-                        --prefix=%{_prefix} \
-                        --libdir=%{_libdir} \
-                        --staging-libdir=%{buildroot}%{_libdir} \
-                        --staging-sharedir=%{buildroot}%{_datadir}
+%__python2 setup.py install --root=%{buildroot}%{_prefix} \
+                            --prefix=%{_prefix} \
+                            --libdir=%{_libdir} \
+                            --staging-libdir=%{buildroot}%{_libdir} \
+                            --staging-sharedir=%{buildroot}%{_datadir}
 
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
-sed -i -e '/^#!\//, 1d' %{buildroot}%{python_sitelib}/init_calibre.py
+sed -i -e '/^#!\//, 1d' %{buildroot}%{python2_sitelib}/init_calibre.py
+
+# there are some python files there, do byte-compilation on them
+%py_byte_compile %{__python2} %{buildroot}%{_datadir}/%{name}
 
 # icons
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
@@ -223,11 +228,11 @@ rm -rf %{buildroot}%{_libdir}/%{name}/odf
 # rm empty feedparser files.
 rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
 
-ln -s %{python_sitelib}/feedparser.py \
+ln -s %{python2_sitelib}/feedparser.py \
       %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.py
-ln -s %{python_sitelib}/feedparser.pyc \
+ln -s %{python2_sitelib}/feedparser.pyc \
       %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.pyc
-ln -s %{python_sitelib}/feedparser.pyo \
+ln -s %{python2_sitelib}/feedparser.pyo \
       %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.pyo
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
@@ -306,12 +311,70 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/*/apps/*
-%{python_sitelib}/init_calibre.py*
+%{python2_sitelib}/init_calibre.py*
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Aug 14 2018 Kevin Fenzi <kevin@scrye.com> - 3.29.0-1
+- Update to 3.29.0. Fixes bug #1614778
+
+* Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 3.28.0-3
+- Rebuild with fixed binutils
+
+* Fri Jul 27 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.28.0-2
+- Rebuild for new binutils
+
+* Thu Jul 26 2018 Kevin Fenzi <kevin@scrye.com> - 3.28.0-1
+- Update to 3.28.0. Fixes bug #1605186
+
+* Thu Jul 26 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.27.1-5
+- Use versioned python macros
+- Do explicit byte compilation to conform to new guidelines
+
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.27.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Wed Jul 11 2018 Sandro Mani <manisandro@gmail.com> - 3.27.1-3
+- Rebuild (podofo)
+
+* Tue Jul 10 2018 Pete Walter <pwalter@fedoraproject.org> - 3.27.1-2
+- Rebuild for ICU 62
+
+* Sat Jul  7 2018 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.27.1-1
+- Update to 3.27.1. Fixes bug #1598761
+
+* Thu Jun 21 2018 Rex Dieter <rdieter@fedoraproject.org> - 3.26.1-2
+- rebuild (qt5)
+
+* Fri Jun 15 2018 Kevin Fenzi <kevin@scrye.com> - 3.26.1-1
+- Update to 3.26.1. Fixes bug #1591735
+
+* Sun Jun 03 2018 Kevin Fenzi <kevin@scrye.com> - 3.25.0-1
+- Update to 3.25.0. Fixes bug #1585171
+
+* Wed May 30 2018 Kevin Fenzi <kevin@scrye.com> - 3.24.2-1
+- Update to 3.24.2.
+
+* Tue May 29 2018 Rex Dieter <rdieter@fedoraproject.org> - 3.23.0-2
+- rebuild (qt5)
+
+* Fri May 04 2018 Kevin Fenzi <kevin@scrye.com> - 3.23.0-1
+- Update to 3.23.0. Fixes bug #1574953
+
+* Mon Apr 30 2018 Pete Walter <pwalter@fedoraproject.org> - 3.22.1-2
+- Rebuild for ICU 61.1
+
+* Fri Apr 20 2018 Kevin Fenzi <kevin@scrye.com> - 3.22.1-1
+- Update to 3.22.1. Fixes bug #1569983
+
+* Sat Apr 07 2018 Kevin Fenzi <kevin@scrye.com> - 3.21.0-1
+- Update to 3.21.0. Fixes bug #1564477
+
+* Fri Mar 23 2018 Kevin Fenzi <kevin@scrye.com> - 3.20.0-1
+- Update to 3.20.0. Fixes bug #1559848
+
 * Fri Mar 09 2018 Kevin Fenzi <kevin@scrye.com> - 3.19.0-1
 - Update to 3.19.0. Fixes bug #1553719
 - Fix for CVE-2018-7889 - bug #1553917,1553919
