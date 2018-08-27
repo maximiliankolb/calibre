@@ -73,6 +73,10 @@ BuildRequires:  python2-msgpack
 BuildRequires:  python2-regex
 BuildRequires:  python2-html5-parser
 BuildRequires:  libappstream-glib
+%if 0%{?fedora} < 29
+# provides %%py_byte_compile macro on f28
+BuildRequires:  python3-devel
+%endif
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
