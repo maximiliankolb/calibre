@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.29.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -317,6 +317,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Sep 21 2018 Jan Grulich <jgrulich@redhat.com> - 3.29.0-2
+- rebuild (qt5)
+
 * Tue Aug 14 2018 Kevin Fenzi <kevin@scrye.com> - 3.29.0-1
 - Update to 3.29.0. Fixes bug #1614778
 
