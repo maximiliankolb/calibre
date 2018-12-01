@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.29.0
+Version:        3.34.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
@@ -321,6 +321,12 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sat Dec 01 2018 Kevin Fenzi <kevin@scrye.com> - 3.34.0-1
+- Update to 3.34.
+
+* Fri Sep 21 2018 Jan Grulich <jgrulich@redhat.com> - 3.29.0-2
+- rebuild (qt5)
+
 * Tue Aug 14 2018 Kevin Fenzi <kevin@scrye.com> - 3.29.0-1
 - Update to 3.29.0. Fixes bug #1614778
 
