@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.36.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 Group:          Applications/Multimedia
 License:        GPLv3
@@ -317,6 +317,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Wed Jan 23 2019 Pete Walter <pwalter@fedoraproject.org> - 3.36.0-2
+- Rebuild for ICU 63
+
 * Sun Dec 23 2018 Kevin Fenzi <kevin@scrye.com> - 3.36.0-1
 - Update to 3.36.
 
