@@ -8,7 +8,6 @@ Name:           calibre
 Version:        3.36.0
 Release:        2%{?dist}
 Summary:        E-book converter and library manager
-Group:          Applications/Multimedia
 License:        GPLv3
 URL:            http://calibre-ebook.com/
 
