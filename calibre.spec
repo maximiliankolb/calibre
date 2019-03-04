@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.36.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            http://calibre-ebook.com/
@@ -316,6 +316,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sun Mar 03 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-4
+- Rebuild for new qt5.
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.36.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
