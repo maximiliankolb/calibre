@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.36.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            http://calibre-ebook.com/
@@ -236,29 +236,29 @@ ln -s %{python2_sitelib}/feedparser.pyo \
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
-ln -s %{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-BoldItalic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Bold.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Bold.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Italic.ttf \
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Italic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Italic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Regular.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-BoldItalic.ttf \
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-BoldItalic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Bold.ttf \
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Bold.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Bold.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Italic.ttf \
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Italic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Italic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Regular.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-BoldItalic.ttf \
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-BoldItalic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Bold.ttf \
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Bold.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Bold.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Italic.ttf \
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Italic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
 
 # delete locales, calibre stores them in a zip file now
@@ -316,6 +316,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Jun 25 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-7
+- Adjust for liberation fonts moving around.
+
 * Mon Jun 17 2019 Jan Grulich <jgrulich@redhat.com> - 3.36.0-6
 - rebuild (qt5)
 
