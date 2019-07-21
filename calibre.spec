@@ -5,10 +5,9 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.34.0
-Release:        2%{?dist}
+Version:        3.36.0
+Release:        8%{?dist}
 Summary:        E-book converter and library manager
-Group:          Applications/Multimedia
 License:        GPLv3
 URL:            http://calibre-ebook.com/
 
@@ -32,6 +31,10 @@ Patch1:         %{name}-no-update.patch
 # This is so gnome-software only 'sees' calibre once.
 #
 Patch3:         calibre-nodisplay.patch
+#
+# Add patch to fix kindle-s with newer kernels
+#
+Patch4:         calibre-3.36.0-fynsc-fix.patch
 
 BuildRequires:  python2 >= 2.7
 BuildRequires:  python2-devel >= 2.7
@@ -241,6 +244,33 @@ ln -s %{python2_sitelib}/feedparser.pyo \
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
+%if 0%{?fedora} >= 31
+# In fedora 31 liberation fonts moved directories.
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Bold.ttf
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Italic.ttf
+ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Regular.ttf
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Bold.ttf
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Italic.ttf
+ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Regular.ttf
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-BoldItalic.ttf
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Bold.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Bold.ttf
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Italic.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
+ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Regular.ttf \
+      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
+%else
 ln -s %{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
@@ -265,6 +295,7 @@ ln -s %{_datadir}/fonts/liberation/LiberationSerif-Italic.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
 ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
       %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
+%endif
 
 # delete locales, calibre stores them in a zip file now
 rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
@@ -321,6 +352,30 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sun Jul 21 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-8
+- Add patch for kindle-s. Fixes bug #1731734
+
+* Tue Jun 25 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-7
+- Adjust for liberation fonts moving around.
+
+* Mon Jun 17 2019 Jan Grulich <jgrulich@redhat.com> - 3.36.0-6
+- rebuild (qt5)
+
+* Sat Jun 15 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-5
+- Rebuild for new qt5.
+
+* Sun Mar 03 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-4
+- Rebuild for new qt5.
+
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.36.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Wed Jan 23 2019 Pete Walter <pwalter@fedoraproject.org> - 3.36.0-2
+- Rebuild for ICU 63
+
+* Sun Dec 23 2018 Kevin Fenzi <kevin@scrye.com> - 3.36.0-1
+- Update to 3.36.
+
 * Thu Dec 13 2018 Rex Dieter <rdieter@fedoraproject.org> - 3.34.0-2
 - rebuild (qt5)
 
