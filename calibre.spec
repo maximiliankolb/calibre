@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.36.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            http://calibre-ebook.com/
@@ -348,6 +348,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.36.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Sun Jul 21 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-8
 - Add patch for kindle-s. Fixes bug #1731734
 
