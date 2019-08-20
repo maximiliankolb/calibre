@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.46.0
-Release:        1.git20190819%{?dist}
+Release:        2.git20190819%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -479,6 +479,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Aug 20 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.46.0-2.git20190819
+- Rebuilt for Python 3.8
+
 * Mon Aug 19 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.46.0-1.git20190819
 - Update to the latest version + various patches (#1667497)
 
