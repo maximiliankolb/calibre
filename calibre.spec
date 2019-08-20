@@ -150,7 +150,7 @@ BuildRequires:  python3dist(pygments)
 BuildRequires:  python3dist(soupsieve)
 BuildRequires:  python3dist(msgpack)
 BuildRequires:  python3dist(regex)
-BuildRequires:  python3dist(html5-parser)
+BuildRequires:  python3dist(html5-parser) >= 0.4.8
 BuildRequires:  python3dist(html2text)
 BuildRequires:  python3dist(zeroconf)
 BuildRequires:  python3dist(markdown) >= 3.0
@@ -197,7 +197,7 @@ Requires:       python3dist(psutil)
 Requires:       python3dist(pygments)
 Requires:       python3dist(msgpack)
 Requires:       python3dist(regex)
-Requires:       python3dist(html5-parser)
+Requires:       python3dist(html5-parser) >= 0.4.8
 Requires:       python3dist(html2text)
 Requires:       python3dist(markdown) >= 3.0
 Recommends:     python3dist(zeroconf)
@@ -239,10 +239,6 @@ rm -rvf resources/viewer/mathjax
 sed -r -i 's/\b(test_actual_case|test_clone|test_file_add|test_file_removal|test_file_rename|test_folder_type_map_case|test_merge_file)\b/_skipped_\1/' src/calibre/ebooks/oeb/polish/tests/container.py
 # Skip test that fails in mock
 sed  -r -i 's/\btest_bonjour\b/_skipped_\0/' src/calibre/srv/tests/loop.py
-# This fails with:
-#   AttributeError: type object 'HTMLTreeBuilder' has no attribute 'cdata_list_attributes'
-# Ignore for now.
-sed -r -i 's/\btest_comments_to_html\b/_skipped_\0/' src/calibre/library/comments.py
 
 %build
 OVERRIDE_CFLAGS="%{optflags}" \
