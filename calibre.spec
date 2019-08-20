@@ -335,55 +335,79 @@ rm -rf %{buildroot}%{_libdir}/calibre/odf
 # http://bugs.calibre-ebook.com/ticket/3832
 %if 0%{?fedora} >= 31
 # In fedora 31 liberation fonts moved directories.
-ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-BoldItalic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Bold.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Bold.ttf
-ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Italic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Italic.ttf
-ln -s %{_datadir}/fonts/liberation-mono/LiberationMono-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Regular.ttf
-ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-BoldItalic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Bold.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Bold.ttf
-ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Italic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Italic.ttf
-ln -s %{_datadir}/fonts/liberation-sans/LiberationSans-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Regular.ttf
-ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-BoldItalic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Bold.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Bold.ttf
-ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Italic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
-ln -s %{_datadir}/fonts/liberation-serif/LiberationSerif-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-mono/LiberationMono-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-BoldItalic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-mono/LiberationMono-Bold.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-Bold.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-mono/LiberationMono-Italic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-Italic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-mono/LiberationMono-Regular.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-Regular.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-sans/LiberationSans-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-BoldItalic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-sans/LiberationSans-Bold.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-Bold.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-sans/LiberationSans-Italic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-Italic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-sans/LiberationSans-Regular.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-Regular.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-serif/LiberationSerif-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-BoldItalic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-serif/LiberationSerif-Bold.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Bold.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-serif/LiberationSerif-Italic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Italic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation-serif/LiberationSerif-Regular.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Regular.ttf
 %else
-ln -s %{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Bold.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Italic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Italic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationMono-Regular.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-BoldItalic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Bold.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Bold.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Italic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Italic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSans-Regular.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-BoldItalic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-BoldItalic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Bold.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Bold.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Italic.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Italic.ttf
-ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
-      %{buildroot}%{_datadir}/%{name}/fonts/liberation/LiberationSerif-Regular.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationMono-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-BoldItalic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationMono-Bold.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-Bold.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationMono-Italic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-Italic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationMono-Regular.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationMono-Regular.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSans-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-BoldItalic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSans-Bold.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-Bold.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSans-Italic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-Italic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSans-Regular.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSans-Regular.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSerif-BoldItalic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-BoldItalic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSerif-Bold.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Bold.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSerif-Italic.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Italic.ttf
+ln -s --relative \
+      %{buildroot}%{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
+      %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Regular.ttf
 %endif
 
 # delete locales, calibre stores them in a zip file now
