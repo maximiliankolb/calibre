@@ -1,0 +1,86 @@
+From b4c96c6e3806c2f9986e618f7407d232364efa54 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Wed, 7 Aug 2019 20:16:23 +0530
+Subject: [PATCH 41/71] Use mbcs encoding when passing filenames to windows
+
+---
+ src/calibre/utils/podofo/__init__.py | 22 ++++++++++++++--------
+ src/calibre/utils/podofo/doc.cpp     | 25 +++++++++++++++----------
+ 2 files changed, 29 insertions(+), 18 deletions(-)
+
+diff --git a/src/calibre/utils/podofo/__init__.py b/src/calibre/utils/podofo/__init__.py
+index 65f09f78c6..3f5e8f18c6 100644
+--- a/src/calibre/utils/podofo/__init__.py
++++ b/src/calibre/utils/podofo/__init__.py
+@@ -163,6 +163,7 @@ def test_save_to(src, dest):
+ 
+ 
+ def test_podofo():
++    import tempfile
+     from io import BytesIO
+     from calibre.ebooks.metadata.book.base import Metadata
+     from calibre.ebooks.metadata.xmp import metadata_to_xmp_packet
+@@ -178,14 +179,19 @@ def test_podofo():
+     buf = BytesIO()
+     p.save_to_fileobj(buf)
+     raw = buf.getvalue()
+-    p = podofo.PDFDoc()
+-    p.load(raw)
+-    if (p.title, p.author) != (mi.title, mi.authors[0]):
+-        raise ValueError('podofo failed to set title and author in Info dict %s != %s' % (
+-            (p.title, p.author), (mi.title, mi.authors[0])))
+-    if not p.get_xmp_metadata():
+-        raise ValueError('podofo failed to write XMP packet')
+-    del p
++    with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as f:
++        f.write(raw)
++    try:
++        p = podofo.PDFDoc()
++        p.open(f.name)
++        if (p.title, p.author) != (mi.title, mi.authors[0]):
++            raise ValueError('podofo failed to set title and author in Info dict %s != %s' % (
++                (p.title, p.author), (mi.title, mi.authors[0])))
++        if not p.get_xmp_metadata():
++            raise ValueError('podofo failed to write XMP packet')
++        del p
++    finally:
++        os.remove(f.name)
+ 
+ 
+ if __name__ == '__main__':
+diff --git a/src/calibre/utils/podofo/doc.cpp b/src/calibre/utils/podofo/doc.cpp
+index e5c5154a23..0a1e71a820 100644
+--- a/src/calibre/utils/podofo/doc.cpp
++++ b/src/calibre/utils/podofo/doc.cpp
+@@ -62,16 +62,21 @@ PDFDoc_load(PDFDoc *self, PyObject *args) {
+ static PyObject *
+ PDFDoc_open(PDFDoc *self, PyObject *args) {
+     char *fname;
+-
+-    if (PyArg_ParseTuple(args, "s", &fname)) {
+-        try {
+-            self->doc->Load(fname);
+-        } catch(const PdfError & err) {
+-            podofo_set_exception(err);
+-            return NULL;
+-        }
+-    } else return NULL;
+-
++#ifdef _WIN32
++#define ENCODING "mbcs"
++#else
++#define ENCODING "utf-8"
++#endif
++    if (!PyArg_ParseTuple(args, "es", ENCODING, &fname)) return NULL;
++#undef ENCODING
++	try {
++		self->doc->Load(fname);
++	} catch(const PdfError & err) {
++		podofo_set_exception(err);
++		PyMem_Free(fname);
++		return NULL;
++	}
++	PyMem_Free(fname);
+ 
+     Py_RETURN_NONE;
+ }

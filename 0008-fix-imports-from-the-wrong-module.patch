@@ -1,0 +1,36 @@
+From 018f73f89cac3db1bd102a3eac3a4a916640ad41 Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz@archlinux.org>
+Date: Thu, 18 Jul 2019 12:28:02 -0400
+Subject: [PATCH 08/71] fix imports from the wrong module
+
+when module_a.submodule_a imports module_b, then module_c should not use
+"from module_a.submodule_a import module_b"
+---
+ src/calibre/ebooks/oeb/transforms/split.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/calibre/ebooks/oeb/transforms/split.py b/src/calibre/ebooks/oeb/transforms/split.py
+index a42bae67a5..93fd1226c5 100644
+--- a/src/calibre/ebooks/oeb/transforms/split.py
++++ b/src/calibre/ebooks/oeb/transforms/split.py
+@@ -18,9 +18,10 @@ from lxml import etree
+ from calibre import as_unicode, force_unicode
+ from calibre.ebooks.epub import rules
+ from calibre.ebooks.oeb.base import (OEB_STYLES, XPNSMAP as NAMESPACES,
+-        urldefrag, rewrite_links, urlunquote, XHTML, urlnormalize)
++        urldefrag, rewrite_links, XHTML, urlnormalize)
+ from calibre.ebooks.oeb.polish.split import do_split
+ from polyglot.builtins import iteritems, range, map
++from polyglot.urllib import unquote
+ from css_selectors import Select, SelectorError
+ 
+ XPath = functools.partial(_XPath, namespaces=NAMESPACES)
+@@ -179,7 +180,7 @@ class Split(object):
+             nhref = anchor_map[frag if frag else None]
+             nhref = self.current_item.relhref(nhref)
+             if frag:
+-                nhref = '#'.join((urlunquote(nhref), frag))
++                nhref = '#'.join((unquote(nhref), frag))
+ 
+             return nhref
+         return url

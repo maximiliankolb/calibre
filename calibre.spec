@@ -1,12 +1,12 @@
 %{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
-%global __provides_exclude_from ^%{_libdir}/%{name}/%{name}/plugins/.*\.so$
+%global __provides_exclude_from ^%{_libdir}/calibre/calibre/plugins/.*\.so$
 
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.36.0
-Release:        9%{?dist}
+Version:        3.46.0
+Release:        1.git20190819%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            http://calibre-ebook.com/
@@ -19,39 +19,103 @@ URL:            http://calibre-ebook.com/
 # directory:
 # ./getsources.sh %%{version}
 
-Source0:        %{name}-%{version}-nofonts.tar.xz
+Source0:        calibre-%{version}-nofonts.tar.xz
 Source1:        getsources.sh
 Source2:        calibre-mount-helper
-#
+
 # Disable auto update from inside the app
-#
-Patch1:         %{name}-no-update.patch
-#
+Patch1:         calibre-no-update.patch
+
 # Do not display multiple apps in desktop files, only the main app
 # This is so gnome-software only 'sees' calibre once.
-#
 Patch3:         calibre-nodisplay.patch
-#
-# Add patch to fix kindle-s with newer kernels
-#
-Patch4:         calibre-3.36.0-fynsc-fix.patch
 
-BuildRequires:  python2 >= 2.7
-BuildRequires:  python2-devel >= 2.7
-BuildRequires:  python2-setuptools
-BuildRequires:  python2-qt5-devel
-BuildRequires:  python2-qt5
-BuildRequires:  python2-qt5-webkit
+# Patches that are not suitable for upstream:
+Patch4:         https://github.com/keszybz/calibre/commit/497810f8adb992bfecf04e8eacf4ac1340ee6fe0.patch
+Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
+
+Patch10001:     0001-py3-fix-invalid-escapes.patch
+Patch10002:     0002-py3-another-warning-about-invalid-escape.patch
+Patch10003:     0003-Update-WSJ.patch
+Patch10004:     0004-Preferences-Ignored-devices-Add-a-button-to-reset-th.patch
+Patch10005:     0005-Open-With-don-t-raise-KeyError-if-cache-exists-and-t.patch
+Patch10006:     0006-LIT-Output-Fix-regression-in-3.41-caused-by-py3-port.patch
+Patch10007:     0007-use-raw-strings-where-possible-to-avoid-escaping-iss.patch
+Patch10008:     0008-fix-imports-from-the-wrong-module.patch
+Patch10009:     0009-unicode_check-do-not-try-to-check-pyuic-generated-fi.patch
+Patch10010:     0010-py3-more-work-towards-universal-__future__s.patch
+Patch10011:     0011-use-floor-division-instead-of-math.floor.patch
+Patch10012:     0012-simplify-check-for-non-zero-content-in-set.patch
+Patch10013:     0013-Get-more-information-from-podofo-exceptions.patch
+Patch10014:     0014-Various-fixes-for-the-last-py3-merge.patch
+Patch10015:     0015-Dont-use-auto-in-master-since-it-is-still-built-with.patch
+Patch10016:     0016-More-ancient-linux-compiler-support.patch
+Patch10017:     0017-py3-compat-for-gaierror-retry.patch
+Patch10018:     0018-Update-Chicago-Tribune.patch
+Patch10019:     0019-.patch
+Patch10020:     0020-use-context-managers-to-open-files.patch
+Patch10021:     0021-py3-read-in-raw-data-files-as-binary.patch
+Patch10022:     0022-Add-missing-language-field-to-ComicBookInfo-metadata.patch
+Patch10023:     0023-.patch
+Patch10024:     0024-if-the-cover-img-resolution-is-too-low-kindle-wouldn.patch
+Patch10025:     0025-enlarge-cover-img-resolution-by-change-the-url.patch
+Patch10026:     0026-Add-funding-sources-for-github-sponsor-button.patch
+Patch10027:     0027-Misc-CHM-Input-fixes.patch
+Patch10028:     0028-Preserve-tag-order-when-reading-metadata-from-MOBI-f.patch
+Patch10029:     0029-Remove-metadata-from-conversion_options-API-docs-sin.patch
+Patch10030:     0030-Try-manually-installing-libgl1-mesa-dev-on-Travis.patch
+Patch10031:     0031-Improve-PoDoFo-test-a-bit.patch
+Patch10032:     0032-Simplify-podofo-str-unicode-conversion.patch
+Patch10033:     0033-Cleanup-conversion-of-python-strings-to-podofo-strin.patch
+Patch10034:     0034-Utility-function-to-detect-if-a-PDF-is-encrypted.patch
+Patch10035:     0035-macOS-Fix-a-regression-that-could-cause-a-crash-on-e.patch
+Patch10036:     0036-Update-login-mechanism-for-Times-Online.patch
+Patch10037:     0037-Change-travis-email-notification-semantics.patch
+Patch10038:     0038-py3-compat.patch
+Patch10039:     0039-Content-server-Fix-OPDS-feed-for-category-based-brow.patch
+Patch10040:     0040-See-if-not-using-a-temp-file-fixes-the-weird-test-fa.patch
+Patch10041:     0041-Use-mbcs-encoding-when-passing-filenames-to-windows.patch
+Patch10042:     0042-py3-more-fixes.patch
+Patch10043:     0043-Update-National-Geographic.patch
+Patch10044:     0044-py3-More-fixes.patch
+Patch10045:     0045-A-better-fix-for-python3.7-smtplib-breakage.patch
+Patch10046:     0046-Fix-1839494-Application-crashes-on-changing-icons-ht.patch
+Patch10047:     0047-HTMLZ-Output-Fix-svg-content-from-HTML-files-that-co.patch
+Patch10048:     0048-PML-Input-Modernize-the-generated-HTML-a-bit.-Fixes-.patch
+Patch10049:     0049-Cleanup.patch
+Patch10050:     0050-Workaround-for-weird-PyQt-return-with-error-set-in-t.patch
+Patch10051:     0051-py3-more-future-imports.patch
+Patch10052:     0052-py3-Another-fix.patch
+Patch10053:     0053-Fix-1028-Fix-podofo-convert-pystring-to-PdfString-bu.patch
+Patch10054:     0054-.patch
+Patch10055:     0055-EPUB-3-Fix-setting-metadata-in-EPUB-3-files-with-a-t.patch
+Patch10056:     0056-Speed-up-restoring-original-format-by-doing-a-rename.patch
+Patch10057:     0057-Support-Dublin-Core-id-tags-when-importing-HTML.patch
+Patch10058:     0058-Refactor-HTML-metadata-parsing.patch
+Patch10059:     0059-Fix-importing-ratings-from-HTML-metadata.patch
+Patch10060:     0060-Escape-HTML-entities-in-comments.patch
+Patch10061:     0061-Add-unit-tests-for-HTML-metadata-imports.patch
+Patch10062:     0062-Cleanup-HTML-metadata-parsing.patch
+Patch10063:     0063-.patch
+Patch10064:     0064-Update-CNET-News.patch
+Patch10065:     0065-Updated-The-Globe-and-Mail-recipe-article-titles-no-.patch
+Patch10066:     0066-change-wording-slightly.patch
+Patch10067:     0067-Complete-fix-for-WSJ-login-logic-change.patch
+Patch10068:     0068-Update-derStandaard.patch
+Patch10069:     0069-Update-bundled-mechanize.patch
+Patch10070:     0070-Get-parse_index-working-for-foreign-affairs-AJAX-bac.patch
+Patch10071:     0071-Update-Foreign-Affairs.patch
+
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-qt5-devel
+BuildRequires:  python3-qt5
+BuildRequires:  python3-qt5-webkit
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:  python2-mechanize
-BuildRequires:  python2-lxml
-BuildRequires:  python2-dateutil
-BuildRequires:  python2-imaging
 BuildRequires:  xdg-utils
-BuildRequires:  python2-beautifulsoup
 BuildRequires:  chmlib-devel
-BuildRequires:  python2-cssutils >= 0.9.9
+BuildRequires:  python3-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
@@ -66,16 +130,34 @@ BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
 BuildRequires:  bash-completion
-BuildRequires:  python2-apsw
-BuildRequires:  python2-enum34
 BuildRequires:  glib2-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libinput-devel
 BuildRequires:  libxkbcommon-devel
-BuildRequires:  python2-msgpack
-BuildRequires:  python2-regex
-BuildRequires:  python2-html5-parser
 BuildRequires:  libappstream-glib
+BuildRequires:  optipng
+BuildRequires:  python3dist(apsw)
+BuildRequires:  python3dist(mechanize)
+BuildRequires:  python3dist(lxml)
+BuildRequires:  python3dist(python-dateutil)
+BuildRequires:  python3dist(pillow)
+BuildRequires:  python3dist(css-parser)
+BuildRequires:  python3dist(feedparser)
+BuildRequires:  python3dist(netifaces)
+BuildRequires:  python3dist(beautifulsoup4)
+BuildRequires:  python3dist(psutil)
+BuildRequires:  python3dist(pygments)
+BuildRequires:  python3dist(soupsieve)
+BuildRequires:  python3dist(msgpack)
+BuildRequires:  python3dist(regex)
+BuildRequires:  python3dist(html5-parser)
+BuildRequires:  python3dist(html2text)
+BuildRequires:  python3dist(zeroconf)
+BuildRequires:  python3dist(markdown) >= 3.0
+BuildRequires:  python3dist(dukpy)
+# Those are only used for tests. Do not add to runtime deps.
+BuildRequires:  /usr/bin/jpegtran
+BuildRequires:  /usr/bin/JxrDecApp
 
 %{?pyqt5_requires}
 # once ^^ %%pyqt5_requires is everywhere, can drop python-qt5 dep below -- rex
@@ -87,35 +169,38 @@ BuildRequires:  libappstream-glib
 BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
-Requires:       python2-qt5
-Requires:       python2-qt5-webkit
+Requires:       python3-qt5
+Requires:       python3-qt5-webkit
 Requires:       qt5-qtwebkit
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
-Requires:       python2-cssutils
-Requires:       python2-odfpy
-Requires:       python2-lxml
-Requires:       python2-imaging
-Requires:       python2-mechanize
-Requires:       python2-dateutil
-Requires:       python2-beautifulsoup
 Requires:       poppler-utils
-# Require the packages of the files which are symlinked by calibre
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
-Requires:       python2-feedparser
-Requires:       python2-netifaces
-Requires:       python2-dns
-Requires:       python2-apsw
 Requires:       mathjax
-Requires:       python2-psutil
-Requires:       python2-pygments
 Requires:       optipng
-Requires:       python2-msgpack
-Requires:       python2-regex
-Requires:       python2-html5-parser
-Requires:       python2-enum34
+Requires:       python3dist(cssutils)
+Requires:       python3dist(odfpy)
+Requires:       python3dist(lxml)
+Requires:       python3dist(pillow)
+Requires:       python3dist(mechanize)
+Requires:       python3dist(python-dateutil)
+Requires:       python3dist(beautifulsoup4)
+Requires:       python3dist(soupsieve)
+Requires:       python3dist(css-parser)
+Requires:       python3dist(feedparser)
+Requires:       python3dist(netifaces)
+Requires:       python3dist(dnspython)
+Requires:       python3dist(apsw)
+Requires:       python3dist(psutil)
+Requires:       python3dist(pygments)
+Requires:       python3dist(msgpack)
+Requires:       python3dist(regex)
+Requires:       python3dist(html5-parser)
+Requires:       python3dist(html2text)
+Requires:       python3dist(markdown) >= 3.0
+Recommends:     python3dist(zeroconf)
 
 %description
 Calibre is meant to be a complete e-library solution. It includes library
@@ -132,7 +217,7 @@ Supported input formats are: MOBI, LIT, PRC, EPUB, CHM, ODT, HTML, CBR, CBZ,
 RTF, TXT, PDF and LRS.
 
 %prep
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n calibre-%{version} -p1
 
 # remove shebangs
 sed -i -e '/^#!\//, 1d' src/calibre/*/*/*/*.py
@@ -141,7 +226,7 @@ sed -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
 sed -i -e '/^#!\//, 1d' src/calibre/*.py
 sed -i -e '/^#!\//, 1d' src/templite/*.py
 sed -i -e '/^#!\//, 1d' resources/default_tweaks.py
-sed -i -e '/^#!\//, 1d' resources/catalog/section_list_templates.py
+#sed -i -e '/^#!\//, 1d' resources/catalog/section_list_templates.py
 
 chmod -x src/calibre/*/*/*/*.py \
     src/calibre/*/*/*.py \
@@ -150,8 +235,15 @@ chmod -x src/calibre/*/*/*/*.py \
 
 rm -rvf resources/viewer/mathjax
 
+# Skip tests that require removed fonts
+sed -r -i 's/\b(test_actual_case|test_clone|test_file_add|test_file_removal|test_file_rename|test_folder_type_map_case|test_merge_file)\b/_skipped_\1/' src/calibre/ebooks/oeb/polish/tests/container.py
+# Skip test that fails in mock
+sed  -r -i 's/\btest_bonjour\b/_skipped_\0/' src/calibre/srv/tests/loop.py
+
 %build
-OVERRIDE_CFLAGS="%{optflags}" %__python2 setup.py build
+OVERRIDE_CFLAGS="%{optflags}" \
+CALIBRE_PY3_PORT=1 \
+%__python3 setup.py build
 
 %install
 mkdir -p %{buildroot}%{_datadir}
@@ -167,7 +259,7 @@ mkdir -p %{buildroot}%{_datadir}/desktop-directories
 
 # create directory for calibre environment module
 # the install script assumes it's there.
-mkdir -p %{buildroot}%{python2_sitelib}
+mkdir -p %{buildroot}%{python3_sitelib}
 
 # create directory for completion files, so calibre knows where
 # to install them
@@ -177,7 +269,8 @@ mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
 XDG_DATA_DIRS="%{buildroot}%{_datadir}" \
 XDG_UTILS_INSTALL_MODE="system" \
 LIBPATH="%{_libdir}" \
-%__python2 setup.py install --root=%{buildroot}%{_prefix} \
+CALIBRE_PY3_PORT=1 \
+%__python3 setup.py install --root=%{buildroot}%{_prefix} \
                             --prefix=%{_prefix} \
                             --libdir=%{_libdir} \
                             --staging-libdir=%{buildroot}%{_libdir} \
@@ -185,15 +278,15 @@ LIBPATH="%{_libdir}" \
 
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
-sed -i -e '/^#!\//, 1d' %{buildroot}%{python2_sitelib}/init_calibre.py
+sed -i -e '/^#!\//, 1d' %{buildroot}%{python3_sitelib}/init_calibre.py
 
 # there are some python files there, do byte-compilation on them
-%py_byte_compile %{__python2} %{buildroot}%{_datadir}/%{name}
+%py_byte_compile %{__python3} %{buildroot}%{_datadir}/calibre
 
 # icons
 mkdir -p %{buildroot}%{_datadir}/pixmaps/
 cp -p resources/images/library.png                \
-   %{buildroot}%{_datadir}/pixmaps/%{name}-gui.png
+   %{buildroot}%{_datadir}/pixmaps/calibre-gui.png
 cp -p resources/images/viewer.png                 \
    %{buildroot}%{_datadir}/pixmaps/calibre-viewer.png
 cp -p resources/images/tweak.png                 \
@@ -226,17 +319,17 @@ cp -p resources/images/viewer.png \
       %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/calibre-viewer.png
 
 # these are provided as separate packages
-rm -rf %{buildroot}%{_libdir}/%{name}/odf
+rm -rf %{buildroot}%{_libdir}/calibre/odf
 
-# rm empty feedparser files.
-rm -rf %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.*
+# # rm empty feedparser files.
+# rm -rf %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.*
 
-ln -s %{python2_sitelib}/feedparser.py \
-      %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.py
-ln -s %{python2_sitelib}/feedparser.pyc \
-      %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.pyc
-ln -s %{python2_sitelib}/feedparser.pyo \
-      %{buildroot}%{_libdir}/%{name}/%{name}/web/feeds/feedparser.pyo
+# ln -s %{python3_sitelib}/feedparser.py \
+#       %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.py
+# ln -s %{python3_sitelib}/feedparser.pyc \
+#       %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.pyc
+# ln -s %{python3_sitelib}/feedparser.pyo \
+#       %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.pyo
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
@@ -294,9 +387,9 @@ ln -s %{_datadir}/fonts/liberation/LiberationSerif-Regular.ttf \
 %endif
 
 # delete locales, calibre stores them in a zip file now
-rm -rf %{buildroot}%{_datadir}/%{name}/localization/locales/
+rm -rf %{buildroot}%{_datadir}/calibre/localization/locales/
 
-rm -f %{buildroot}%{_bindir}/%{name}-uninstall
+rm -f %{buildroot}%{_bindir}/calibre-uninstall
 
 cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 
@@ -304,13 +397,16 @@ cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 
+%check
+CALIBRE_PY3_PORT=1 python3 setup.py test
+
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
 
 %preun
-rm %{_datadir}/%{name}/viewer/mathjax
+rm %{_datadir}/calibre/viewer/mathjax
 
 %posttrans
-ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
+ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 
 %files
 %doc COPYRIGHT LICENSE Changelog.yaml
@@ -335,19 +431,23 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_bindir}/web2disk
 %{_bindir}/ebook-polish
 %{_bindir}/ebook-edit
-%{_libdir}/%{name}
-%{_datadir}/%{name}
+%{_libdir}/calibre/
+%{_datadir}/calibre/
 %{_datadir}/pixmaps/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/*/apps/*
-%{python2_sitelib}/init_calibre.py*
-%{_datadir}/bash-completion/completions/%{name}
-%{_datadir}/zsh/site-functions/_%{name}
+%{python3_sitelib}/init_calibre.py
+%{python3_sitelib}/__pycache__/init_calibre.*.py*
+%{_datadir}/bash-completion/completions/calibre
+%{_datadir}/zsh/site-functions/_calibre
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Mon Aug 19 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.46.0-1.git20190819
+- Update to the latest version + various patches (#1667497)
+
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 3.36.0-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 

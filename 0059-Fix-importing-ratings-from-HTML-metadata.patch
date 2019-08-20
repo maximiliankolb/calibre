@@ -1,0 +1,25 @@
+From 7b900143bb95e5efdff7bb5e835d8ec53d8f29f9 Mon Sep 17 00:00:00 2001
+From: Christopher Szucko <cszucko@gmail.com>
+Date: Sat, 10 Aug 2019 10:03:40 -0500
+Subject: [PATCH 59/71] Fix importing ratings from HTML metadata
+
+The HTML import was assuming ratings were out of 5 but the internal representation is out of 10
+---
+ src/calibre/ebooks/metadata/html.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/calibre/ebooks/metadata/html.py b/src/calibre/ebooks/metadata/html.py
+index b8b86d4c19..222afa83ea 100644
+--- a/src/calibre/ebooks/metadata/html.py
++++ b/src/calibre/ebooks/metadata/html.py
+@@ -226,9 +226,7 @@ def get_metadata_(src, encoding=None):
+             mi.rating = float(rating)
+             if mi.rating < 0:
+                 mi.rating = 0
+-            if mi.rating > 5:
+-                mi.rating /= 2.
+-            if mi.rating > 5:
++            if mi.rating > 10:
+                 mi.rating = 0
+         except:
+             pass

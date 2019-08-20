@@ -1,0 +1,25 @@
+From e51136af1d1df5dd8e492ef71c87724708f538ad Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Tue, 23 Jul 2019 20:08:12 +0530
+Subject: [PATCH 06/71] LIT Output: Fix regression in 3.41 caused by py3
+ porting that broke conversion of some files to LIT. Fixes #1837561 [Lit
+ conversion error (Conversion options changed from
+ default)](https://bugs.launchpad.net/calibre/+bug/1837561)
+
+---
+ src/calibre/ebooks/lit/writer.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/calibre/ebooks/lit/writer.py b/src/calibre/ebooks/lit/writer.py
+index f1191b781e..534570fd19 100644
+--- a/src/calibre/ebooks/lit/writer.py
++++ b/src/calibre/ebooks/lit/writer.py
+@@ -721,6 +721,8 @@ class LitWriter(object):
+             dchunks.append(dchunk.getvalue())
+             dcounts.append(dcount)
+             if ichunk:
++                if not isinstance(name, bytes):
++                    name = name.encode('utf-8')
+                 ichunk.write(decint(len(name)))
+                 ichunk.write(name)
+                 ichunk.write(decint(cid))

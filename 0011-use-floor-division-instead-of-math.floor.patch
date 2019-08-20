@@ -1,0 +1,31 @@
+From 6e4c098d0d1ac478cc967b1c913de3a2bc589520 Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz@archlinux.org>
+Date: Thu, 18 Jul 2019 12:22:26 -0400
+Subject: [PATCH 11/71] use floor division instead of math.floor
+
+---
+ src/calibre/ebooks/oeb/transforms/split.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/calibre/ebooks/oeb/transforms/split.py b/src/calibre/ebooks/oeb/transforms/split.py
+index a54121e48c..3124561a2b 100644
+--- a/src/calibre/ebooks/oeb/transforms/split.py
++++ b/src/calibre/ebooks/oeb/transforms/split.py
+@@ -9,7 +9,7 @@ forced at "likely" locations to conform to size limitations. This transform
+ assumes a prior call to the flatcss transform.
+ '''
+ 
+-import os, math, functools, collections, re, copy
++import os, functools, collections, re, copy
+ from collections import OrderedDict
+ 
+ from lxml.etree import XPath as _XPath
+@@ -390,7 +390,7 @@ class FlowSplitter(object):
+                 elems = [i for i in elems if i.get(SPLIT_POINT_ATTR, '0') !=
+                         '1']
+                 if elems:
+-                    i = int(math.floor(len(elems)/2.))
++                    i = int(len(elems)//2)
+                     elems[i].set(SPLIT_POINT_ATTR, '1')
+                     return elems[i]
+ 

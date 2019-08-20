@@ -1,0 +1,136 @@
+From 012ab78ac30ed61070500b35082cef3c220e19e3 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Tue, 6 Aug 2019 11:46:15 +0530
+Subject: [PATCH 35/71] macOS: Fix a regression that could cause a crash on
+ exit if any books were deleted while calibre was running. Fixes #1839044
+ [calibre crash when deleting
+ ebook](https://bugs.launchpad.net/calibre/+bug/1839044)
+
+---
+ src/calibre/db/delete_service.py  |  3 +++
+ src/calibre/utils/cocoa.m         | 29 ++++++++++++++---------------
+ src/calibre/utils/cocoa_wrapper.c |  8 ++++++++
+ 3 files changed, 25 insertions(+), 15 deletions(-)
+
+diff --git a/src/calibre/db/delete_service.py b/src/calibre/db/delete_service.py
+index 15d48358d1..4a10e8ca59 100644
+--- a/src/calibre/db/delete_service.py
++++ b/src/calibre/db/delete_service.py
+@@ -8,6 +8,7 @@ __copyright__ = '2013, Kovid Goyal <kovid at kovidgoyal.net>'
+ import os, tempfile, shutil, errno, time, atexit
+ from threading import Thread
+ 
++from calibre.constants import isosx, plugins
+ from calibre.ptempfile import remove_dir
+ from calibre.utils.filenames import remove_dir_if_empty
+ from calibre.utils.recycle_bin import delete_tree, delete_file
+@@ -33,6 +34,8 @@ class DeleteService(Thread):
+     def __init__(self):
+         Thread.__init__(self)
+         self.requests = Queue()
++        if isosx:
++            plugins['cocoa'][0].enable_cocoa_multithreading()
+ 
+     def shutdown(self, timeout=20):
+         self.requests.put(None)
+diff --git a/src/calibre/utils/cocoa.m b/src/calibre/utils/cocoa.m
+index 7b7f098ef8..ed228bed3c 100644
+--- a/src/calibre/utils/cocoa.m
++++ b/src/calibre/utils/cocoa.m
+@@ -9,18 +9,21 @@
+ #include <Cocoa/Cocoa.h>
+ #include <string.h>
+ 
++void
++activate_cocoa_multithreading(void) {
++	if (![NSThread isMultiThreaded]) [[NSThread new] start];
++}
++
+ const char*
+ cocoa_send2trash(const char *utf8_path) {
+-	NSString *path = [[NSString alloc] initWithUTF8String:utf8_path];
+-	NSURL *url = [NSURL fileURLWithPath:path];
++	@autoreleasepool {
+ 	const char *ret = NULL;
+ 	NSError* ns_error = nil;
+-	if (![[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:&ns_error]) {
++	if (![[NSFileManager defaultManager] trashItemAtURL:[NSURL fileURLWithPath:@(utf8_path)] resultingItemURL:nil error:&ns_error]) {
+ 		ret = strdup([[ns_error localizedDescription] UTF8String]);
+ 	}
+-	[url release];
+-	[path release];
+ 	return ret;
++	}
+ }
+ 
+ 
+@@ -32,35 +35,31 @@ extern void macos_notification_callback(const char*);
+ 
+ void
+ cocoa_send_notification(const char *identifier, const char *title, const char *subtitle, const char *informativeText, const char* path_to_image) {
++	@autoreleasepool {
+     NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
+     if (!center) {return;}
+     if (!center.delegate) center.delegate = [[NotificationDelegate alloc] init];
+     NSUserNotification *n = [NSUserNotification new];
+     NSImage *img = nil;
+     if (path_to_image) {
+-        NSString *p = [NSString stringWithUTF8String:path_to_image];
+-        NSURL *url = [NSURL fileURLWithPath:p];
+-        img = [[NSImage alloc] initWithContentsOfURL:url];
+-        [url release]; [p release];
++		img = [[NSImage alloc] initWithContentsOfURL:[NSURL fileURLWithPath:@(path_to_image)]];
+         if (img) {
+             [n setValue:img forKey:@"_identityImage"];
+             [n setValue:@(false) forKey:@"_identityImageHasBorder"];
+         }
+-        [img release];
++		[img release];
+     }
+ #define SET(x) { \
+     if (x) { \
+-        NSString *t = [NSString stringWithUTF8String:x]; \
+-        n.x = t; \
+-        [t release]; \
++        n.x = @(x); \
+     }}
+     SET(title); SET(subtitle); SET(informativeText);
+ #undef SET
+     if (identifier) {
+-        n.userInfo = @{@"user_id": [NSString stringWithUTF8String:identifier]};
++        n.userInfo = @{@"user_id": @(identifier)};
+     }
+     [center deliverNotification:n];
+-
++	}
+ }
+ 
+ @implementation NotificationDelegate
+diff --git a/src/calibre/utils/cocoa_wrapper.c b/src/calibre/utils/cocoa_wrapper.c
+index b16242a902..5f68e313e1 100644
+--- a/src/calibre/utils/cocoa_wrapper.c
++++ b/src/calibre/utils/cocoa_wrapper.c
+@@ -10,6 +10,7 @@
+ extern double cocoa_cursor_blink_time(void);
+ extern void cocoa_send_notification(const char *identitifer, const char *title, const char *subtitle, const char *informativeText, const char* path_to_image);
+ extern const char* cocoa_send2trash(const char *utf8_path);
++extern void activate_cocoa_multithreading(void);
+ 
+ static PyObject *notification_activated_callback = NULL;
+ 
+@@ -63,8 +64,15 @@ send2trash(PyObject *self, PyObject *args) {
+ 	Py_RETURN_NONE;
+ }
+ 
++static PyObject*
++enable_cocoa_multithreading(PyObject *self, PyObject *args) {
++	activate_cocoa_multithreading();
++	Py_RETURN_NONE;
++}
++
+ static PyMethodDef module_methods[] = {
+     {"cursor_blink_time", (PyCFunction)cursor_blink_time, METH_NOARGS, ""},
++    {"enable_cocoa_multithreading", (PyCFunction)enable_cocoa_multithreading, METH_NOARGS, ""},
+     {"set_notification_activated_callback", (PyCFunction)set_notification_activated_callback, METH_O, ""},
+     {"send_notification", (PyCFunction)send_notification, METH_VARARGS, ""},
+     {"send2trash", (PyCFunction)send2trash, METH_VARARGS, ""},

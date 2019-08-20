@@ -1,0 +1,62 @@
+From 3939e7dc2adad89c19ed0fcad4063e18162f9b27 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Wed, 14 Aug 2019 20:52:07 +0530
+Subject: [PATCH 67/71] Complete fix for WSJ login logic change
+
+---
+ recipes/wsj.recipe      | 8 +++++++-
+ recipes/wsj_free.recipe | 8 +++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/recipes/wsj.recipe b/recipes/wsj.recipe
+index 5c13138c4f..5e8e6adefc 100644
+--- a/recipes/wsj.recipe
++++ b/recipes/wsj.recipe
+@@ -112,6 +112,7 @@ def get_browser(self, *a, **kw):
+                 'sso': 'true',
+                 'tenant': 'sso',
+                 '_intstate': 'deprecated',
++                'connection': 'DJldap',
+             }
+             for k in 'scope connection nonce state ui_locales ns protocol redirect_uri'.split():
+                 if k in query:
+@@ -135,7 +136,12 @@ def get_browser(self, *a, **kw):
+                 'X-Remote-User': self.username
+             }, data=request_query)
+             self.log('Sending login request...')
+-            res = br.open(rq)
++            try:
++                res = br.open(rq)
++            except Exception as err:
++                if hasattr(err, 'read'):
++                    raise Exception('Login request failed with error: {} and body: {}'.format(err, err.read().decode('utf-8', 'replace')))
++                raise
+             if res.code != 200:
+                 raise ValueError('Failed to login, check your username and password')
+             br.select_form(nr=0)
+diff --git a/recipes/wsj_free.recipe b/recipes/wsj_free.recipe
+index d9ecde365d..62a792b297 100644
+--- a/recipes/wsj_free.recipe
++++ b/recipes/wsj_free.recipe
+@@ -112,6 +112,7 @@ def get_browser(self, *a, **kw):
+                 'sso': 'true',
+                 'tenant': 'sso',
+                 '_intstate': 'deprecated',
++                'connection': 'DJldap',
+             }
+             for k in 'scope connection nonce state ui_locales ns protocol redirect_uri'.split():
+                 if k in query:
+@@ -135,7 +136,12 @@ def get_browser(self, *a, **kw):
+                 'X-Remote-User': self.username
+             }, data=request_query)
+             self.log('Sending login request...')
+-            res = br.open(rq)
++            try:
++                res = br.open(rq)
++            except Exception as err:
++                if hasattr(err, 'read'):
++                    raise Exception('Login request failed with error: {} and body: {}'.format(err, err.read().decode('utf-8', 'replace')))
++                raise
+             if res.code != 200:
+                 raise ValueError('Failed to login, check your username and password')
+             br.select_form(nr=0)

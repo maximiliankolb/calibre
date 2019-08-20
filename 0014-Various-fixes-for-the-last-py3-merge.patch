@@ -1,0 +1,314 @@
+From be1242547c96578a9da56a71b24ea85d6fe5c4b4 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Thu, 25 Jul 2019 08:52:35 +0530
+Subject: [PATCH 14/71] Various fixes for the last py3 merge
+
+---
+ src/calibre/ebooks/oeb/transforms/metadata.py |  3 +--
+ src/calibre/ebooks/pml/__init__.py            |  2 +-
+ src/calibre/ebooks/pml/pmlml.py               |  4 +--
+ src/calibre/ebooks/rb/writer.py               |  2 +-
+ src/calibre/ebooks/readability/debug.py       |  8 +++---
+ src/calibre/ebooks/rtf/preprocess.py          |  4 +--
+ src/calibre/ebooks/rtf/rtfml.py               | 14 +++++-----
+ src/calibre/gui2/cover_flow.py                |  6 ++---
+ src/calibre/gui2/custom_column_widgets.py     |  4 +--
+ src/calibre/gui2/linux_file_dialogs.py        | 27 ++++++++++---------
+ src/calibre/gui2/shortcuts.py                 |  4 +--
+ 11 files changed, 40 insertions(+), 38 deletions(-)
+
+diff --git a/src/calibre/ebooks/oeb/transforms/metadata.py b/src/calibre/ebooks/oeb/transforms/metadata.py
+index ed829dc92d..71baff4935 100644
+--- a/src/calibre/ebooks/oeb/transforms/metadata.py
++++ b/src/calibre/ebooks/oeb/transforms/metadata.py
+@@ -9,8 +9,7 @@ __docformat__ = 'restructuredtext en'
+ import os, re
+ from calibre.utils.date import isoformat, now
+ from calibre import guess_type
+-from polyglot.builtins import iteritems, filter
+-filter
++from polyglot.builtins import iteritems
+ 
+ 
+ def meta_info_to_oeb_metadata(mi, m, log, override_input_metadata=False):
+diff --git a/src/calibre/ebooks/pml/__init__.py b/src/calibre/ebooks/pml/__init__.py
+index 2260f2fe7c..d3d90c74e4 100644
+--- a/src/calibre/ebooks/pml/__init__.py
++++ b/src/calibre/ebooks/pml/__init__.py
+@@ -60,7 +60,7 @@ def unipmlcode(char):
+         val = ord(char.encode('cp1252'))
+         if val in A_CHARS:
+             return '\\a%i' % val
+-    except:
++    except Exception:
+         pass
+     val = ord(char)
+     if val in U_CHARS:
+diff --git a/src/calibre/ebooks/pml/pmlml.py b/src/calibre/ebooks/pml/pmlml.py
+index 7685036733..06af92cd83 100644
+--- a/src/calibre/ebooks/pml/pmlml.py
++++ b/src/calibre/ebooks/pml/pmlml.py
+@@ -190,7 +190,7 @@ class PMLMLizer(object):
+             text = text.replace(r'\Q="%s"' % unused, '')
+ 
+         # Remove \Cn tags that are within \x and \Xn tags
+-        text = re.sub(unicode_type(r'(?msu)(?P<t>\\(x|X[0-4]))(?P<a>.*?)(?P<c>\\C[0-4]\s*=\s*"[^"]*")(?P<b>.*?)(?P=t)'), r'\g<t>\g<a>\g<b>\g<t>', text)
++        text = re.sub(r'(?msu)(?P<t>\\(x|X[0-4]))(?P<a>.*?)(?P<c>\\C[0-4]\s*=\s*"[^"]*")(?P<b>.*?)(?P=t)', r'\g<t>\g<a>\g<b>\g<t>', text)
+ 
+         # Replace bad characters.
+         text = text.replace('\xc2', '')
+@@ -326,7 +326,7 @@ class PMLMLizer(object):
+         for s in STYLES:
+             style_tag = s[1].get(style[s[0]], None)
+             if style_tag and style_tag not in tag_stack+tags:
+-                text.append('r\%s' % style_tag)
++                text.append(r'\%s' % style_tag)
+                 tags.append(style_tag)
+ 
+         # margin left
+diff --git a/src/calibre/ebooks/rb/writer.py b/src/calibre/ebooks/rb/writer.py
+index af671295bc..c6353d146e 100644
+--- a/src/calibre/ebooks/rb/writer.py
++++ b/src/calibre/ebooks/rb/writer.py
+@@ -122,7 +122,7 @@ class RBWriter(object):
+         for item in manifest:
+             if item.media_type in OEB_RASTER_IMAGES:
+                 try:
+-                    data = ''
++                    data = b''
+ 
+                     im = Image.open(io.BytesIO(item.data)).convert('L')
+                     data = io.BytesIO()
+diff --git a/src/calibre/ebooks/readability/debug.py b/src/calibre/ebooks/readability/debug.py
+index c8acf510cf..d8557b606e 100644
+--- a/src/calibre/ebooks/readability/debug.py
++++ b/src/calibre/ebooks/readability/debug.py
+@@ -1,10 +1,10 @@
+ from __future__ import absolute_import, division, print_function, unicode_literals
+ 
++
+ def save_to_file(text, filename):
+-    f = open(filename, 'wt')
+-    f.write('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />')
+-    f.write(text.encode('utf-8'))
+-    f.close()
++    with open(filename, 'wb') as f:
++        f.write(b'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />')
++        f.write(text.encode('utf-8'))
+ 
+ 
+ uids = {}
+diff --git a/src/calibre/ebooks/rtf/preprocess.py b/src/calibre/ebooks/rtf/preprocess.py
+index 04d3c1124b..a9d48d144e 100644
+--- a/src/calibre/ebooks/rtf/preprocess.py
++++ b/src/calibre/ebooks/rtf/preprocess.py
+@@ -21,7 +21,7 @@ class tokenDelimitatorStart():
+         pass
+ 
+     def toRTF(self):
+-        return b'{'
++        return '{'
+ 
+     def __repr__(self):
+         return '{'
+@@ -33,7 +33,7 @@ class tokenDelimitatorEnd():
+         pass
+ 
+     def toRTF(self):
+-        return b'}'
++        return '}'
+ 
+     def __repr__(self):
+         return '}'
+diff --git a/src/calibre/ebooks/rtf/rtfml.py b/src/calibre/ebooks/rtf/rtfml.py
+index 5944c4f228..11736ffaef 100644
+--- a/src/calibre/ebooks/rtf/rtfml.py
++++ b/src/calibre/ebooks/rtf/rtfml.py
+@@ -86,10 +86,10 @@ def txt2rtf(text):
+         if val == 160:
+             buf.write(r'\~')
+         elif val <= 127:
+-            buf.write(unicode_type(x))
++            buf.write(x)
+         else:
+             # python2 and ur'\u' does not work
+-            c = unicode_type('\\u{0:d}?'.format(val))
++            c = '\\u{0:d}?'.format(val)
+             buf.write(c)
+     return buf.getvalue()
+ 
+@@ -175,8 +175,8 @@ class RTFMLizer(object):
+                 src = item.href
+                 try:
+                     data, width, height = self.image_to_hexstring(item.data)
+-                except:
+-                    self.log.warn('Image %s is corrupted, ignoring'%item.href)
++                except Exception:
++                    self.log.exception('Image %s is corrupted, ignoring'%item.href)
+                     repl = '\n\n'
+                 else:
+                     repl = '\n\n{\\*\\shppict{\\pict\\jpegblip\\picw%i\\pich%i \n%s\n}}\n\n' % (width, height, data)
+@@ -188,8 +188,8 @@ class RTFMLizer(object):
+         width, height = identify(data)[1:]
+ 
+         raw_hex = ''
+-        for char in data:
+-            raw_hex += hex(ord(char)).replace('0x', '').rjust(2, '0')
++        for char in bytearray(data):
++            raw_hex += hex(char).replace('0x', '').rjust(2, '0')
+ 
+         # Images must be broken up so that they are no longer than 129 chars
+         # per line
+@@ -202,7 +202,7 @@ class RTFMLizer(object):
+             col += 1
+             hex_string += char
+ 
+-        return (hex_string, width, height)
++        return hex_string, width, height
+ 
+     def clean_text(self, text):
+         # Remove excessive newlines
+diff --git a/src/calibre/gui2/cover_flow.py b/src/calibre/gui2/cover_flow.py
+index 17aafcbaf5..ec708602e2 100644
+--- a/src/calibre/gui2/cover_flow.py
++++ b/src/calibre/gui2/cover_flow.py
+@@ -245,7 +245,7 @@ class CBDialog(QDialog):
+         geom = gprefs.get('cover_browser_dialog_geometry', bytearray(''))
+         geom = QByteArray(geom)
+         if not self.restoreGeometry(geom):
+-            h, w = available_height()-60, available_width()//1.5
++            h, w = available_height()-60, int(available_width()/1.5)
+             self.resize(w, h)
+         self.action_fs_toggle = a = QAction(self)
+         self.addAction(a)
+@@ -459,7 +459,7 @@ def test():
+     app = QApplication([])
+     w = QMainWindow()
+     cf = CoverFlow()
+-    cf.resize(available_width()//1.5, available_height()-60)
++    cf.resize(int(available_width()/1.5), available_height()-60)
+     w.resize(cf.size()+QSize(30, 20))
+     model = DummyImageList()
+     cf.setImages(model)
+@@ -480,7 +480,7 @@ if __name__ == '__main__':
+     app = QApplication([])
+     w = QMainWindow()
+     cf = CoverFlow()
+-    cf.resize(available_width()//1.5, available_height()-60)
++    cf.resize(int(available_width()/1.5), available_height()-60)
+     w.resize(cf.size()+QSize(30, 20))
+     path = sys.argv[1]
+     model = FileSystemImages(sys.argv[1])
+diff --git a/src/calibre/gui2/custom_column_widgets.py b/src/calibre/gui2/custom_column_widgets.py
+index 2a4f87c49b..2d60470268 100644
+--- a/src/calibre/gui2/custom_column_widgets.py
++++ b/src/calibre/gui2/custom_column_widgets.py
+@@ -731,7 +731,7 @@ def populate_metadata_page(layout, db, book_id, bulk=False, two_column=False, pa
+     count = len(cols)
+     layout_rows_for_comments = 9
+     if two_column:
+-        turnover_point = ((count-comments_not_in_tweak+1) + comments_in_tweak*(layout_rows_for_comments-1))/2
++        turnover_point = ((count-comments_not_in_tweak+1) + int(comments_in_tweak*(layout_rows_for_comments-1))/2)
+     else:
+         # Avoid problems with multi-line widgets
+         turnover_point = count + 1000
+@@ -758,7 +758,7 @@ def populate_metadata_page(layout, db, book_id, bulk=False, two_column=False, pa
+                 column = 0
+                 row = max_row
+                 base_row = row
+-                turnover_point = row + (comments_not_in_tweak * layout_rows_for_comments)/2
++                turnover_point = row + int((comments_not_in_tweak * layout_rows_for_comments)/2)
+                 comments_not_in_tweak = 0
+ 
+         l = QGridLayout()
+diff --git a/src/calibre/gui2/linux_file_dialogs.py b/src/calibre/gui2/linux_file_dialogs.py
+index 78d76b90af..875c87e428 100644
+--- a/src/calibre/gui2/linux_file_dialogs.py
++++ b/src/calibre/gui2/linux_file_dialogs.py
+@@ -11,12 +11,12 @@ import sys
+ import time
+ from threading import Thread
+ 
+-from polyglot.builtins import reraise, unicode_type, string_or_bytes
+ from PyQt5.Qt import QEventLoop
+ 
+ from calibre import force_unicode
+-from calibre.constants import filesystem_encoding, preferred_encoding, DEBUG
++from calibre.constants import DEBUG, filesystem_encoding, ispy3, preferred_encoding
+ from calibre.utils.config import dynamic
++from polyglot.builtins import getenv, reraise, string_or_bytes, unicode_type
+ 
+ 
+ def dialog_name(name, title):
+@@ -29,20 +29,20 @@ def get_winid(widget=None):
+ 
+ 
+ def detect_desktop_environment():
+-    de = os.environ.get('XDG_CURRENT_DESKTOP')
++    de = getenv('XDG_CURRENT_DESKTOP')
+     if de:
+-        return de.decode('utf-8', 'replace').upper().split(':', 1)[0]
+-    if os.environ.get('KDE_FULL_SESSION') == 'true':
++        return de.upper().split(':', 1)[0]
++    if getenv('KDE_FULL_SESSION') == 'true':
+         return 'KDE'
+-    if os.environ.get('GNOME_DESKTOP_SESSION_ID'):
++    if getenv('GNOME_DESKTOP_SESSION_ID'):
+         return 'GNOME'
+-    ds = os.environ.get('DESKTOP_SESSION')
+-    if ds and ds.upper() in {b'GNOME', b'XFCE'}:
+-        return ds.decode('utf-8').upper()
++    ds = getenv('DESKTOP_SESSION')
++    if ds and ds.upper() in {'GNOME', 'XFCE'}:
++        return ds.upper()
+ 
+ 
+ def is_executable_present(name):
+-    PATH = os.environ.get('PATH') or b''
++    PATH = getenv('PATH') or ''
+     for path in PATH.split(os.pathsep):
+         if os.access(os.path.join(path, name), os.X_OK):
+             return True
+@@ -107,7 +107,7 @@ def decode_output(raw):
+ 
+ def run(cmd):
+     from calibre.gui2 import sanitize_env_vars
+-    ecmd = list(map(encode_arg, cmd))
++    ecmd = cmd if ispy3 else list(map(encode_arg, cmd))
+     if DEBUG:
+         try:
+             print(ecmd)
+@@ -125,7 +125,10 @@ def run(cmd):
+ def kdialog_supports_desktopfile():
+     ans = getattr(kdialog_supports_desktopfile, 'ans', None)
+     if ans is None:
+-        raw = subprocess.check_output(['kdialog', '--help'])
++        try:
++            raw = subprocess.check_output(['kdialog', '--help'])
++        except EnvironmentError:
++            raw = b'--desktopfile'
+         ans = kdialog_supports_desktopfile.ans = b'--desktopfile' in raw
+     return ans
+ 
+diff --git a/src/calibre/gui2/shortcuts.py b/src/calibre/gui2/shortcuts.py
+index 3e78dd7fd0..4f64be603f 100644
+--- a/src/calibre/gui2/shortcuts.py
++++ b/src/calibre/gui2/shortcuts.py
+@@ -112,7 +112,7 @@ class Customize(QFrame):
+                 Qt.Key_Shift, Qt.Key_Control, Qt.Key_Alt, Qt.Key_Meta,
+                 Qt.Key_AltGr, Qt.Key_CapsLock, Qt.Key_NumLock, Qt.Key_ScrollLock):
+             return QWidget.keyPressEvent(self, ev)
+-        sequence = QKeySequence(code|(int(ev.modifiers())&~Qt.KeypadModifier))
++        sequence = QKeySequence(code|(int(ev.modifiers()) & (~Qt.KeypadModifier)))
+         setattr(self, 'shortcut%d'%which, sequence)
+         self.clear_button(which)
+         self.capture = 0
+@@ -237,7 +237,7 @@ class Shortcuts(QAbstractListModel):
+     def get_match(self, event_or_sequence, ignore=tuple()):
+         q = event_or_sequence
+         if isinstance(q, QKeyEvent):
+-            q = QKeySequence(q.key()|(int(q.modifiers())&~Qt.KeypadModifier))
++            q = QKeySequence(q.key()|(int(q.modifiers()) & (~Qt.KeypadModifier)))
+         for key in self.order:
+             if key not in ignore:
+                 for seq in self.get_sequences(key):

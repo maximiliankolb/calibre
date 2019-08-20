@@ -1,0 +1,35 @@
+From 998c659c9e4afa3766c0c3056e9d359690e061a8 Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz@archlinux.org>
+Date: Tue, 23 Jul 2019 01:11:19 -0400
+Subject: [PATCH 05/71] Open With: don't raise KeyError if cache exists and
+ there are new dirs
+
+If the cache failed to load, it is initialized as a defaultdict and all
+mtimes compare as 0. If the cache did load, however, then an ordinary
+dict was used, and if new icon directories appeared on the system since
+the cache creation, they would raise a KeyError and Open With would not
+load data.
+
+Fix by using a defaultdict in all cases, but initializing with the
+contents of the cache if possible.
+
+Discovered when crazy applications added crazy subdirectories in
+/usr/share/pixmaps (???) and suddenly calibre failed to do the right
+thing, but the same should apply if the system adds a new icon theme.
+---
+ src/calibre/utils/open_with/linux.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/calibre/utils/open_with/linux.py b/src/calibre/utils/open_with/linux.py
+index f4b3269c06..f397c68659 100644
+--- a/src/calibre/utils/open_with/linux.py
++++ b/src/calibre/utils/open_with/linux.py
+@@ -116,7 +116,7 @@ def find_icons():
+         with open(cache_file, 'rb') as f:
+             cache = f.read()
+         cache = msgpack_loads(cache)
+-        mtimes, cache = cache['mtimes'], cache['data']
++        mtimes, cache = defaultdict(int, cache['mtimes']), defaultdict(dict, cache['data'])
+     except Exception:
+         mtimes, cache = defaultdict(int), defaultdict(dict)
+ 

@@ -1,0 +1,22 @@
+From dd55ad4f0e02a156eb4cafc265fa2f779df08cf3 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Sat, 10 Aug 2019 13:29:58 +0530
+Subject: [PATCH 52/71] py3: Another fix
+
+---
+ src/calibre/gui2/ui.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/calibre/gui2/ui.py b/src/calibre/gui2/ui.py
+index f9cb245a6d..deee2c7da2 100644
+--- a/src/calibre/gui2/ui.py
++++ b/src/calibre/gui2/ui.py
+@@ -626,6 +626,8 @@ class Main(MainWindow, MainWindowMixin, DeviceMixin, EmailMixin,  # {{{
+             msg = self.listener.queue.get_nowait()
+         except Empty:
+             return
++        if isinstance(msg, bytes):
++            msg = msg.decode('utf-8', 'replace')
+         if msg.startswith('launched:'):
+             import json
+             try:

@@ -1,0 +1,716 @@
+From d4f0dc87e18f543520adcdcb6c15552136964e5b Mon Sep 17 00:00:00 2001
+From: Eli Schwartz <eschwartz@archlinux.org>
+Date: Thu, 25 Jul 2019 00:30:42 -0400
+Subject: [PATCH 20/71] use context managers to open files
+
+---
+ bypy/macos/__main__.py                        |  6 +++--
+ bypy/macos/sign.py                            |  3 ++-
+ bypy/windows/__main__.py                      |  3 ++-
+ bypy/windows/wix.py                           |  6 +++--
+ setup/__init__.py                             |  3 ++-
+ setup/build.py                                |  3 ++-
+ setup/linux-installer.py                      |  3 ++-
+ setup/port.py                                 |  3 ++-
+ setup/translations.py                         |  3 ++-
+ src/calibre/db/tests/filesystem.py            | 11 ++++-----
+ .../ebooks/conversion/plugins/djvu_input.py   | 15 ++++++------
+ .../ebooks/conversion/plugins/html_input.py   |  3 ++-
+ .../ebooks/conversion/plugins/htmlz_input.py  | 16 ++++++-------
+ src/calibre/ebooks/conversion/plumber.py      |  3 ++-
+ src/calibre/ebooks/djvu/djvubzzdec.py         |  3 ++-
+ src/calibre/ebooks/lrf/html/convert_from.py   |  3 ++-
+ src/calibre/ebooks/lrf/meta.py                |  3 ++-
+ src/calibre/ebooks/metadata/topaz.py          |  9 ++++----
+ src/calibre/ebooks/oeb/iterator/bookmarks.py  |  8 +++----
+ src/calibre/ebooks/oeb/transforms/metadata.py |  3 ++-
+ src/calibre/ebooks/rtf/preprocess.py          | 10 ++++----
+ src/calibre/ebooks/snb/snbfile.py             | 23 +++++++++----------
+ src/calibre/gui2/actions/edit_metadata.py     |  3 ++-
+ src/calibre/gui2/convert/metadata.py          |  6 ++---
+ src/calibre/gui2/dialogs/custom_recipes.py    |  3 ++-
+ src/calibre/gui2/main.py                      |  3 ++-
+ src/calibre/gui2/metadata/basic_widgets.py    |  6 ++---
+ src/calibre/gui2/metadata/single.py           |  3 ++-
+ src/calibre/gui2/tweak_book/diff/main.py      |  3 ++-
+ .../gui2/tweak_book/editor/syntax/html.py     |  3 ++-
+ src/calibre/utils/fonts/utils.py              |  7 +++---
+ src/calibre/utils/fonts/win_fonts.py          |  7 +++---
+ src/calibre/utils/ip_routing.py               |  3 ++-
+ src/calibre/web/feeds/news.py                 |  3 ++-
+ src/calibre/web/feeds/recipes/collection.py   |  3 ++-
+ update-on-ox                                  |  6 +++--
+ 36 files changed, 113 insertions(+), 89 deletions(-)
+
+diff --git a/bypy/macos/__main__.py b/bypy/macos/__main__.py
+index ef0e1ceacc..d8b012cc12 100644
+--- a/bypy/macos/__main__.py
++++ b/bypy/macos/__main__.py
+@@ -72,7 +72,8 @@ gcc = os.environ.get('CC', 'clang')
+ def compile_launchers(contents_dir, xprograms, pyver):
+     base = dirname(abspath(__file__))
+     lib = compile_launcher_lib(contents_dir, gcc, base)
+-    src = open(join(base, 'launcher.c'), 'rb').read().decode('utf-8')
++    with open(join(base, 'launcher.c'), 'rb') as f:
++        src = f.read().decode('utf-8')
+     env, env_vals = [], []
+     for key, val in ENV.items():
+         env.append('"%s"' % key)
+@@ -450,7 +451,8 @@ class Freeze(object):
+         src = os.path.join(PREFIX, 'etc', 'fonts')
+         shutil.copytree(src, dst, symlinks=False)
+         fc = os.path.join(dst, 'fonts.conf')
+-        raw = open(fc, 'rb').read().decode('utf-8')
++        with open(fc, 'rb') as f:
++            raw = f.read().decode('utf-8')
+         raw = raw.replace('<dir>/usr/share/fonts</dir>', '''\
+         <dir>/Library/Fonts</dir>
+         <dir>/System/Library/Fonts</dir>
+diff --git a/bypy/macos/sign.py b/bypy/macos/sign.py
+index 09b3c685a3..e545c2d5bc 100644
+--- a/bypy/macos/sign.py
++++ b/bypy/macos/sign.py
+@@ -42,7 +42,8 @@ def make_certificate_useable():
+         # Unlock keychain
+         run('security unlock-keychain -p "{}" "{}"'.format(KEYCHAIN_PASSWORD, KEYCHAIN))
+         # Add certificate to keychain
+-        cert_pass = open(CODESIGN_CREDS).read().strip()
++        with open(CODESIGN_CREDS, 'r') as f:
++            cert_pass = f.read().strip()
+         # Add certificate to keychain and allow codesign to use it
+         # Use -A instead of -T /usr/bin/codesign to allow all apps to use it
+         run('security import {} -k "{}" -P "{}" -T "/usr/bin/codesign"'.format(
+diff --git a/bypy/windows/__main__.py b/bypy/windows/__main__.py
+index c014ae026e..7efce10977 100644
+--- a/bypy/windows/__main__.py
++++ b/bypy/windows/__main__.py
+@@ -305,7 +305,8 @@ def embed_resources(env, module, desc=None, extra_data=None, product_description
+     icon_map = {'calibre': 'library', 'ebook-viewer': 'viewer', 'ebook-edit': 'ebook-edit',
+                 'lrfviewer': 'viewer', 'calibre-portable': 'library'}
+     file_type = 'DLL' if module.endswith('.dll') else 'APP'
+-    template = open(env.rc_template, 'rb').read().decode('utf-8')
++    with open(env.rc_template, 'rb') as f:
++        template = f.read().decode('utf-8')
+     bname = b(module)
+     internal_name = os.path.splitext(bname)[0]
+     icon = icon_map.get(internal_name, 'command-prompt')
+diff --git a/bypy/windows/wix.py b/bypy/windows/wix.py
+index dd5925469e..cc8d8adc5d 100644
+--- a/bypy/windows/wix.py
++++ b/bypy/windows/wix.py
+@@ -29,7 +29,8 @@ def create_installer(env):
+         shutil.rmtree(env.installer_dir)
+     os.makedirs(env.installer_dir)
+ 
+-    template = open(j(d(__file__), 'wix-template.xml'), 'rb').read().decode('utf-8')
++    with open(j(d(__file__), 'wix-template.xml'), 'rb') as f:
++        template = f.read().decode('utf-8')
+ 
+     components, smap = get_components_from_files(env)
+     wxs = template.format(
+@@ -50,7 +51,8 @@ def create_installer(env):
+         editor_icon=j(env.src_root, 'icons', 'ebook-edit.ico'),
+         web_icon=j(env.src_root, 'icons', 'web.ico'),
+     )
+-    template = open(j(d(__file__), 'en-us.xml'), 'rb').read().decode('utf-8')
++    with open(j(d(__file__), 'en-us.xml'), 'rb') as f:
++        template = f.read().decode('utf-8')
+     enus = template.format(app=calibre_constants['appname'])
+ 
+     enusf = j(env.installer_dir, 'en-us.wxl')
+diff --git a/setup/__init__.py b/setup/__init__.py
+index fdbe266bd5..69450c8948 100644
+--- a/setup/__init__.py
++++ b/setup/__init__.py
+@@ -95,7 +95,8 @@ def require_clean_git():
+ def initialize_constants():
+     global __version__, __appname__, modules, functions, basenames, scripts
+ 
+-    src = open(os.path.join(SRC, 'calibre/constants.py'), 'rb').read().decode('utf-8')
++    with open(os.path.join(SRC, 'calibre/constants.py'), 'rb') as f:
++        src = f.read().decode('utf-8')
+     nv = re.search(r'numeric_version\s+=\s+\((\d+), (\d+), (\d+)\)', src)
+     __version__ = '%s.%s.%s'%(nv.group(1), nv.group(2), nv.group(3))
+     __appname__ = re.search(r'__appname__\s+=\s+(u{0,1})[\'"]([^\'"]+)[\'"]',
+diff --git a/setup/build.py b/setup/build.py
+index f5a521192c..cae5455c07 100644
+--- a/setup/build.py
++++ b/setup/build.py
+@@ -454,7 +454,8 @@ class Build(Command):
+             self.info(' '.join(cmd))
+             self.check_call(cmd)
+             self.info('')
+-        raw = open(sbf, 'rb').read().decode('utf-8')
++        with open(sbf, 'rb') as f:
++            raw = f.read().decode('utf-8')
+ 
+         def read(x):
+             ans = re.search(r'^%s\s*=\s*(.+)$' % x, raw, flags=re.M).group(1).strip()
+diff --git a/setup/linux-installer.py b/setup/linux-installer.py
+index cd2252bf49..568845e876 100644
+--- a/setup/linux-installer.py
++++ b/setup/linux-installer.py
+@@ -748,7 +748,8 @@ except NameError:
+ 
+ def update_intaller_wrapper():
+     # To run: python3 -c "import runpy; runpy.run_path('setup/linux-installer.py', run_name='update_wrapper')"
+-    src = open(__file__, 'rb').read().decode('utf-8')
++    with open(__file__, 'rb') as f:
++        src = f.read().decode('utf-8')
+     wrapper = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'linux-installer.sh')
+     with open(wrapper, 'r+b') as f:
+         raw = f.read().decode('utf-8')
+diff --git a/setup/port.py b/setup/port.py
+index 401764fcb7..6267e4515d 100644
+--- a/setup/port.py
++++ b/setup/port.py
+@@ -211,7 +211,8 @@ class IteratorsCheck(Base):
+ 
+     def get_errors_in_file(self, f):
+         pat = re.compile(r'\b(range|map|filter|zip)\(')
+-        text = open(f, 'rb').read().decode('utf-8')
++        with open(f, 'rb') as f:
++            text = f.read().decode('utf-8')
+         matches = tuple(pat.finditer(text))
+         if not matches:
+             return []
+diff --git a/setup/translations.py b/setup/translations.py
+index e591cc0462..e630ffefab 100644
+--- a/setup/translations.py
++++ b/setup/translations.py
+@@ -665,7 +665,8 @@ class GetTranslations(Translations):  # {{{
+             return errs
+ 
+         def check_for_control_chars(f):
+-            raw = open(f, 'rb').read().decode('utf-8')
++            with open(f, 'rb') as f:
++                raw = f.read().decode('utf-8')
+             pat = re.compile(type(u'')(r'[\0-\x08\x0b\x0c\x0e-\x1f\x7f\x80-\x9f]'))
+             errs = []
+             for i, line in enumerate(raw.splitlines()):
+diff --git a/src/calibre/db/tests/filesystem.py b/src/calibre/db/tests/filesystem.py
+index eec8ca0c4a..2525572565 100644
+--- a/src/calibre/db/tests/filesystem.py
++++ b/src/calibre/db/tests/filesystem.py
+@@ -74,12 +74,11 @@ class FilesystemTest(BaseTest):
+         cl = self.cloned_library
+         cache = self.init_cache(cl)
+         fpath = cache.format_abspath(1, 'FMT1')
+-        f = open(fpath, 'rb')
+-        with self.assertRaises(IOError):
+-            cache.set_field('title', {1:'Moved'})
+-        with self.assertRaises(IOError):
+-            cache.remove_books({1})
+-        f.close()
++        with open(fpath, 'rb') as f:
++            with self.assertRaises(IOError):
++                cache.set_field('title', {1:'Moved'})
++            with self.assertRaises(IOError):
++                cache.remove_books({1})
+         self.assertNotEqual(cache.field_for('title', 1), 'Moved', 'Title was changed despite file lock')
+ 
+         # Test on folder with hardlinks
+diff --git a/src/calibre/ebooks/conversion/plugins/djvu_input.py b/src/calibre/ebooks/conversion/plugins/djvu_input.py
+index dde7ed92b4..8f25551af8 100644
+--- a/src/calibre/ebooks/conversion/plugins/djvu_input.py
++++ b/src/calibre/ebooks/conversion/plugins/djvu_input.py
+@@ -38,22 +38,21 @@ class DJVUInput(InputFormatPlugin):
+             setattr(options, opt.option.name, opt.recommended_value)
+         options.input_encoding = 'utf-8'
+         base = getcwd()
+-        fname = os.path.join(base, 'index.html')
++        htmlfile = os.path.join(base, 'index.html')
+         c = 0
+-        while os.path.exists(fname):
++        while os.path.exists(htmlfile):
+             c += 1
+-            fname = os.path.join(base, 'index%d.html'%c)
+-        htmlfile = open(fname, 'wb')
+-        with htmlfile:
+-            htmlfile.write(html.encode('utf-8'))
++            htmlfile = os.path.join(base, 'index%d.html'%c)
++        with open(htmlfile, 'wb') as f:
++            f.write(html.encode('utf-8'))
+         odi = options.debug_pipeline
+         options.debug_pipeline = None
+         # Generate oeb from html conversion.
+-        with open(htmlfile.name, 'rb') as f:
++        with open(htmlfile, 'rb') as f:
+             oeb = html_input.convert(f, options, 'html', log,
+                 {})
+         options.debug_pipeline = odi
+-        os.remove(htmlfile.name)
++        os.remove(htmlfile)
+ 
+         # Set metadata from file.
+         from calibre.customize.ui import get_file_type_metadata
+diff --git a/src/calibre/ebooks/conversion/plugins/html_input.py b/src/calibre/ebooks/conversion/plugins/html_input.py
+index 89e4353a13..b74cfba882 100644
+--- a/src/calibre/ebooks/conversion/plugins/html_input.py
++++ b/src/calibre/ebooks/conversion/plugins/html_input.py
+@@ -307,7 +307,8 @@ class HTMLInput(InputFormatPlugin):
+         if link is None or not os.access(link, os.R_OK) or os.path.isdir(link):
+             return (None, None)
+         try:
+-            raw = open(link, 'rb').read().decode('utf-8', 'replace')
++            with open(link, 'rb') as f:
++                raw = f.read().decode('utf-8', 'replace')
+             raw = self.oeb.css_preprocessor(raw, add_namespace=False)
+         except:
+             self.log.exception('Failed to read CSS file: %r'%link)
+diff --git a/src/calibre/ebooks/conversion/plugins/htmlz_input.py b/src/calibre/ebooks/conversion/plugins/htmlz_input.py
+index ca8180ae9e..baed0c1ac7 100644
+--- a/src/calibre/ebooks/conversion/plugins/htmlz_input.py
++++ b/src/calibre/ebooks/conversion/plugins/htmlz_input.py
+@@ -88,21 +88,21 @@ class HTMLZInput(InputFormatPlugin):
+             setattr(options, opt.option.name, opt.recommended_value)
+         options.input_encoding = 'utf-8'
+         base = getcwd()
+-        fname = os.path.join(base, u'index.html')
++        htmlfile = os.path.join(base, u'index.html')
+         c = 0
+-        while os.path.exists(fname):
++        while os.path.exists(htmlfile):
+             c += 1
+-            fname = u'index%d.html'%c
+-        htmlfile = open(fname, 'wb')
+-        with htmlfile:
+-            htmlfile.write(html.encode('utf-8'))
++            htmlfile = u'index%d.html'%c
++        with open(htmlfile, 'wb') as f:
++            f.write(html.encode('utf-8'))
+         odi = options.debug_pipeline
+         options.debug_pipeline = None
+         # Generate oeb from html conversion.
+-        oeb = html_input.convert(open(htmlfile.name, 'rb'), options, 'html', log,
++        with open(htmlfile, 'rb') as f:
++            oeb = html_input.convert(f, options, 'html', log,
+                 {})
+         options.debug_pipeline = odi
+-        os.remove(htmlfile.name)
++        os.remove(htmlfile)
+ 
+         # Set metadata from file.
+         from calibre.customize.ui import get_file_type_metadata
+diff --git a/src/calibre/ebooks/conversion/plumber.py b/src/calibre/ebooks/conversion/plumber.py
+index 977a1ee95e..a9720505a9 100644
+--- a/src/calibre/ebooks/conversion/plumber.py
++++ b/src/calibre/ebooks/conversion/plumber.py
+@@ -1191,7 +1191,8 @@ OptionRecommendation(name='search_replace',
+             self.log('Structured HTML written to:', out_dir)
+ 
+         if self.opts.extra_css and os.path.exists(self.opts.extra_css):
+-            self.opts.extra_css = open(self.opts.extra_css, 'rb').read()
++            with open(self.opts.extra_css, 'rb') as f:
++                self.opts.extra_css = f.read()
+ 
+         oibl = self.opts.insert_blank_line
+         orps  = self.opts.remove_paragraph_spacing
+diff --git a/src/calibre/ebooks/djvu/djvubzzdec.py b/src/calibre/ebooks/djvu/djvubzzdec.py
+index 6d60d9f03a..262409d565 100644
+--- a/src/calibre/ebooks/djvu/djvubzzdec.py
++++ b/src/calibre/ebooks/djvu/djvubzzdec.py
+@@ -734,7 +734,8 @@ class BZZDecoder():
+ def main():
+     import sys
+     from calibre.constants import plugins
+-    raw = open(sys.argv[1], "rb").read()
++    with open(sys.argv[1], "rb") as f:
++        raw = f.read()
+     d = plugins['bzzdec'][0]
+     print(d.decompress(raw))
+ 
+diff --git a/src/calibre/ebooks/lrf/html/convert_from.py b/src/calibre/ebooks/lrf/html/convert_from.py
+index 59472c1451..781d205e05 100644
+--- a/src/calibre/ebooks/lrf/html/convert_from.py
++++ b/src/calibre/ebooks/lrf/html/convert_from.py
+@@ -266,7 +266,8 @@ class HTMLConverter(object):
+ 
+         if self._override_css is not None:
+             if os.access(self._override_css, os.R_OK):
+-                src = open(self._override_css, 'rb').read()
++                with open(self._override_css, 'rb') as f:
++                    src = f.read()
+             else:
+                 src = self._override_css
+             if isinstance(src, bytes):
+diff --git a/src/calibre/ebooks/lrf/meta.py b/src/calibre/ebooks/lrf/meta.py
+index d48f05a1f9..f76ba91d01 100644
+--- a/src/calibre/ebooks/lrf/meta.py
++++ b/src/calibre/ebooks/lrf/meta.py
+@@ -712,7 +712,8 @@ def main(args=sys.argv):
+         lrf.book_id = options.book_id
+     if options.comment:
+         path = os.path.expanduser(os.path.expandvars(options.comment))
+-        lrf.free_text = open(path, 'rb').read().decode('utf-8', 'replace')
++        with open(path, 'rb') as f:
++            lrf.free_text = f.read().decode('utf-8', 'replace')
+     if options.get_thumbnail:
+         t = lrf.thumbnail
+         td = "None"
+diff --git a/src/calibre/ebooks/metadata/topaz.py b/src/calibre/ebooks/metadata/topaz.py
+index 880ee237de..9ea6def0d5 100644
+--- a/src/calibre/ebooks/metadata/topaz.py
++++ b/src/calibre/ebooks/metadata/topaz.py
+@@ -391,14 +391,13 @@ if __name__ == '__main__':
+         print(get_metadata(open(sys.argv[1], 'rb')))
+     else:
+         # Test set_metadata()
+-        data = open(sys.argv[1], 'rb')
+         stream = io.BytesIO()
+-        stream.write(data.read())
++        with open(sys.argv[1], 'rb') as data:
++            stream.write(data.read())
+         mi = MetaInformation(title="Updated Title", authors=['Author, Random'])
+         set_metadata(stream, mi)
+ 
+         # Write the result
+         tokens = sys.argv[1].rpartition('.')
+-        updated_data = open(tokens[0]+'-updated' + '.' + tokens[2],'wb')
+-        updated_data.write(stream.getvalue())
+-        updated_data.close()
++        with open(tokens[0]+'-updated' + '.' + tokens[2],'wb') as updated_data:
++            updated_data.write(stream.getvalue())
+diff --git a/src/calibre/ebooks/oeb/iterator/bookmarks.py b/src/calibre/ebooks/oeb/iterator/bookmarks.py
+index eb7ab618d5..bc16fbaf81 100644
+--- a/src/calibre/ebooks/oeb/iterator/bookmarks.py
++++ b/src/calibre/ebooks/oeb/iterator/bookmarks.py
+@@ -87,12 +87,12 @@ class BookmarksMixin(object):
+         if not no_copy_to_file and self.copy_bookmarks_to_file and os.path.splitext(
+                 self.pathtoebook)[1].lower() == '.epub' and os.access(self.pathtoebook, os.W_OK):
+             try:
+-                zf = open(self.pathtoebook, 'r+b')
++                with open(self.pathtoebook, 'r+b') as zf:
++                    safe_replace(zf, 'META-INF/calibre_bookmarks.txt',
++                            BytesIO(dat.encode('utf-8')),
++                            add_missing=True)
+             except IOError:
+                 return
+-            safe_replace(zf, 'META-INF/calibre_bookmarks.txt',
+-                    BytesIO(dat.encode('utf-8')),
+-                    add_missing=True)
+ 
+     def add_bookmark(self, bm, no_copy_to_file=False):
+         self.bookmarks = [x for x in self.bookmarks if x['title'] !=
+diff --git a/src/calibre/ebooks/oeb/transforms/metadata.py b/src/calibre/ebooks/oeb/transforms/metadata.py
+index 71baff4935..ab7500a050 100644
+--- a/src/calibre/ebooks/oeb/transforms/metadata.py
++++ b/src/calibre/ebooks/oeb/transforms/metadata.py
+@@ -126,7 +126,8 @@ class MergeMetadata(object):
+     def set_cover(self, mi, prefer_metadata_cover):
+         cdata, ext = '', 'jpg'
+         if mi.cover and os.access(mi.cover, os.R_OK):
+-            cdata = open(mi.cover, 'rb').read()
++            with open(mi.cover, 'rb') as f:
++                cdata = f.read()
+             ext = mi.cover.rpartition('.')[-1].lower().strip()
+         elif mi.cover_data and mi.cover_data[-1]:
+             cdata = mi.cover_data[1]
+diff --git a/src/calibre/ebooks/rtf/preprocess.py b/src/calibre/ebooks/rtf/preprocess.py
+index a9d48d144e..c65b853f8e 100644
+--- a/src/calibre/ebooks/rtf/preprocess.py
++++ b/src/calibre/ebooks/rtf/preprocess.py
+@@ -368,15 +368,13 @@ if __name__ == "__main__":
+     if len(sys.argv) < 2:
+         print("Usage %prog rtfFileToConvert")
+         sys.exit()
+-    f = open(sys.argv[1], 'rb')
+-    data = f.read()
+-    f.close()
++    with open(sys.argv[1], 'rb') as f:
++        data = f.read()
+ 
+     tokenizer = RtfTokenizer(data)
+     parsedTokens = RtfTokenParser(tokenizer.tokens)
+ 
+     data = parsedTokens.toRTF()
+ 
+-    f = open(sys.argv[1], 'w')
+-    f.write(data)
+-    f.close()
++    with open(sys.argv[1], 'w') as f:
++        f.write(data)
+diff --git a/src/calibre/ebooks/snb/snbfile.py b/src/calibre/ebooks/snb/snbfile.py
+index 9931a33826..8cfe99b680 100644
+--- a/src/calibre/ebooks/snb/snbfile.py
++++ b/src/calibre/ebooks/snb/snbfile.py
+@@ -39,10 +39,9 @@ class SNBFile:
+     def Open(self, inputFile):
+         self.fileName = inputFile
+ 
+-        snbFile = open(self.fileName, "rb")
+-        snbFile.seek(0)
+-        self.Parse(snbFile)
+-        snbFile.close()
++        with open(self.fileName, "rb") as f:
++            f.seek(0)
++            self.Parse(f)
+ 
+     def Parse(self, snbFile, metaOnly=False):
+         # Read header
+@@ -158,7 +157,8 @@ class SNBFile:
+         f = FileStream()
+         f.attr = 0x41000000
+         f.fileSize = os.path.getsize(os.path.join(tdir,fileName))
+-        f.fileBody = open(os.path.join(tdir,fileName), 'rb').read()
++        with open(os.path.join(tdir,fileName), 'rb') as data:
++            f.fileBody = data.read()
+         f.fileName = fileName.replace(os.sep, '/')
+         if isinstance(f.fileName, unicode_type):
+             f.fileName = f.fileName.encode("ascii", "ignore")
+@@ -168,7 +168,8 @@ class SNBFile:
+         f = FileStream()
+         f.attr = 0x01000000
+         f.fileSize = os.path.getsize(os.path.join(tdir,fileName))
+-        f.fileBody = open(os.path.join(tdir,fileName), 'rb').read()
++        with open(os.path.join(tdir,fileName), 'rb') as data:
++            f.fileBody = data.read()
+         f.fileName = fileName.replace(os.sep, '/')
+         if isinstance(f.fileName, unicode_type):
+             f.fileName = f.fileName.encode("ascii", "ignore")
+@@ -186,9 +187,8 @@ class SNBFile:
+             fname = os.path.basename(f.fileName)
+             root, ext = os.path.splitext(fname)
+             if ext in ['.jpeg', '.jpg', '.gif', '.svg', '.png']:
+-                file = open(os.path.join(path, fname), 'wb')
+-                file.write(f.fileBody)
+-                file.close()
++                with open(os.path.join(path, fname), 'wb') as outfile:
++                    outfile.write(f.fileBody)
+                 fileNames.append((fname, guess_type('a'+ext)[0]))
+         return fileNames
+ 
+@@ -297,9 +297,8 @@ class SNBFile:
+             print("File Size: ", f.fileSize)
+             print("Block Index: ", f.blockIndex)
+             print("Content Offset: ", f.contentOffset)
+-            tempFile = open("/tmp/" + f.fileName, 'wb')
+-            tempFile.write(f.fileBody)
+-            tempFile.close()
++            with open("/tmp/" + f.fileName, 'wb') as tempFile:
++                tempFile.write(f.fileBody)
+ 
+ 
+ def usage():
+diff --git a/src/calibre/gui2/actions/edit_metadata.py b/src/calibre/gui2/actions/edit_metadata.py
+index 85d917c21f..ac0f572f1d 100644
+--- a/src/calibre/gui2/actions/edit_metadata.py
++++ b/src/calibre/gui2/actions/edit_metadata.py
+@@ -937,7 +937,8 @@ class EditMetadataAction(InterfaceAction):
+                 if old != prefs['read_file_metadata']:
+                     prefs['read_file_metadata'] = old
+             if mi.cover and os.access(mi.cover, os.R_OK):
+-                cdata = open(mi.cover).read()
++                with open(mi.cover) as f:
++                    cdata = f.read()
+             elif mi.cover_data[1] is not None:
+                 cdata = mi.cover_data[1]
+             if cdata is None:
+diff --git a/src/calibre/gui2/convert/metadata.py b/src/calibre/gui2/convert/metadata.py
+index 2ca3d72a01..ec87f479a4 100644
+--- a/src/calibre/gui2/convert/metadata.py
++++ b/src/calibre/gui2/convert/metadata.py
+@@ -198,10 +198,10 @@ class MetadataWidget(Widget, Ui_Form):
+                         _('You do not have permission to read the file: ') + _file)
+                 d.exec_()
+                 return
+-            cf, cover = None, None
++            cover = None
+             try:
+-                cf = open(_file, "rb")
+-                cover = cf.read()
++                with open(_file, "rb") as f:
++                    cover = f.read()
+             except IOError as e:
+                 d = error_dialog(self.parent(), _('Error reading file'),
+                         _("<p>There was an error reading from file: <br /><b>") + _file + "</b></p><br />"+str(e))
+diff --git a/src/calibre/gui2/dialogs/custom_recipes.py b/src/calibre/gui2/dialogs/custom_recipes.py
+index dc74fea242..03b2782bf3 100644
+--- a/src/calibre/gui2/dialogs/custom_recipes.py
++++ b/src/calibre/gui2/dialogs/custom_recipes.py
+@@ -606,7 +606,8 @@ class CustomRecipes(Dialog):
+         if files:
+             path = files[0]
+             try:
+-                src = open(path, 'rb').read().decode('utf-8')
++                with open(path, 'rb') as f:
++                    src = f.read().decode('utf-8')
+             except Exception as err:
+                 error_dialog(self, _('Invalid input'),
+                         _('<p>Could not create recipe. Error:<br>%s')%err, show=True)
+diff --git a/src/calibre/gui2/main.py b/src/calibre/gui2/main.py
+index 3d13ab7b34..bf82c6b8ab 100644
+--- a/src/calibre/gui2/main.py
++++ b/src/calibre/gui2/main.py
+@@ -577,7 +577,8 @@ if __name__ == '__main__':
+         from PyQt5.Qt import QErrorMessage
+         logfile = os.path.join(os.path.expanduser('~'), 'calibre.log')
+         if os.path.exists(logfile):
+-            log = open(logfile).read().decode('utf-8', 'ignore')
++            with open(logfile) as f:
++                log = f.read().decode('utf-8', 'ignore')
+             d = QErrorMessage()
+             d.showMessage(('<b>Error:</b>%s<br><b>Traceback:</b><br>'
+                 '%s<b>Log:</b><br>%s')%(unicode_type(err),
+diff --git a/src/calibre/gui2/metadata/basic_widgets.py b/src/calibre/gui2/metadata/basic_widgets.py
+index 49d2ad2161..3e8aa4526d 100644
+--- a/src/calibre/gui2/metadata/basic_widgets.py
++++ b/src/calibre/gui2/metadata/basic_widgets.py
+@@ -1168,10 +1168,10 @@ class Cover(ImageView):  # {{{
+                         _('You do not have permission to read the file: ') + _file)
+                 d.exec_()
+                 return
+-            cf, cover = None, None
++            cover = None
+             try:
+-                cf = open(_file, "rb")
+-                cover = cf.read()
++                with open(_file, "rb") as f:
++                    cover = f.read()
+             except IOError as e:
+                 d = error_dialog(
+                         self, _('Error reading file'),
+diff --git a/src/calibre/gui2/metadata/single.py b/src/calibre/gui2/metadata/single.py
+index d5083f8daf..4cdd2aa2a1 100644
+--- a/src/calibre/gui2/metadata/single.py
++++ b/src/calibre/gui2/metadata/single.py
+@@ -461,7 +461,8 @@ class MetadataSingleDialogBase(QDialog):
+             return
+         cdata = None
+         if mi.cover and os.access(mi.cover, os.R_OK):
+-            cdata = open(mi.cover).read()
++            with open(mi.cover) as f:
++                cdata = f.read()
+         elif mi.cover_data[1] is not None:
+             cdata = mi.cover_data[1]
+         if cdata is None:
+diff --git a/src/calibre/gui2/tweak_book/diff/main.py b/src/calibre/gui2/tweak_book/diff/main.py
+index 295ab8ea10..a884aa40ae 100644
+--- a/src/calibre/gui2/tweak_book/diff/main.py
++++ b/src/calibre/gui2/tweak_book/diff/main.py
+@@ -139,7 +139,8 @@ def string_diff(left, right, left_syntax=None, right_syntax=None, left_name='lef
+ def file_diff(left, right):
+     (raw1, syntax1), (raw2, syntax2) = map(get_decoded_raw, (left, right))
+     if type(raw1) is not type(raw2):
+-        raw1, raw2 = open(left, 'rb').read(), open(right, 'rb').read()
++        with open(left, 'rb') as f1, open(right, 'rb') as f2:
++            raw1, raw2 = f1.read(), f2.read()
+     cache = Cache()
+     cache.set_left(left, raw1), cache.set_right(right, raw2)
+     changed_names = {} if raw1 == raw2 else {left:right}
+diff --git a/src/calibre/gui2/tweak_book/editor/syntax/html.py b/src/calibre/gui2/tweak_book/editor/syntax/html.py
+index b475da0fc8..a5f1200764 100644
+--- a/src/calibre/gui2/tweak_book/editor/syntax/html.py
++++ b/src/calibre/gui2/tweak_book/editor/syntax/html.py
+@@ -606,7 +606,8 @@ def profile():
+     from calibre.gui2.tweak_book.editor.themes import get_theme
+     app = Application([])
+     set_book_locale('en')
+-    raw = open(sys.argv[-2], 'rb').read().decode('utf-8')
++    with open(sys.argv[-2], 'rb') as f:
++        raw = f.read().decode('utf-8')
+     doc = QTextDocument()
+     doc.setPlainText(raw)
+     h = Highlighter()
+diff --git a/src/calibre/utils/fonts/utils.py b/src/calibre/utils/fonts/utils.py
+index 767fcfc65d..fd5987614d 100644
+--- a/src/calibre/utils/fonts/utils.py
++++ b/src/calibre/utils/fonts/utils.py
+@@ -487,9 +487,10 @@ def test():
+ 
+ def main():
+     import sys, os
+-    for f in sys.argv[1:]:
+-        print(os.path.basename(f))
+-        raw = open(f, 'rb').read()
++    for arg in sys.argv[1:]:
++        print(os.path.basename(arg))
++        with open(arg, 'rb') as f:
++            raw = f.read()
+         print(get_font_names(raw))
+         characs = get_font_characteristics(raw)
+         print(characs)
+diff --git a/src/calibre/utils/fonts/win_fonts.py b/src/calibre/utils/fonts/win_fonts.py
+index 6e8641737d..1d85e56c3e 100644
+--- a/src/calibre/utils/fonts/win_fonts.py
++++ b/src/calibre/utils/fonts/win_fonts.py
+@@ -147,9 +147,10 @@ def load_winfonts():
+ 
+ 
+ def test_ttf_reading():
+-    for f in sys.argv[1:]:
+-        raw = open(f).read()
+-        print(os.path.basename(f))
++    for arg in sys.argv[1:]:
++        with open(arg) as f:
++            raw = f.read()
++        print(os.path.basename(arg))
+         get_font_characteristics(raw)
+         print()
+ 
+diff --git a/src/calibre/utils/ip_routing.py b/src/calibre/utils/ip_routing.py
+index c7e43b1d97..7f1ef8674e 100644
+--- a/src/calibre/utils/ip_routing.py
++++ b/src/calibre/utils/ip_routing.py
+@@ -70,7 +70,8 @@ else:
+ 
+     def get_default_route_src_address():
+         # Use /proc/net/ipv6_route for IPv6 addresses
+-        raw = open('/proc/net/route', 'rb').read().decode('utf-8')
++        with open('/proc/net/route', 'rb') as f:
++            raw = f.read().decode('utf-8')
+         for line in raw.splitlines():
+             parts = line.split()
+             if len(parts) > 1 and parts[1] == '00000000':
+diff --git a/src/calibre/web/feeds/news.py b/src/calibre/web/feeds/news.py
+index 678a9af3ad..854c62ebec 100644
+--- a/src/calibre/web/feeds/news.py
++++ b/src/calibre/web/feeds/news.py
+@@ -1299,7 +1299,8 @@ class BasicNewsRecipe(Recipe):
+                 cdata = cu.read()
+                 cu = getattr(cu, 'name', 'cover.jpg')
+             elif os.access(cu, os.R_OK):
+-                cdata = open(cu, 'rb').read()
++                with open(cu, 'rb') as f:
++                    cdata = f.read()
+             else:
+                 self.report_progress(1, _('Downloading cover from %s')%cu)
+                 with closing(self.browser.open(cu)) as r:
+diff --git a/src/calibre/web/feeds/recipes/collection.py b/src/calibre/web/feeds/recipes/collection.py
+index 7be5d1dac1..c6dbef2065 100644
+--- a/src/calibre/web/feeds/recipes/collection.py
++++ b/src/calibre/web/feeds/recipes/collection.py
+@@ -114,7 +114,8 @@ def get_custom_recipe_collection(*args):
+         title, fname = x
+         recipe = os.path.join(bdir, fname)
+         try:
+-            recipe = open(recipe, 'rb').read().decode('utf-8')
++            with open(recipe, 'rb') as f:
++                recipe = f.read().decode('utf-8')
+             recipe_class = compile_recipe(recipe)
+             if recipe_class is not None:
+                 rmap['custom:%s'%id_] = recipe_class
+diff --git a/update-on-ox b/update-on-ox
+index a8cff33ef6..c7816d53a1 100755
+--- a/update-on-ox
++++ b/update-on-ox
+@@ -35,7 +35,8 @@ HOST = 'ox'
+ 
+ base = os.path.dirname(os.path.abspath(__file__))
+ if True:
+-    raw = open(os.path.join(base, 'src/calibre/constants.py')).read()
++    with open(os.path.join(base, 'src/calibre/constants.py')) as f:
++        raw = f.read()
+     v = re.search(r'numeric_version\s*=\s*(\(.+?\))', raw).group(1)
+     v = '.'.join(map(str, ast.literal_eval(v)))
+     dmg = f'calibre-{v}.dmg'
+@@ -47,7 +48,8 @@ def run(what):
+         raise SystemExit(ret.returncode)
+ 
+ 
+-script = open(__file__, 'rb').read().decode('utf-8')
++with open(__file__, 'rb') as f:
++    script = f.read().decode('utf-8')
+ script = script[:script.find('# EOF_REMOTE')].replace('if False:', 'if True:', 1)
+ os.chdir(os.path.expanduser('~/work/build-calibre'))
+ with tempfile.NamedTemporaryFile(prefix='install-dmg-', suffix='.py') as f:

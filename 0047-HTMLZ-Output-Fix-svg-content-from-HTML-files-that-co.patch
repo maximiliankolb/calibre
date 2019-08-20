@@ -1,0 +1,61 @@
+From 19c70a64821baeecaeab089faeec9d51871a51a8 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Fri, 9 Aug 2019 15:57:18 +0530
+Subject: [PATCH 47/71] HTMLZ Output: Fix svg content from HTML files that
+ contain only SVG being removed. Fixes #1839522 [all images wrapped in <svg>
+ element are lost in htmlz
+ output](https://bugs.launchpad.net/calibre/+bug/1839522)
+
+---
+ src/calibre/ebooks/htmlz/oeb2html.py | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/calibre/ebooks/htmlz/oeb2html.py b/src/calibre/ebooks/htmlz/oeb2html.py
+index 39d45e0690..96847238d6 100644
+--- a/src/calibre/ebooks/htmlz/oeb2html.py
++++ b/src/calibre/ebooks/htmlz/oeb2html.py
+@@ -18,7 +18,7 @@ from lxml import html
+ 
+ from calibre import prepare_string_for_xml
+ from calibre.ebooks.oeb.base import (
+-    XHTML, XHTML_NS, barename, namespace, OEB_IMAGES, XLINK, rewrite_links, urlnormalize)
++    XHTML, XHTML_NS, SVG_NS, barename, namespace, OEB_IMAGES, XLINK, rewrite_links, urlnormalize)
+ from calibre.ebooks.oeb.stylizer import Stylizer
+ from calibre.utils.logging import default_log
+ from polyglot.builtins import unicode_type, string_or_bytes, as_bytes
+@@ -160,9 +160,9 @@ class OEB2HTMLNoCSSizer(OEB2HTML):
+ 
+         # We can only processes tags. If there isn't a tag return any text.
+         if not isinstance(elem.tag, string_or_bytes) \
+-           or namespace(elem.tag) != XHTML_NS:
++           or namespace(elem.tag) not in (XHTML_NS, SVG_NS):
+             p = elem.getparent()
+-            if p is not None and isinstance(p.tag, string_or_bytes) and namespace(p.tag) == XHTML_NS \
++            if p is not None and isinstance(p.tag, string_or_bytes) and namespace(p.tag) in (XHTML_NS, SVG_NS) \
+                     and elem.tail:
+                 return [elem.tail]
+             return ['']
+@@ -249,9 +249,9 @@ class OEB2HTMLInlineCSSizer(OEB2HTML):
+ 
+         # We can only processes tags. If there isn't a tag return any text.
+         if not isinstance(elem.tag, string_or_bytes) \
+-           or namespace(elem.tag) != XHTML_NS:
++           or namespace(elem.tag) not in (XHTML_NS, SVG_NS):
+             p = elem.getparent()
+-            if p is not None and isinstance(p.tag, string_or_bytes) and namespace(p.tag) == XHTML_NS \
++            if p is not None and isinstance(p.tag, string_or_bytes) and namespace(p.tag) in (XHTML_NS, SVG_NS) \
+                     and elem.tail:
+                 return [elem.tail]
+             return ['']
+@@ -352,9 +352,9 @@ class OEB2HTMLClassCSSizer(OEB2HTML):
+ 
+         # We can only processes tags. If there isn't a tag return any text.
+         if not isinstance(elem.tag, string_or_bytes) \
+-           or namespace(elem.tag) != XHTML_NS:
++           or namespace(elem.tag) not in (XHTML_NS, SVG_NS):
+             p = elem.getparent()
+-            if p is not None and isinstance(p.tag, string_or_bytes) and namespace(p.tag) == XHTML_NS \
++            if p is not None and isinstance(p.tag, string_or_bytes) and namespace(p.tag) in (XHTML_NS, SVG_NS) \
+                     and elem.tail:
+                 return [elem.tail]
+             return ['']

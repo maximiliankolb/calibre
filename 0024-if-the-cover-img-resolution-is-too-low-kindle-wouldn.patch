@@ -1,0 +1,31 @@
+From 5aa4bcc3c653e0fef58c26a9245875ab28025427 Mon Sep 17 00:00:00 2001
+From: jn8029 <warren.y.cheng@gmail.com>
+Date: Mon, 29 Jul 2019 15:11:03 +0800
+Subject: [PATCH 24/71] if the cover img resolution is too low, kindle wouldn't
+ show it. replacing the original src img size with a bigger size solves this
+ issue this is discuessed in
+ https://www.mobileread.com/forums/showthread.php?t=293114
+
+---
+ recipes/new_yorker.recipe | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/recipes/new_yorker.recipe b/recipes/new_yorker.recipe
+index d19cd42c86..7197dd1c61 100644
+--- a/recipes/new_yorker.recipe
++++ b/recipes/new_yorker.recipe
+@@ -77,6 +77,14 @@ def parse_index(self):
+             cover_img = cover_img.find('img')
+             if cover_img is not None:
+                 self.cover_url = cover_img.get('src')
++                try:
++                    # the src original resolution w_280 was too low, replace w_280 with w_560
++                    cover_url_width_index = self.cover_url.find("w_")
++                    old_width = self.cover_url[cover_url_width_index:cover_url_width_index+5]
++                    self.cover_url = self.cover_url.replace(old_width, "w_560")
++                except Exception as e:
++                    self.log('Failed enlarging cover img, using the original one')
++              
+                 self.log('Found cover:', self.cover_url)
+         stories = defaultdict(list)
+         last_section = 'Unknown'

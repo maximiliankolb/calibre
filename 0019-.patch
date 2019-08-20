@@ -1,0 +1,22 @@
+From b9c3fbbd704846f96e0c7cf3b37434cccf6e35cf Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Thu, 25 Jul 2019 13:56:15 +0530
+Subject: [PATCH 19/71] ...
+
+---
+ recipes/chicago_tribune.recipe | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/recipes/chicago_tribune.recipe b/recipes/chicago_tribune.recipe
+index 80d187f9dc..1fc2f9ca36 100644
+--- a/recipes/chicago_tribune.recipe
++++ b/recipes/chicago_tribune.recipe
+@@ -64,7 +64,7 @@ def parse_index(self):
+                 ('sports', 'Sports'),
+                 ('business', 'Business'),
+                 ('entertainment', 'Entertainment'),
+-                ('dining', 'Chicago Dinining'),
++                ('dining', 'Chicago Dining'),
+                 ('columns', 'Tribune Voices'),
+         ):
+             self.log('Found section:', title)

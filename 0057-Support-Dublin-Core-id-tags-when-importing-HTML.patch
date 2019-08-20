@@ -1,0 +1,71 @@
+From 3f4f1738e9f5a08b4e3ce0157dab14f30e608f82 Mon Sep 17 00:00:00 2001
+From: Christopher Szucko <cszucko@gmail.com>
+Date: Fri, 9 Aug 2019 08:54:26 -0500
+Subject: [PATCH 57/71] Support Dublin Core id tags when importing HTML
+
+All of the below formats are supported and would be interpreted as "foo:bar"
+<meta name="DC.identifier" scheme="foo" content="bar" />
+<meta name="dc:identifier.foo" content="bar/>
+<meta name="DCTERMS:identifier" scheme="foo" content="bar" />
+<meta name="dcterms.identifier.foo" content="bar" />
+---
+ src/calibre/ebooks/metadata/html.py | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/src/calibre/ebooks/metadata/html.py b/src/calibre/ebooks/metadata/html.py
+index 49ce83df63..3f0aefaadf 100644
+--- a/src/calibre/ebooks/metadata/html.py
++++ b/src/calibre/ebooks/metadata/html.py
+@@ -10,6 +10,8 @@ Try to read metadata from an HTML file.
+ 
+ import re
+ 
++from HTMLParser import HTMLParser
++
+ from calibre.ebooks.metadata import string_to_authors
+ from calibre.ebooks.metadata.book.base import Metadata
+ from calibre.ebooks.chardet import xml_to_unicode
+@@ -87,6 +89,26 @@ def parse_meta_tags(src):
+                 return ans
+     return ans
+ 
++def parse_meta_tag_identifiers(src):
++    meta_identifiers = {}
++
++    class MetadataParser(HTMLParser):
++        def handle_starttag(self, tag, attrs):
++            attr_dict = dict(attrs)
++
++            if tag == 'meta' and re.match(r'(?:dc|dcterms)[\.:]identifier', attr_dict.get('name', ''), flags=re.IGNORECASE):
++                content = attr_dict.get('content', '').strip()
++                scheme = attr_dict.get('scheme', '').strip()
++                if not scheme:
++                    elements = re.split(r'[\.:]', attr_dict['name'])
++                    if len(elements) == 3:
++                        scheme = elements[2]
++                if content and scheme:
++                    meta_identifiers[scheme.lower()] = replace_entities(content)
++
++    MetadataParser().feed(src)
++
++    return meta_identifiers
+ 
+ def parse_comment_tags(src):
+     all_names = '|'.join(itervalues(COMMENT_NAMES))
+@@ -113,6 +135,7 @@ def get_metadata_(src, encoding=None):
+     src = src[:150000]  # Searching shouldn't take too long
+     comment_tags = parse_comment_tags(src)
+     meta_tags = parse_meta_tags(src)
++    meta_tag_ids = parse_meta_tag_identifiers(src)
+ 
+     def get(field):
+         ans = comment_tags.get(field, meta_tags.get(field, None))
+@@ -193,4 +216,8 @@ def get_metadata_(src, encoding=None):
+         if tags:
+             mi.tags = tags
+ 
++    # IDENTIFIERS
++    for (k,v) in meta_tag_ids.iteritems():
++        mi.set_identifier(k, v)
++
+     return mi

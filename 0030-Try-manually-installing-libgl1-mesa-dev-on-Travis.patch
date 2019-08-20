@@ -1,0 +1,23 @@
+From 149d14a205d9a19f859c9721fa4c61cbd40f02e5 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Tue, 30 Jul 2019 19:50:31 +0530
+Subject: [PATCH 30/71] Try manually installing libgl1-mesa-dev on Travis
+
+---
+ .travis.yml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/.travis.yml b/.travis.yml
+index a4f85b49bf..54060a6162 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -10,6 +10,9 @@ matrix:
+     include:
+         - os: linux
+           sudo: false
++          addons:
++              apt:
++                  packages: libgl1-mesa-dev
+         - os: osx
+ 
+ before_install:

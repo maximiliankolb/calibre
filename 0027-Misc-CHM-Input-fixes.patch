@@ -1,0 +1,89 @@
+From 9f1d7955f06cbbe626bd517b4f71bb97dbc6dc23 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Tue, 30 Jul 2019 19:31:06 +0530
+Subject: [PATCH 27/71] Misc CHM Input fixes
+
+Mostly to deal with chm files with broken filename encoding
+---
+ src/calibre/ebooks/chm/reader.py                   | 13 +++++++++++--
+ src/calibre/ebooks/conversion/plugins/chm_input.py |  6 +++---
+ src/calibre/utils/chm/chm.py                       |  2 +-
+ 3 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/src/calibre/ebooks/chm/reader.py b/src/calibre/ebooks/chm/reader.py
+index 983526232a..b5ce8981be 100644
+--- a/src/calibre/ebooks/chm/reader.py
++++ b/src/calibre/ebooks/chm/reader.py
+@@ -97,9 +97,14 @@ class CHMReader(CHMFile):
+         return toc
+ 
+     def ResolveObject(self, path):
++        opath = path
+         if not isinstance(path, bytes):
+             path = path.encode(self.chm_encoding)
+-        return CHMFile.ResolveObject(self, path)
++        ans = CHMFile.ResolveObject(self, path)
++        if ans[0] != chmlib.CHM_RESOLVE_SUCCESS and not isinstance(opath, bytes):
++            path = opath.encode('utf-8')
++            ans = CHMFile.ResolveObject(self, path)
++        return ans
+ 
+     def GetFile(self, path):
+         # have to have abs paths for ResolveObject, but Contents() deliberately
+@@ -280,7 +285,11 @@ class CHMReader(CHMFile):
+         paths = []
+ 
+         def get_paths(chm, ui, ctx):
+-            path = as_unicode(ui.path, self.chm_encoding)
++            try:
++                path = as_unicode(ui.path, self.chm_encoding)
++            except UnicodeDecodeError:
++                path = as_unicode(ui.path, 'utf-8')
++
+             # skip directories
+             # note this path refers to the internal CHM structure
+             if path[-1] != '/':
+diff --git a/src/calibre/ebooks/conversion/plugins/chm_input.py b/src/calibre/ebooks/conversion/plugins/chm_input.py
+index b28e31e74e..44f5de5f88 100644
+--- a/src/calibre/ebooks/conversion/plugins/chm_input.py
++++ b/src/calibre/ebooks/conversion/plugins/chm_input.py
+@@ -10,7 +10,7 @@ import os
+ from calibre.customize.conversion import InputFormatPlugin
+ from calibre.ptempfile import TemporaryDirectory
+ from calibre.constants import filesystem_encoding
+-from polyglot.builtins import unicode_type
++from polyglot.builtins import unicode_type, as_bytes
+ 
+ 
+ class CHMInput(InputFormatPlugin):
+@@ -170,7 +170,7 @@ class CHMInput(InputFormatPlugin):
+                                    pretty_print=True)
+                 f.write(raw)
+             else:
+-                f.write(hhcdata)
++                f.write(as_bytes(hhcdata))
+         return htmlpath, toc
+ 
+     def _read_file(self, name):
+@@ -180,7 +180,7 @@ class CHMInput(InputFormatPlugin):
+ 
+     def add_node(self, node, toc, ancestor_map):
+         from calibre.ebooks.chm.reader import match_string
+-        if match_string(node.attrib['type'], 'text/sitemap'):
++        if match_string(node.attrib.get('type', ''), 'text/sitemap'):
+             p = node.xpath('ancestor::ul[1]/ancestor::li[1]/object[1]')
+             parent = p[0] if p else None
+             toc = ancestor_map.get(parent, toc)
+diff --git a/src/calibre/utils/chm/chm.py b/src/calibre/utils/chm/chm.py
+index 7be92acaa5..d313ab5620 100644
+--- a/src/calibre/utils/chm/chm.py
++++ b/src/calibre/utils/chm/chm.py
+@@ -506,7 +506,7 @@ class CHMFile:
+         if not self.topics:
+             self.topics = self.GetString(text, toc_index)
+             if not self.topics.startswith(b"/"):
+-                self.topics = "b/" + self.topics
++                self.topics = b"/" + self.topics
+ 
+         if not self.index:
+             self.index = self.GetString(text, idx_index)

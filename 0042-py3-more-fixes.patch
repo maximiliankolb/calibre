@@ -1,0 +1,35 @@
+From a7ae09dd93ceada7e9fe43ffd4adef84a4bfc883 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Wed, 7 Aug 2019 22:35:58 +0530
+Subject: [PATCH 42/71] py3: more fixes
+
+---
+ src/calibre/__init__.py            | 1 +
+ src/calibre/devices/kindle/apnx.py | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/calibre/__init__.py b/src/calibre/__init__.py
+index f2c2c8d2ee..30d38f621c 100644
+--- a/src/calibre/__init__.py
++++ b/src/calibre/__init__.py
+@@ -498,6 +498,7 @@ def strftime(fmt, t=None):
+         t = list(t)
+         orig_year = t[0]
+         t[0] = replacement
++        t = time.struct_time(t)
+     ans = None
+     if iswindows:
+         if isinstance(fmt, bytes):
+diff --git a/src/calibre/devices/kindle/apnx.py b/src/calibre/devices/kindle/apnx.py
+index 7fb4e2bbf0..e9a8639d0a 100644
+--- a/src/calibre/devices/kindle/apnx.py
++++ b/src/calibre/devices/kindle/apnx.py
+@@ -38,7 +38,7 @@ class APNXBuilder(object):
+ 
+         with lopen(mobi_file_path, 'rb') as mf:
+             ident = PdbHeaderReader(mf).identity()
+-            if ident != b'BOOKMOBI':
++            if as_bytes(ident) != b'BOOKMOBI':
+                 # Check that this is really a MOBI file.
+                 raise Exception(_('Not a valid MOBI file. Reports identity of %s') % ident)
+             apnx_meta['acr'] = as_unicode(PdbHeaderReader(mf).name(), errors='replace')

@@ -1,0 +1,29 @@
+From f8ccd37e90c59562d9a514dee15d75220650d8a5 Mon Sep 17 00:00:00 2001
+From: jn8029 <warren.y.cheng@gmail.com>
+Date: Tue, 30 Jul 2019 16:55:29 +0800
+Subject: [PATCH 25/71] enlarge cover img resolution by change the url
+
+kindle app on larger tablets does not show cover
+if the cover img resolution is too low.
+---
+ recipes/nature.recipe | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/recipes/nature.recipe b/recipes/nature.recipe
+index d8af3dd1a6..e7f50bdd70 100644
+--- a/recipes/nature.recipe
++++ b/recipes/nature.recipe
+@@ -50,6 +50,13 @@ def parse_index(self):
+         self.cover_url = 'https:' + soup.find(
+             'img', attrs={'data-test': check_words('issue-cover-image')}
+         )['src']
++        try:
++            self.cover_url = self.cover_url.replace("w200","w500") # enlarge cover size resolution
++        except:
++            """
++            failed, img src might have changed, use default width 200
++            """
++            pass
+         section_tags = soup.find(
+             'div', {'data-container-type': check_words('issue-section-list')}
+         )

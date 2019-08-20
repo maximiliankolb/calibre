@@ -1,0 +1,24 @@
+From 658241fa38353b07be5a8bcaaba4cd537efe61be Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Sun, 18 Aug 2019 14:09:19 +0530
+Subject: [PATCH 69/71] Update bundled mechanize
+
+---
+ bypy/sources.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/bypy/sources.json b/bypy/sources.json
+index 34227957c1..d6a9afb318 100644
+--- a/bypy/sources.json
++++ b/bypy/sources.json
+@@ -579,8 +579,8 @@
+     {
+         "name": "mechanize",
+         "unix": {
+-            "filename": "mechanize-0.4.2.tar.gz",
+-            "hash": "sha256:b680ca1b4fabe5ef52024d120f40b8e2ed7d175ed4d67225d2c477dac7c7a58b",
++            "filename": "mechanize-0.4.3.tar.gz",
++            "hash": "sha256:d7d7068be5e1b3069575c98c870aaa96dd26603fe8c8697b470e2f65259fddbf",
+             "urls": ["pypi"]
+         }
+     },

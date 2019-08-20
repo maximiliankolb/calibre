@@ -1,0 +1,40 @@
+From 41d8f9b4a7891873f3f2d882664e49a8842802c9 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Mon, 5 Aug 2019 12:11:48 +0530
+Subject: [PATCH 34/71] Utility function to detect if a PDF is encrypted
+
+---
+ src/calibre/ebooks/metadata/pdf.py | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/src/calibre/ebooks/metadata/pdf.py b/src/calibre/ebooks/metadata/pdf.py
+index fd0604d204..bf29d62e1f 100644
+--- a/src/calibre/ebooks/metadata/pdf.py
++++ b/src/calibre/ebooks/metadata/pdf.py
+@@ -8,7 +8,7 @@ import os, subprocess, shutil, re
+ from functools import partial
+ 
+ from calibre import prints
+-from calibre.constants import iswindows
++from calibre.constants import iswindows, ispy3
+ from calibre.ptempfile import TemporaryDirectory
+ from calibre.ebooks.metadata import (
+     MetaInformation, string_to_authors, check_isbn, check_doi)
+@@ -97,6 +97,17 @@ def page_images(pdfpath, outputdir, first=1, last=1):
+         raise ValueError('Failed to render PDF, pdftoppm errorcode: %s'%e.returncode)
+ 
+ 
++def is_pdf_encrypted(path_to_pdf):
++    if not ispy3 and not isinstance(path_to_pdf, bytes):
++        path_to_pdf = path_to_pdf.encode('mbcs' if iswindows else 'utf-8')
++    pdfinfo = get_tools()[0]
++    raw = subprocess.check_output([pdfinfo, path_to_pdf])
++    q = re.search(br'^Encrypted:\s*(\S+)', raw, flags=re.MULTILINE)
++    if q is not None:
++        return q.group(1) == b'yes'
++    return False
++
++
+ def get_metadata(stream, cover=True):
+     with TemporaryDirectory('_pdf_metadata_read') as pdfpath:
+         stream.seek(0)

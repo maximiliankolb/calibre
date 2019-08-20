@@ -1,0 +1,23 @@
+From aacfcaae35f22eb458eb3ac8477f016784d24cbb Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Sat, 10 Aug 2019 22:15:36 +0530
+Subject: [PATCH 55/71] EPUB 3: Fix setting metadata in EPUB 3 files with a
+ title not working
+
+---
+ src/calibre/ebooks/metadata/opf3.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/calibre/ebooks/metadata/opf3.py b/src/calibre/ebooks/metadata/opf3.py
+index 043207cd9d..47ecbba785 100644
+--- a/src/calibre/ebooks/metadata/opf3.py
++++ b/src/calibre/ebooks/metadata/opf3.py
+@@ -382,7 +382,7 @@ def set_title(root, prefixes, refines, title, title_sort=None):
+     main_title = find_main_title(root, refines, remove_blanks=True)
+     if main_title is None:
+         m = XPath('./opf:metadata')(root)[0]
+-        main_title = m.makeelement('dc:title')
++        main_title = m.makeelement(DC('title'))
+         m.insert(0, main_title)
+     main_title.text = title or None
+     ts = [refdef('file-as', title_sort)] if title_sort else ()
