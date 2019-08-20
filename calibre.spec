@@ -9,7 +9,7 @@ Version:        3.46.0
 Release:        1.git20190819%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
-URL:            http://calibre-ebook.com/
+URL:            https://calibre-ebook.com/
 
 # SourceURL: curl -L http://code.calibre-ebook.com/dist/src > calibre-%%{version}.tar.xz
 # Upstream packages some unfree fonts which we cannot redistribute.
