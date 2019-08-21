@@ -106,6 +106,8 @@ Patch10069:     0069-Update-bundled-mechanize.patch
 Patch10070:     0070-Get-parse_index-working-for-foreign-affairs-AJAX-bac.patch
 Patch10071:     0071-Update-Foreign-Affairs.patch
 
+Patch20001:     https://github.com/kovidgoyal/calibre/pull/1033/commits/9e86f6744be764b2522663f9a7fe2376105fc72c.patch
+
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-qt5-devel
