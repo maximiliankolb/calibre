@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# This is a dummy script shipped in the fedora calibre package. 
-# Since we have better/safer/easier ways to mount mass storage devices
-# there's no need to have a suid binary try and do this. 
-# This script simply exits telling calibre that the device is already
-# been mounted by your desktop. 
-
-exit 1
