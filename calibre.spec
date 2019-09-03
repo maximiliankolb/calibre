@@ -1,4 +1,4 @@
-%{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
+%{?_sip_api:Requires: python3-sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %global __provides_exclude_from ^%{_libdir}/calibre/calibre/plugins/.*\.so$
 
