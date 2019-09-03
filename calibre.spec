@@ -1,4 +1,4 @@
-%{?_sip_api:Requires: sip-api(%{_sip_api_major}) >= %{_sip_api}}
+%{?_sip_api:Requires: python3-sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %global __provides_exclude_from ^%{_libdir}/calibre/calibre/plugins/.*\.so$
 
@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.47.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -401,6 +401,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Sep 03 2019 Kevin Fenzi <kevin@scrye.com> - 3.47.1-2
+- Adjust sip requires to Require the python3-sip-api package.
+
 * Mon Sep 02 2019 Kevin Fenzi <kevin@scrye.com> - 3.47.1-1
 - Update 3.47.1. Fixes bug #1747848
 
