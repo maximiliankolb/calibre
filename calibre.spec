@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.47.1
-Release:        2%{?dist}
+Version:        3.48.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -401,6 +401,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Sep 13 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.48.0-1
+- Update to 3.48.0 (#1751909)
+
 * Tue Sep 03 2019 Kevin Fenzi <kevin@scrye.com> - 3.47.1-2
 - Adjust sip requires to Require the python3-sip-api package.
 
