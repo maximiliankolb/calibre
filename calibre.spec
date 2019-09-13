@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.46.0
-Release:        1.git20190819%{?dist}
+Version:        3.48.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -21,7 +21,6 @@ URL:            https://calibre-ebook.com/
 
 Source0:        calibre-%{version}-nofonts.tar.xz
 Source1:        getsources.sh
-Source2:        calibre-mount-helper
 
 # Disable auto update from inside the app
 Patch1:         calibre-no-update.patch
@@ -31,80 +30,10 @@ Patch1:         calibre-no-update.patch
 Patch3:         calibre-nodisplay.patch
 
 # Patches that are not suitable for upstream:
+# skip unrardll tests if unrardll has been removed.
 Patch4:         https://github.com/keszybz/calibre/commit/497810f8adb992bfecf04e8eacf4ac1340ee6fe0.patch
+# sgml was removed, so disable test for it.
 Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
-
-Patch10001:     0001-py3-fix-invalid-escapes.patch
-Patch10002:     0002-py3-another-warning-about-invalid-escape.patch
-Patch10003:     0003-Update-WSJ.patch
-Patch10004:     0004-Preferences-Ignored-devices-Add-a-button-to-reset-th.patch
-Patch10005:     0005-Open-With-don-t-raise-KeyError-if-cache-exists-and-t.patch
-Patch10006:     0006-LIT-Output-Fix-regression-in-3.41-caused-by-py3-port.patch
-Patch10007:     0007-use-raw-strings-where-possible-to-avoid-escaping-iss.patch
-Patch10008:     0008-fix-imports-from-the-wrong-module.patch
-Patch10009:     0009-unicode_check-do-not-try-to-check-pyuic-generated-fi.patch
-Patch10010:     0010-py3-more-work-towards-universal-__future__s.patch
-Patch10011:     0011-use-floor-division-instead-of-math.floor.patch
-Patch10012:     0012-simplify-check-for-non-zero-content-in-set.patch
-Patch10013:     0013-Get-more-information-from-podofo-exceptions.patch
-Patch10014:     0014-Various-fixes-for-the-last-py3-merge.patch
-Patch10015:     0015-Dont-use-auto-in-master-since-it-is-still-built-with.patch
-Patch10016:     0016-More-ancient-linux-compiler-support.patch
-Patch10017:     0017-py3-compat-for-gaierror-retry.patch
-Patch10018:     0018-Update-Chicago-Tribune.patch
-Patch10019:     0019-.patch
-Patch10020:     0020-use-context-managers-to-open-files.patch
-Patch10021:     0021-py3-read-in-raw-data-files-as-binary.patch
-Patch10022:     0022-Add-missing-language-field-to-ComicBookInfo-metadata.patch
-Patch10023:     0023-.patch
-Patch10024:     0024-if-the-cover-img-resolution-is-too-low-kindle-wouldn.patch
-Patch10025:     0025-enlarge-cover-img-resolution-by-change-the-url.patch
-Patch10026:     0026-Add-funding-sources-for-github-sponsor-button.patch
-Patch10027:     0027-Misc-CHM-Input-fixes.patch
-Patch10028:     0028-Preserve-tag-order-when-reading-metadata-from-MOBI-f.patch
-Patch10029:     0029-Remove-metadata-from-conversion_options-API-docs-sin.patch
-Patch10030:     0030-Try-manually-installing-libgl1-mesa-dev-on-Travis.patch
-Patch10031:     0031-Improve-PoDoFo-test-a-bit.patch
-Patch10032:     0032-Simplify-podofo-str-unicode-conversion.patch
-Patch10033:     0033-Cleanup-conversion-of-python-strings-to-podofo-strin.patch
-Patch10034:     0034-Utility-function-to-detect-if-a-PDF-is-encrypted.patch
-Patch10035:     0035-macOS-Fix-a-regression-that-could-cause-a-crash-on-e.patch
-Patch10036:     0036-Update-login-mechanism-for-Times-Online.patch
-Patch10037:     0037-Change-travis-email-notification-semantics.patch
-Patch10038:     0038-py3-compat.patch
-Patch10039:     0039-Content-server-Fix-OPDS-feed-for-category-based-brow.patch
-Patch10040:     0040-See-if-not-using-a-temp-file-fixes-the-weird-test-fa.patch
-Patch10041:     0041-Use-mbcs-encoding-when-passing-filenames-to-windows.patch
-Patch10042:     0042-py3-more-fixes.patch
-Patch10043:     0043-Update-National-Geographic.patch
-Patch10044:     0044-py3-More-fixes.patch
-Patch10045:     0045-A-better-fix-for-python3.7-smtplib-breakage.patch
-Patch10046:     0046-Fix-1839494-Application-crashes-on-changing-icons-ht.patch
-Patch10047:     0047-HTMLZ-Output-Fix-svg-content-from-HTML-files-that-co.patch
-Patch10048:     0048-PML-Input-Modernize-the-generated-HTML-a-bit.-Fixes-.patch
-Patch10049:     0049-Cleanup.patch
-Patch10050:     0050-Workaround-for-weird-PyQt-return-with-error-set-in-t.patch
-Patch10051:     0051-py3-more-future-imports.patch
-Patch10052:     0052-py3-Another-fix.patch
-Patch10053:     0053-Fix-1028-Fix-podofo-convert-pystring-to-PdfString-bu.patch
-Patch10054:     0054-.patch
-Patch10055:     0055-EPUB-3-Fix-setting-metadata-in-EPUB-3-files-with-a-t.patch
-Patch10056:     0056-Speed-up-restoring-original-format-by-doing-a-rename.patch
-Patch10057:     0057-Support-Dublin-Core-id-tags-when-importing-HTML.patch
-Patch10058:     0058-Refactor-HTML-metadata-parsing.patch
-Patch10059:     0059-Fix-importing-ratings-from-HTML-metadata.patch
-Patch10060:     0060-Escape-HTML-entities-in-comments.patch
-Patch10061:     0061-Add-unit-tests-for-HTML-metadata-imports.patch
-Patch10062:     0062-Cleanup-HTML-metadata-parsing.patch
-Patch10063:     0063-.patch
-Patch10064:     0064-Update-CNET-News.patch
-Patch10065:     0065-Updated-The-Globe-and-Mail-recipe-article-titles-no-.patch
-Patch10066:     0066-change-wording-slightly.patch
-Patch10067:     0067-Complete-fix-for-WSJ-login-logic-change.patch
-Patch10068:     0068-Update-derStandaard.patch
-Patch10069:     0069-Update-bundled-mechanize.patch
-Patch10070:     0070-Get-parse_index-working-for-foreign-affairs-AJAX-bac.patch
-Patch10071:     0071-Update-Foreign-Affairs.patch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
@@ -415,8 +344,6 @@ rm -rf %{buildroot}%{_datadir}/calibre/localization/locales/
 
 rm -f %{buildroot}%{_bindir}/calibre-uninstall
 
-cp -p %{SOURCE2} %{buildroot}%{_bindir}/calibre-mount-helper
-
 # Remove these 2 appdata files, we can only include one
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
@@ -447,7 +374,6 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_bindir}/calibre-parallel
 %{_bindir}/calibre-server
 %{_bindir}/calibre-smtp
-%{_bindir}/calibre-mount-helper
 %{_bindir}/calibredb
 %{_bindir}/ebook-convert
 %{_bindir}/ebook-device
@@ -475,6 +401,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Sep 13 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.48.0-1
+- Update to 3.48.0 (#1751909)
+
 * Mon Aug 19 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.46.0-1.git20190819
 - Update to the latest version + various patches (#1667497)
 
