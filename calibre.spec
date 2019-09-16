@@ -1,4 +1,4 @@
-%{?_sip_api:Requires: python3-sip-api(%{_sip_api_major}) >= %{_sip_api}}
+%{?_sip_api:Requires: python3-pyqt5-sip-api(%{_sip_api_major}) >= %{_sip_api}}
 
 %global __provides_exclude_from ^%{_libdir}/calibre/calibre/plugins/.*\.so$
 
@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.48.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -401,6 +401,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Mon Sep 16 2019 Rex Dieter <rdieter@fedoraproject.org> - 3.48.0-2
+- Requires: python3-pyqt5-sip-api (#1748527)
+
 * Fri Sep 13 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.48.0-1
 - Update to 3.48.0 (#1751909)
 
