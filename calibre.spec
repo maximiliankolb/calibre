@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.48.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -401,6 +401,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Wed Sep 25 2019 Jan Grulich <jgrulich@redhat.com> - 3.48.0-3
+- rebuild (qt5)
+
 * Mon Sep 16 2019 Rex Dieter <rdieter@fedoraproject.org> - 3.48.0-2
 - Requires: python3-pyqt5-sip-api (#1748527)
 
