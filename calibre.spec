@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.48.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -401,6 +401,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Sep 26 2019 Jan Grulich <jgrulich@redhat.com> - 3.48.0-2
+- rebuild (qt5)
+
 * Fri Sep 13 2019 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 3.48.0-1
 - Update to 3.48.0 (#1751909)
 
