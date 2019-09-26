@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        3.36.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            http://calibre-ebook.com/
@@ -348,6 +348,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Sep 26 2019 Jan Grulich <jgrulich@redhat.com> - 3.36.0-9
+- rebuild (qt5)
+
 * Sun Jul 21 2019 Kevin Fenzi <kevin@scrye.com> - 3.36.0-8
 - Add patch for kindle-s. Fixes bug #1731734
 
