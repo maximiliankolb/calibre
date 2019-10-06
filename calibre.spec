@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        3.48.0
-Release:        3%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -35,11 +35,11 @@ Patch4:         https://github.com/keszybz/calibre/commit/497810f8adb992bfecf04e
 # sgml was removed, so disable test for it.
 Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
 
+ExclusiveArch: %{qt5_qtwebengine_arches}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-qt5-devel
 BuildRequires:  python3-qt5
-BuildRequires:  python3-qt5-webkit
 BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  xdg-utils
@@ -54,7 +54,6 @@ BuildRequires:  web-assets-devel
 BuildRequires:  qt5-qtbase-static
 BuildRequires:  libXrender-devel
 BuildRequires:  systemd-devel
-BuildRequires:  qt5-qtwebkit-devel
 BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
@@ -84,6 +83,9 @@ BuildRequires:  python3dist(html2text)
 BuildRequires:  python3dist(zeroconf)
 BuildRequires:  python3dist(markdown) >= 3.0
 BuildRequires:  python3dist(dukpy)
+BuildRequires:  hunspell-devel
+BuildRequires:  qt5-qtwebengine-devel
+BuildRequires:  python-qt5-webengine
 # Those are only used for tests. Do not add to runtime deps.
 BuildRequires:  /usr/bin/jpegtran
 BuildRequires:  /usr/bin/JxrDecApp
@@ -99,8 +101,8 @@ BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 Requires:       python3-qt5
-Requires:       python3-qt5-webkit
-Requires:       qt5-qtwebkit
+Requires:       python-qt5-webengine
+Requires:       qt5-qtwebengine
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
 Requires:       poppler-utils
@@ -162,7 +164,7 @@ chmod -x src/calibre/*/*/*/*.py \
     src/calibre/*/*.py \
     src/calibre/*.py
 
-rm -rvf resources/viewer/mathjax
+rm -rvf resources/mathjax
 
 # Skip tests that require removed fonts
 sed -r -i 's/\b(test_actual_case|test_clone|test_file_add|test_file_removal|test_file_rename|test_folder_type_map_case|test_merge_file)\b/_skipped_\1/' src/calibre/ebooks/oeb/polish/tests/container.py
@@ -360,10 +362,10 @@ CALIBRE_PY3_PORT=1 python3 setup.py test \
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
 
 %preun
-rm %{_datadir}/calibre/viewer/mathjax
+rm -f %{_datadir}/calibre/mathjax
 
 %posttrans
-ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
+ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 
 %files
 %doc COPYRIGHT LICENSE Changelog.yaml
@@ -401,6 +403,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/viewer/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Oct 03 2019 Kevin Fenzi <kevin@scrye.com> - 4.0.0-1
+- Update to 4.0.
+
 * Wed Sep 25 2019 Jan Grulich <jgrulich@redhat.com> - 3.48.0-3
 - rebuild (qt5)
 
