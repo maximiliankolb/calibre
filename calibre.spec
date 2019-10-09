@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.0.0
+Version:        4.1.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -403,6 +403,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Wed Oct 09 2019 Kevin Fenzi <kevin@scrye.com> - 4.1.0-1
+- Update to 4.1.0. Fixes bug #1759626
+
 * Thu Oct 03 2019 Kevin Fenzi <kevin@scrye.com> - 4.0.0-1
 - Update to 4.0.
 
