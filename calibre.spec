@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -403,6 +403,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Nov 01 2019 Pete Walter <pwalter@fedoraproject.org> - 4.1.0-2
+- Rebuild for ICU 65
+
 * Wed Oct 09 2019 Kevin Fenzi <kevin@scrye.com> - 4.1.0-1
 - Update to 4.1.0. Fixes bug #1759626
 
