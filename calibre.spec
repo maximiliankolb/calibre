@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.1.0
+Version:        4.3.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -86,6 +86,7 @@ BuildRequires:  python3dist(dukpy)
 BuildRequires:  hunspell-devel
 BuildRequires:  qt5-qtwebengine-devel
 BuildRequires:  python-qt5-webengine
+BuildRequires:  bash-completion
 # Those are only used for tests. Do not add to runtime deps.
 BuildRequires:  /usr/bin/jpegtran
 BuildRequires:  /usr/bin/JxrDecApp
@@ -398,11 +399,18 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/icons/hicolor/*/apps/*
 %{python3_sitelib}/init_calibre.py
 %{python3_sitelib}/__pycache__/init_calibre.*.py*
-%{_datadir}/bash-completion/completions/calibre
+%{_datadir}/bash-completion/completions
 %{_datadir}/zsh/site-functions/_calibre
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sat Nov 09 2019 Kevin Fenzi <kevin@scrye.com> - 4.3.0-1
+- Update to 4.3.0.
+- Include new per command bash-completions.
+
+* Fri Nov 01 2019 Pete Walter <pwalter@fedoraproject.org> - 4.1.0-2
+- Rebuild for ICU 65
+
 * Wed Oct 09 2019 Kevin Fenzi <kevin@scrye.com> - 4.1.0-1
 - Update to 4.1.0. Fixes bug #1759626
 
