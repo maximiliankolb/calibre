@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.4.0
+Version:        4.5.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -177,6 +177,8 @@ CALIBRE_PY3_PORT=1 \
 %__python3 setup.py build
 
 %install
+unset $LD_LIBRARY_PATH
+
 mkdir -p %{buildroot}%{_datadir}
 
 # create directories for xdg-utils
@@ -403,6 +405,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Nov 29 2019 Kevin Fenzi <kevin@scrye.com> - 4.5.0-1
+- Update to 4.5.0. Fixes bug #1778002
+
 * Thu Nov 21 2019 Kevin Fenzi <kevin@scrye.com> - 4.4.0-1
 - Update to 4.4.0. Fixes bug #1775470
 
