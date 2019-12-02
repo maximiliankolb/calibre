@@ -177,8 +177,6 @@ CALIBRE_PY3_PORT=1 \
 %__python3 setup.py build
 
 %install
-unset $LD_LIBRARY_PATH
-
 mkdir -p %{buildroot}%{_datadir}
 
 # create directories for xdg-utils
