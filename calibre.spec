@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.5.0
-Release:        2%{?dist}
+Version:        4.6.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -86,6 +86,7 @@ BuildRequires:  python3dist(dukpy)
 BuildRequires:  hunspell-devel
 BuildRequires:  qt5-qtwebengine-devel
 BuildRequires:  python-qt5-webengine
+BuildRequires:  hyphen-devel
 # Those are only used for tests. Do not add to runtime deps.
 BuildRequires:  /usr/bin/jpegtran
 BuildRequires:  /usr/bin/JxrDecApp
@@ -403,6 +404,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Dec 19 2019 Kevin Fenzi <kevin@scrye.com> - 4.6.0-1
+- Update to 4.6.0. Fixes bug #1783084 and #1780004
+
 * Mon Dec 09 2019 Jan Grulich <jgrulich@redhat.com> - 4.5.0-2
 - rebuild (qt5)
 
