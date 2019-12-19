@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -403,6 +403,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Mon Dec 09 2019 Jan Grulich <jgrulich@redhat.com> - 4.5.0-2
+- rebuild (qt5)
+
 * Fri Nov 29 2019 Kevin Fenzi <kevin@scrye.com> - 4.5.0-1
 - Update to 4.5.0. Fixes bug #1778002
 
