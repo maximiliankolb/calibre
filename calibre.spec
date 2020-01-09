@@ -307,7 +307,7 @@ rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
 
 %preun
-rm %{_datadir}/%{name}/viewer/mathjax
+rm -f %{_datadir}/%{name}/viewer/mathjax
 
 %posttrans
 ln -s %{_jsdir}/mathjax %{_datadir}/%{name}/viewer/
