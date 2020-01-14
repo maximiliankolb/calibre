@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -332,6 +332,10 @@ ln -s --relative \
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 
+# rename MathJax folder to allow upgrade from 4.8.0-1 and earlier, which
+# relied on a symlink handled by the %%preun and %%posttrans scriptlets
+mv %{buildroot}%{_datadir}/calibre/mathjax %{buildroot}%{_datadir}/calibre/mathjax-fedora
+
 %check
 # ignore tests on 32 bit arches for now as there's a pdf issue
 CALIBRE_PY3_PORT=1 python3 setup.py test \
@@ -340,6 +344,14 @@ CALIBRE_PY3_PORT=1 python3 setup.py test \
 %endif
 
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
+
+%preun
+if [ -L %{_datadir}/calibre/mathjax ]; then
+    rm -f %{_datadir}/calibre/mathjax
+fi
+
+%posttrans
+ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 
 %files
 %license LICENSE
@@ -378,6 +390,10 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-g
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Jan 14 2020 Marcus A. Romer <aimylios@gmx.de> - 4.8.0-3
+- Add workaround to allow upgrade from 4.8.0-1 and earlier
+  (required by the change in method to unbundle MathJax).
+
 * Sun Jan 12 2020 Marcus A. Romer <aimylios@gmx.de> - 4.8.0-2
 - Update dependencies.
 - Remove some obsolete packaging workarounds.
