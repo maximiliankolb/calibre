@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.8.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -390,6 +390,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Tue Jan 14 2020 Marcus A. Romer <aimylios@gmx.de> - 4.8.0-3
 - Add workaround to allow upgrade from 4.8.0-1 and earlier
   (required by the change in method to unbundle MathJax).
