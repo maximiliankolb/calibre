@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.8.0
-Release:        4%{?dist}
+Version:        4.10.1
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -390,6 +390,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sat Feb 15 2020 Kevin Fenzi <kevin@scrye.com> - 4.10.1-1
+- Update to 4.10.1. Fixes bug #1794445
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
