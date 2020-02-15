@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.8.0
+Version:        4.10.1
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -36,6 +36,7 @@ Patch4:         https://github.com/keszybz/calibre/commit/497810f8adb992bfecf04e
 Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
 
 ExclusiveArch: %{qt5_qtwebengine_arches}
+
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-qt5-devel
@@ -44,7 +45,6 @@ BuildRequires:  podofo-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  xdg-utils
 BuildRequires:  chmlib-devel
-BuildRequires:  python3-cssutils >= 0.9.9
 BuildRequires:  sqlite-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libpng-devel
@@ -53,7 +53,6 @@ BuildRequires:  qt5-qtbase-devel
 BuildRequires:  web-assets-devel
 BuildRequires:  qt5-qtbase-static
 BuildRequires:  libXrender-devel
-BuildRequires:  systemd-devel
 BuildRequires:  openssl-devel
 # calibre installer is so smart that it check for the presence of the
 # directory (and then installs in the wrong place)
@@ -82,11 +81,11 @@ BuildRequires:  python3dist(html5-parser) >= 0.4.8
 BuildRequires:  python3dist(html2text)
 BuildRequires:  python3dist(zeroconf)
 BuildRequires:  python3dist(markdown) >= 3.0
-BuildRequires:  python3dist(dukpy)
 BuildRequires:  hunspell-devel
 BuildRequires:  qt5-qtwebengine-devel
 BuildRequires:  python-qt5-webengine
 BuildRequires:  hyphen-devel
+BuildRequires:  mathjax
 # Those are only used for tests. Do not add to runtime deps.
 BuildRequires:  /usr/bin/jpegtran
 BuildRequires:  /usr/bin/JxrDecApp
@@ -112,7 +111,6 @@ Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
 Requires:       mathjax
 Requires:       optipng
-Requires:       python3dist(cssutils)
 Requires:       python3dist(odfpy)
 Requires:       python3dist(lxml)
 Requires:       python3dist(pillow)
@@ -152,42 +150,44 @@ RTF, TXT, PDF and LRS.
 %autosetup -n calibre-%{version} -p1
 
 # remove shebangs
+sed -i -e '/^#!\//, 1d' src/calibre/*/*/*/*/*.py
 sed -i -e '/^#!\//, 1d' src/calibre/*/*/*/*.py
 sed -i -e '/^#!\//, 1d' src/calibre/*/*/*.py
 sed -i -e '/^#![ ]*\//, 1d' src/calibre/*/*.py
 sed -i -e '/^#!\//, 1d' src/calibre/*.py
+sed -i -e '/^#!\//, 1d' src/css_selectors/*.py
+sed -i -e '/^#!\//, 1d' src/polyglot/*.py
 sed -i -e '/^#!\//, 1d' src/templite/*.py
+sed -i -e '/^#!\//, 1d' src/tinycss/*/*.py
+sed -i -e '/^#!\//, 1d' src/tinycss/*.py
 sed -i -e '/^#!\//, 1d' resources/default_tweaks.py
-#sed -i -e '/^#!\//, 1d' resources/catalog/section_list_templates.py
 
 chmod -x src/calibre/*/*/*/*.py \
     src/calibre/*/*/*.py \
     src/calibre/*/*.py \
     src/calibre/*.py
 
+# remove bundled MathJax
 rm -rvf resources/mathjax
 
 # Skip tests that require removed fonts
 sed -r -i 's/\b(test_actual_case|test_clone|test_file_add|test_file_removal|test_file_rename|test_folder_type_map_case|test_merge_file)\b/_skipped_\1/' src/calibre/ebooks/oeb/polish/tests/container.py
 # Skip test that fails in mock
-sed  -r -i 's/\btest_bonjour\b/_skipped_\0/' src/calibre/srv/tests/loop.py
+sed -r -i 's/\btest_bonjour\b/_skipped_\0/' src/calibre/srv/tests/loop.py
 
 %build
+# unbundle MathJax
+CALIBRE_PY3_PORT=1 \
+%__python3 setup.py mathjax \
+    --system-mathjax \
+    --path-to-mathjax %{_jsdir}/mathjax/
+
 OVERRIDE_CFLAGS="%{optflags}" \
 CALIBRE_PY3_PORT=1 \
 %__python3 setup.py build
 
 %install
 mkdir -p %{buildroot}%{_datadir}
-
-# create directories for xdg-utils
-mkdir -p %{buildroot}%{_datadir}/icons
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor
-mkdir -p %{buildroot}%{_datadir}/packages
-mkdir -p %{buildroot}%{_datadir}/mime
-mkdir -p %{buildroot}%{_datadir}/mime/packages
-mkdir -p %{buildroot}%{_datadir}/applications
-mkdir -p %{buildroot}%{_datadir}/desktop-directories
 
 # create directory for calibre environment module
 # the install script assumes it's there.
@@ -198,13 +198,12 @@ mkdir -p %{buildroot}%{python3_sitelib}
 mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
 mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
 
-XDG_DATA_DIRS="%{buildroot}%{_datadir}" \
-XDG_UTILS_INSTALL_MODE="system" \
 LIBPATH="%{_libdir}" \
 CALIBRE_PY3_PORT=1 \
 %__python3 setup.py install --root=%{buildroot}%{_prefix} \
                             --prefix=%{_prefix} \
                             --libdir=%{_libdir} \
+                            --staging-root=%{buildroot}%{_prefix} \
                             --staging-libdir=%{buildroot}%{_libdir} \
                             --staging-sharedir=%{buildroot}%{_datadir}
 
@@ -224,21 +223,18 @@ cp -p resources/images/viewer.png                 \
 cp -p resources/images/tweak.png                 \
    %{buildroot}%{_datadir}/pixmaps/calibre-ebook-edit.png
 
-# every file is empty here
-find %{buildroot}%{_datadir}/mime -maxdepth 1 -type f -print -delete
-
 # packages aren't allowed to register mimetypes like this
 rm -f %{buildroot}%{_datadir}/applications/defaults.list
 rm -f %{buildroot}%{_datadir}/applications/mimeinfo.cache
 rm -f %{buildroot}%{_datadir}/mime/application/*.xml
 rm -f %{buildroot}%{_datadir}/mime/text/*.xml
 
+# check .desktop files
 desktop-file-validate \
-%{buildroot}%{_datadir}/applications/calibre-ebook-viewer.desktop
-desktop-file-validate \
-%{buildroot}%{_datadir}/applications/calibre-gui.desktop
-desktop-file-validate \
-%{buildroot}%{_datadir}/applications/calibre-lrfviewer.desktop
+    %{buildroot}%{_datadir}/applications/calibre-ebook-edit.desktop \
+    %{buildroot}%{_datadir}/applications/calibre-ebook-viewer.desktop \
+    %{buildroot}%{_datadir}/applications/calibre-gui.desktop \
+    %{buildroot}%{_datadir}/applications/calibre-lrfviewer.desktop
 
 # mimetype icon for lrf
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/128x128
@@ -252,16 +248,6 @@ cp -p resources/images/viewer.png \
 
 # these are provided as separate packages
 rm -rf %{buildroot}%{_libdir}/calibre/odf
-
-# # rm empty feedparser files.
-# rm -rf %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.*
-
-# ln -s %{python3_sitelib}/feedparser.py \
-#       %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.py
-# ln -s %{python3_sitelib}/feedparser.pyc \
-#       %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.pyc
-# ln -s %{python3_sitelib}/feedparser.pyo \
-#       %{buildroot}%{_libdir}/calibre/calibre/web/feeds/feedparser.pyo
 
 # link to system fonts after we have deleted (see Source0) the non-free ones
 # http://bugs.calibre-ebook.com/ticket/3832
@@ -342,34 +328,34 @@ ln -s --relative \
       %{buildroot}%{_datadir}/calibre/fonts/liberation/LiberationSerif-Regular.ttf
 %endif
 
-# delete locales, calibre stores them in a zip file now
-rm -rf %{buildroot}%{_datadir}/calibre/localization/locales/
-
-rm -f %{buildroot}%{_bindir}/calibre-uninstall
-
 # Remove these 2 appdata files, we can only include one
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 
+# rename MathJax folder to allow upgrade from 4.8.0-1 and earlier, which
+# relied on a symlink handled by the %%preun and %%posttrans scriptlets
+mv %{buildroot}%{_datadir}/calibre/mathjax %{buildroot}%{_datadir}/calibre/mathjax-fedora
+
 %check
-# The bundled copy of tinycss is completely busted on s390x. But
-# the unbundled package in Fedora is unmaintained. Ignore test results
-# for now.
+# ignore tests on 32 bit arches for now as there's a pdf issue
 CALIBRE_PY3_PORT=1 python3 setup.py test \
-%ifarch s390x
+%ifarch i686 armv7hl
 || :
 %endif
 
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
 
 %preun
-rm -f %{_datadir}/calibre/mathjax
+if [ -L %{_datadir}/calibre/mathjax ]; then
+    rm -f %{_datadir}/calibre/mathjax
+fi
 
 %posttrans
-ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
+ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 
 %files
-%doc COPYRIGHT LICENSE Changelog.yaml
+%license LICENSE
+%doc Changelog.yaml COPYRIGHT README.md
 %{_bindir}/calibre
 %{_bindir}/calibre-complete
 %{_bindir}/calibre-customize
@@ -380,7 +366,9 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_bindir}/calibredb
 %{_bindir}/ebook-convert
 %{_bindir}/ebook-device
+%{_bindir}/ebook-edit
 %{_bindir}/ebook-meta
+%{_bindir}/ebook-polish
 %{_bindir}/ebook-viewer
 %{_bindir}/fetch-ebook-metadata
 %{_bindir}/lrf2lrs
@@ -388,8 +376,6 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_bindir}/lrs2lrf
 %{_bindir}/markdown-calibre
 %{_bindir}/web2disk
-%{_bindir}/ebook-polish
-%{_bindir}/ebook-edit
 %{_libdir}/calibre/
 %{_datadir}/calibre/
 %{_datadir}/pixmaps/*
@@ -404,6 +390,20 @@ ln -s %{_jsdir}/mathjax %{_datadir}/calibre/
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sat Feb 15 2020 Kevin Fenzi <kevin@scrye.com> - 4.10.1-1
+- Update to 4.10.1. Fixes bug #1794445
+
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.8.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Tue Jan 14 2020 Marcus A. Romer <aimylios@gmx.de> - 4.8.0-3
+- Add workaround to allow upgrade from 4.8.0-1 and earlier
+  (required by the change in method to unbundle MathJax).
+
+* Sun Jan 12 2020 Marcus A. Romer <aimylios@gmx.de> - 4.8.0-2
+- Update dependencies.
+- Remove some obsolete packaging workarounds.
+
 * Fri Jan 03 2020 Jan Grulich <jgrulich@redhat.com> - 4.8.0-1
 - Update to 4.8.0
 
