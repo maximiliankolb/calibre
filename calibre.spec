@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.11.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -130,6 +130,7 @@ Requires:       python3dist(regex)
 Requires:       python3dist(html5-parser) >= 0.4.8
 Requires:       python3dist(html2text)
 Requires:       python3dist(markdown) >= 3.0
+Requires:       udisks2
 Recommends:     python3dist(zeroconf)
 
 %description
@@ -390,6 +391,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Feb 25 2020 Kevin Fenzi <kevin@scrye.com> - 4.11.2-2
+- Add requires on udisks2. Fixes bug #1806362
+
 * Sat Feb 22 2020 Kevin Fenzi <kevin@scrye.com> - 4.11.2-1
 - Update to 4.11.2. Fixes bug #1805881
 
