@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.11.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -30,8 +30,6 @@ Patch1:         calibre-no-update.patch
 Patch3:         calibre-nodisplay.patch
 
 # Patches that are not suitable for upstream:
-# skip unrardll tests if unrardll has been removed.
-Patch4:         https://github.com/keszybz/calibre/commit/497810f8adb992bfecf04e8eacf4ac1340ee6fe0.patch
 # sgml was removed, so disable test for it.
 Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
 
@@ -170,11 +168,6 @@ chmod -x src/calibre/*/*/*/*.py \
 
 # remove bundled MathJax
 rm -rvf resources/mathjax
-
-# Skip tests that require removed fonts
-sed -r -i 's/\b(test_actual_case|test_clone|test_file_add|test_file_removal|test_file_rename|test_folder_type_map_case|test_merge_file)\b/_skipped_\1/' src/calibre/ebooks/oeb/polish/tests/container.py
-# Skip test that fails in mock
-sed -r -i 's/\btest_bonjour\b/_skipped_\0/' src/calibre/srv/tests/loop.py
 
 %build
 # unbundle MathJax
@@ -338,10 +331,22 @@ rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 mv %{buildroot}%{_datadir}/calibre/mathjax %{buildroot}%{_datadir}/calibre/mathjax-fedora
 
 %check
-# ignore tests on 32 bit arches for now as there's a pdf issue
-CALIBRE_PY3_PORT=1 python3 setup.py test \
+# skip some tests which are failing because of missing dependencies (unrar),
+# problems in mock (bonjour), or they require removed fonts
+# skip qt test on 32 bit arches for now as there's a pdf issue
+CALIBRE_PY3_PORT=1 \
+%{__python3} setup.py test \
+    --exclude-test-name unrar \
+    --exclude-test-name bonjour \
+    --exclude-test-name actual_case \
+    --exclude-test-name clone \
+    --exclude-test-name file_add \
+    --exclude-test-name file_removal \
+    --exclude-test-name file_rename \
+    --exclude-test-name folder_type_map_case \
+    --exclude-test-name merge_file \
 %ifarch i686 armv7hl
-|| :
+    --exclude-test-name qt
 %endif
 
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
@@ -391,6 +396,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sun Mar 01 2020 Marcus A. Romer <aimylios@gmx.de> - 4.11.2-3
+- Properly exclude failing tests.
+
 * Tue Feb 25 2020 Kevin Fenzi <kevin@scrye.com> - 4.11.2-2
 - Add requires on udisks2. Fixes bug #1806362
 
