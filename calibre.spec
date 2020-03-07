@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.11.2
-Release:        3%{?dist}
+Version:        4.12.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -396,6 +396,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Mar 06 2020 Kevin Fenzi <kevin@scrye.com> - 4.12.0-1
+- Update to 4.12.0. Fixes bug 1810856
+
 * Sun Mar 01 2020 Marcus A. Romer <aimylios@gmx.de> - 4.11.2-3
 - Properly exclude failing tests.
 
