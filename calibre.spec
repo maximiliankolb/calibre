@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.13.0
-Release:        2%{?dist}
+Version:        4.15.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -23,6 +23,9 @@ Patch3:         calibre-nodisplay.patch
 # Patches that are not suitable for upstream:
 # sgml was removed, so disable test for it.
 Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
+
+# fix a test bug which often breaks build on 32-bit ARM
+Patch6:         0001-Fix-test_workers-timeout-response-check-with-Python-.patch
 
 ExclusiveArch: %{qt5_qtwebengine_arches}
 
@@ -341,6 +344,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu May 14 2020 Adam Williamson <awilliam@redhat.com> - 4.15.0-1
+- New release 4.15.0, should fix #1818600
+
 * Mon Apr 06 2020 Rex Dieter <rdieter@fedoraproject.org> - 4.13.0-2
 - rebuild (qt5)
 
