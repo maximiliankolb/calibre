@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.16.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -341,6 +341,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Mon May 18 2020 Pete Walter <pwalter@fedoraproject.org> - 4.16.0-2
+- Rebuild for ICU 67
+
 * Sat May 16 2020 Kevin Fenzi <kevin@scrye.com> - 4.16.0-1
 - Update to 4.16.0. Fixes bug #1836053
 
