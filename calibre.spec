@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.17.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -341,6 +341,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Thu Jun 04 2020 Jan Grulich <jgrulich@redhat.com> - 4.17.0-2
+- Rebuild (qt5)
+
 * Thu May 28 2020 Kevin Fenzi <kevin@scrye.com> - 4.17.0-1
 - Update to 4.17.0.
 
