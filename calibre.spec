@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.17.0
+Version:        4.18.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -341,6 +341,9 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Mon Jun 08 2020 Kevin Fenzi <kevin@scrye.com> - 4.18.0-1
+- Update to 4.18.0.
+
 * Thu May 28 2020 Kevin Fenzi <kevin@scrye.com> - 4.17.0-1
 - Update to 4.17.0.
 
