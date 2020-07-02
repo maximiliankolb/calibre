@@ -5,7 +5,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.18.0
+Version:        4.19.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -15,6 +15,10 @@ Source0:        https://download.calibre-ebook.com/%{version}/%{name}-%{version}
 
 # Disable auto update from inside the app
 Patch1:         calibre-no-update.patch
+
+# plistlib.Data is dropped in python 3.9, so remove it's use
+# https://github.com/kovidgoyal/calibre/pull/1184
+Patch2:         calibre-plistlib.patch
 
 # Do not display multiple apps in desktop files, only the main app
 # This is so gnome-software only 'sees' calibre once.
@@ -341,6 +345,10 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Wed Jul 01 2020 Kevin Fenzi <kevin@scrye.com> - 4.19.0-1
+- Update to 4.19.0
+- Add patch for plistlib change
+
 * Mon Jun 08 2020 Kevin Fenzi <kevin@scrye.com> - 4.18.0-1
 - Update to 4.18.0.
 

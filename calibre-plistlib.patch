@@ -1,0 +1,47 @@
+diff -Nur calibre-4.19.0.orig/src/calibre/utils/config.py calibre-4.19.0/src/calibre/utils/config.py
+--- calibre-4.19.0.orig/src/calibre/utils/config.py	2020-07-01 17:51:39.590637064 -0700
++++ calibre-4.19.0/src/calibre/utils/config.py	2020-07-01 17:50:51.287601015 -0700
+@@ -363,29 +363,26 @@
+         self.update(d)
+ 
+     def __getitem__(self, key):
+-        from polyglot.plistlib import Data
+         try:
+             ans = dict.__getitem__(self, key)
+-            if isinstance(ans, Data):
++            if isinstance(ans, bytes):
+                 ans = ans.data
+             return ans
+         except KeyError:
+             return self.defaults.get(key, None)
+ 
+     def get(self, key, default=None):
+-        from polyglot.plistlib import Data
+         try:
+             ans = dict.__getitem__(self, key)
+-            if isinstance(ans, Data):
++            if isinstance(ans, bytes):
+                 ans = ans.data
+             return ans
+         except KeyError:
+             return self.defaults.get(key, default)
+ 
+     def __setitem__(self, key, val):
+-        from polyglot.plistlib import Data
+         if isinstance(val, bytes):
+-            val = Data(val)
++            val = bytes(val)
+         dict.__setitem__(self, key, val)
+         self.commit()
+ 
+diff -Nur calibre-4.19.0.orig/src/polyglot/plistlib.py calibre-4.19.0/src/polyglot/plistlib.py
+--- calibre-4.19.0.orig/src/polyglot/plistlib.py	2020-07-01 17:51:39.601637072 -0700
++++ calibre-4.19.0/src/polyglot/plistlib.py	2020-07-01 17:51:23.458625025 -0700
+@@ -6,6 +6,6 @@
+ from polyglot.builtins import is_py3
+ 
+ if is_py3:
+-    from plistlib import loads, dumps, Data  # noqa
++    from plistlib import loads, dumps # noqa
+ else:
+     from plistlib import readPlistFromString as loads, writePlistToString as dumps, Data  # noqa
