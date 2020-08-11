@@ -5,8 +5,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.17.0
-Release:        2%{?dist}
+Version:        4.22.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -74,7 +74,8 @@ BuildRequires:  hunspell-devel
 BuildRequires:  qt5-qtwebengine-devel
 BuildRequires:  python-qt5-webengine
 BuildRequires:  hyphen-devel
-BuildRequires:  mathjax
+# using the bundled mathjax until Fedora updates to 3.0.0
+#BuildRequires:  mathjax
 # Those are only used for tests. Do not add to runtime deps.
 BuildRequires:  /usr/bin/jpegtran
 BuildRequires:  /usr/bin/JxrDecApp
@@ -98,7 +99,8 @@ Requires:       poppler-utils
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
 Requires:       liberation-mono-fonts
-Requires:       mathjax
+# using the bundled mathjax until Fedora updates to 3.0.0
+#Requires:       mathjax
 Requires:       optipng
 Requires:       python3dist(odfpy)
 Requires:       python3dist(lxml)
@@ -157,15 +159,17 @@ chmod -x src/calibre/*/*/*/*.py \
     src/calibre/*/*.py \
     src/calibre/*.py
 
+# Using bundled mathjax until fedora goes to 3.0.0
 # remove bundled MathJax
-rm -rvf resources/mathjax
+#rm -rvf resources/mathjax
 
 %build
 # unbundle MathJax
-CALIBRE_PY3_PORT=1 \
-%__python3 setup.py mathjax \
-    --system-mathjax \
-    --path-to-mathjax %{_jsdir}/mathjax/
+# using the bundled mathjax until Fedora updates to 3.0.0
+#CALIBRE_PY3_PORT=1 \
+#%%__python3 setup.py mathjax \
+#    --system-mathjax \
+#    --path-to-mathjax %%{_jsdir}/mathjax/
 
 OVERRIDE_CFLAGS="%{optflags}" \
 CALIBRE_PY3_PORT=1 \
@@ -276,10 +280,10 @@ ln --symbolic --relative \
 # Remove these 2 appdata files, we can only include one
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
-
+ 
 # rename MathJax folder to allow upgrade from 4.8.0-1 and earlier, which
 # relied on a symlink handled by the %%preun and %%posttrans scriptlets
-mv %{buildroot}%{_datadir}/calibre/mathjax %{buildroot}%{_datadir}/calibre/mathjax-fedora
+#mv %%{buildroot}%%{_datadir}/calibre/mathjax %%{buildroot}%%{_datadir}/calibre/mathjax-fedora
 
 %check
 # skip failing tests:
@@ -301,8 +305,8 @@ if [ -L %{_datadir}/calibre/mathjax ]; then
     rm -f %{_datadir}/calibre/mathjax
 fi
 
-%posttrans
-ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
+#posttrans
+#ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 
 %files
 %license LICENSE
@@ -341,8 +345,19 @@ ln -s -r %{_datadir}/calibre/mathjax-fedora %{_datadir}/calibre/mathjax
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
-* Thu Jun 04 2020 Jan Grulich <jgrulich@redhat.com> - 4.17.0-2
-- Rebuild (qt5)
+* Sun Aug 02 2020 Kevin Fenzi <kevin@scrye.com> - 4.22.0-1
+- Update to 4.22.0.
+- Use bundled mathjax for now until fedora moves to 3.0.0
+
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.19.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Wed Jul 01 2020 Kevin Fenzi <kevin@scrye.com> - 4.19.0-1
+- Update to 4.19.0
+- Add patch for plistlib change
+
+* Mon Jun 08 2020 Kevin Fenzi <kevin@scrye.com> - 4.18.0-1
+- Update to 4.18.0.
 
 * Thu May 28 2020 Kevin Fenzi <kevin@scrye.com> - 4.17.0-1
 - Update to 4.17.0.
