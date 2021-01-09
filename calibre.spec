@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.23.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -345,6 +345,9 @@ fi
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Sat Jan  9 22:55:59 CET 2021 Sandro Mani <manisandro@gmail.com> - 4.23.0-4
+- Rebuild (podofo)
+
 * Mon Nov 23 07:49:11 CET 2020 Jan Grulich <jgrulich@redhat.com> - 4.23.0-3
 - rebuild (qt5)
 
