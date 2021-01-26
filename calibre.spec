@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.23.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -345,6 +345,9 @@ fi
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 4.23.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
 * Sat Jan  9 22:55:59 CET 2021 Sandro Mani <manisandro@gmail.com> - 4.23.0-4
 - Rebuild (podofo)
 
