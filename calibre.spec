@@ -6,7 +6,7 @@
 
 Name:           calibre
 Version:        4.23.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -345,6 +345,9 @@ fi
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 4.23.0-7
+- Rebuilt for Python 3.10
+
 * Wed May 19 2021 Pete Walter <pwalter@fedoraproject.org> - 4.23.0-6
 - Rebuild for ICU 69
 
