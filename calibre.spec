@@ -1,12 +1,10 @@
-%{?_sip_api:Requires: python3-pyqt5-sip-api(%{_sip_api_major}) >= %{_sip_api}}
-
 %global __provides_exclude_from ^%{_libdir}/calibre/calibre/plugins/.*\.so$
 
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        4.23.0
-Release:        7%{?dist}
+Version:        5.22.1
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -70,10 +68,18 @@ BuildRequires:  python3dist(html5-parser) >= 0.4.8
 BuildRequires:  python3dist(html2text)
 BuildRequires:  python3dist(zeroconf)
 BuildRequires:  python3dist(markdown) >= 3.0
+BuildRequires:  python3dist(sip) >= 5.5
+BuildRequires:  python3dist(pyqt-builder)
+BuildRequires:  python3dist(pychm)
+BuildRequires:  python3dist(pycrypto)
+BuildRequires:  python3dist(cchardet)
+BuildRequires:  python3-speechd
 BuildRequires:  hunspell-devel
 BuildRequires:  qt5-qtwebengine-devel
 BuildRequires:  python-qt5-webengine
 BuildRequires:  hyphen-devel
+BuildRequires:  qt5-qtimageformats
+BuildRequires:  libstemmer-devel
 # using the bundled mathjax until Fedora updates to 3.0.0
 #BuildRequires:  mathjax
 # Those are only used for tests. Do not add to runtime deps.
@@ -95,6 +101,7 @@ Requires:       python-qt5-webengine
 Requires:       qt5-qtwebengine
 Requires:       qt5-qtsvg
 Requires:       qt5-qtsensors
+Requires:       qt5-qtimageformats
 Requires:       poppler-utils
 Requires:       liberation-sans-fonts
 Requires:       liberation-serif-fonts
@@ -121,7 +128,12 @@ Requires:       python3dist(regex)
 Requires:       python3dist(html5-parser) >= 0.4.8
 Requires:       python3dist(html2text)
 Requires:       python3dist(markdown) >= 3.0
+Requires:       python3dist(pychm)
+Requires:       python3dist(cchardet)
+Requires:       python3dist(pyqt5-sip) >= 12.8, python3dist(pyqt5-sip) < 13
 Requires:       udisks2
+Requires:       /usr/bin/jpegtran
+Requires:       /usr/bin/JxrDecApp
 Recommends:     python3dist(zeroconf)
 
 %description
@@ -289,16 +301,18 @@ rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 # skip failing tests:
 # - unrar (missing dependencies)
 # - bonjour (problems in mock)
+# - 7z (missing dependencies)
 # - qt (fails on 32-bit architectures only)
 CALIBRE_PY3_PORT=1 \
 %{__python3} setup.py test \
     --exclude-test-name unrar \
     --exclude-test-name bonjour \
+    --exclude-test-name 7z \
 %ifarch i686 armv7hl
     --exclude-test-name qt
 %endif
 
-appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.metainfo.xml
 
 %preun
 if [ -L %{_datadir}/calibre/mathjax ]; then
@@ -310,7 +324,7 @@ fi
 
 %files
 %license LICENSE
-%doc Changelog.yaml COPYRIGHT README.md
+%doc Changelog.txt COPYRIGHT README.md
 %{_bindir}/calibre
 %{_bindir}/calibre-complete
 %{_bindir}/calibre-customize
@@ -342,9 +356,12 @@ fi
 %{python3_sitelib}/__pycache__/init_calibre.*.py*
 %{_datadir}/bash-completion/completions
 %{_datadir}/zsh/site-functions/_calibre
-%{_datadir}/metainfo/*.appdata.xml
+%{_datadir}/metainfo/*.metainfo.xml
 
 %changelog
+* Thu Jun 10 2021 Scott Talbert <swt@techie.net> - 5.22.1-1
+- Update to new upstream release 5.22.1 and fix build with sip5
+
 * Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 4.23.0-7
 - Rebuilt for Python 3.10
 

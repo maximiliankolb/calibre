@@ -7,14 +7,14 @@ diff -up calibre/src/calibre/linux.py.orig calibre/src/calibre/linux.py
  Icon=calibre-viewer
 +NoDisplay=true
  MimeType=application/x-sony-bbeb;
- Categories=Graphics;Viewer;
+ Categories=Office;Viewer;
  '''
 @@ -948,6 +949,7 @@ Comment=Viewer for E-books in all the ma
  TryExec=ebook-viewer
  Exec=ebook-viewer --detach %f
  Icon=calibre-viewer
 +NoDisplay=true
- Categories=Graphics;Viewer;
+ Categories=Office;Viewer;
  '''
  
 @@ -961,6 +963,7 @@ Comment=Edit e-books in various formats
@@ -22,6 +22,6 @@ diff -up calibre/src/calibre/linux.py.orig calibre/src/calibre/linux.py
  Exec=ebook-edit --detach %f
  Icon=calibre-ebook-edit
 +NoDisplay=true
- Categories=Office;
+ Categories=Office;WordProcessor
  '''
  
