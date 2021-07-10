@@ -3,7 +3,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        5.22.1
+Version:        5.23.0
 Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -74,6 +74,7 @@ BuildRequires:  python3dist(pychm)
 BuildRequires:  python3dist(pycrypto)
 BuildRequires:  python3dist(cchardet)
 BuildRequires:  python3-speechd
+BuildRequires:  python3-jeepney
 BuildRequires:  hunspell-devel
 BuildRequires:  qt5-qtwebengine-devel
 BuildRequires:  python-qt5-webengine
@@ -134,6 +135,7 @@ Requires:       python3dist(pyqt5-sip) >= 12.8, python3dist(pyqt5-sip) < 13
 Requires:       udisks2
 Requires:       /usr/bin/jpegtran
 Requires:       /usr/bin/JxrDecApp
+Requires:       python3-jeepney
 Recommends:     python3dist(zeroconf)
 
 %description
@@ -303,11 +305,13 @@ rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 # - bonjour (problems in mock)
 # - 7z (missing dependencies)
 # - qt (fails on 32-bit architectures only)
+# - test_searching (python3 porting issue?)
 CALIBRE_PY3_PORT=1 \
 %{__python3} setup.py test \
     --exclude-test-name unrar \
     --exclude-test-name bonjour \
     --exclude-test-name 7z \
+    --exclude-test-name test_searching \
 %ifarch i686 armv7hl
     --exclude-test-name qt
 %endif
@@ -359,6 +363,9 @@ fi
 %{_datadir}/metainfo/*.metainfo.xml
 
 %changelog
+* Sat Jul 10 2021 Kevin Fenzi <kevin@scrye.com> - 5.23.0-1
+- Update to 5.23.0. Fixes rhbz#1980644
+
 * Thu Jun 10 2021 Scott Talbert <swt@techie.net> - 5.22.1-1
 - Update to new upstream release 5.22.1 and fix build with sip5
 
