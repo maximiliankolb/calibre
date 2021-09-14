@@ -4,7 +4,7 @@
 
 Name:           calibre
 Version:        5.26.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -363,6 +363,9 @@ fi
 %{_datadir}/metainfo/*.metainfo.xml
 
 %changelog
+* Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 5.26.0-2
+- Rebuilt with OpenSSL 3.0.0
+
 * Fri Aug 27 2021 Kevin Fenzi <kevin@scrye.com> - 5.26.0-1
 - Update to 5.26.0. Fixes rhbz#1993502
 
