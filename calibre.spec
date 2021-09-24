@@ -3,8 +3,8 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        5.26.0
-Release:        2%{?dist}
+Version:        5.28.0
+Release:        1%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
@@ -363,6 +363,9 @@ fi
 %{_datadir}/metainfo/*.metainfo.xml
 
 %changelog
+* Fri Sep 24 2021 Kevin Fenzi <kevin@scrye.com> - 5.28.0-1
+- Update to 5.28.0. Fixes rhbz#2003012
+
 * Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 5.26.0-2
 - Rebuilt with OpenSSL 3.0.0
 
