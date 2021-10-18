@@ -1,0 +1,24 @@
+From 5d22453ed384df16ab0d7d61a4924324e95135a1 Mon Sep 17 00:00:00 2001
+From: Jakub Rembisz <jprembis@gmail.com>
+Date: Tue, 27 Oct 2020 15:02:25 -0400
+Subject: [PATCH] Replace obsolete alias tostring() with tobytes()
+
+The tostring() method was renamed to tobytes() in Python 3.2 and
+has since been deprecated and removed in Python 3.9.
+---
+ src/calibre/utils/fonts/sfnt/loca.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/calibre/utils/fonts/sfnt/loca.py b/src/calibre/utils/fonts/sfnt/loca.py
+index dee0462015d..7cc16444bbc 100644
+--- a/src/calibre/utils/fonts/sfnt/loca.py
++++ b/src/calibre/utils/fonts/sfnt/loca.py
+@@ -79,7 +79,7 @@ def update(self, resolved_glyph_map):
+ 
+         if sys.byteorder != "big":
+             vals.byteswap()
+-        self.raw = vals.tostring()
++        self.raw = vals.tobytes()
+     subset = update
+ 
+     def dump_glyphs(self, sfnt):

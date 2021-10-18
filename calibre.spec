@@ -6,23 +6,29 @@
 
 Name:           calibre
 Version:        4.23.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        E-book converter and library manager
 License:        GPLv3
 URL:            https://calibre-ebook.com/
 
 Source0:        https://download.calibre-ebook.com/%{version}/%{name}-%{version}.tar.xz
 
+# https://bugzilla.redhat.com/show_bug.cgi?id=2015130
+Patch0:         https://github.com/kovidgoyal/calibre/commit/5d22453ed384df16ab0d7d61a4924324e95135a1.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1922761
+Patch2:         https://github.com/kovidgoyal/calibre/commit/0db1b7662dd1eedb7a3ec5ffcec90a62b6c1f702.patch
+
+
 # Disable auto update from inside the app
-Patch1:         calibre-no-update.patch
+Patch10:         calibre-no-update.patch
 
 # Do not display multiple apps in desktop files, only the main app
 # This is so gnome-software only 'sees' calibre once.
-Patch3:         calibre-nodisplay.patch
+Patch13:         calibre-nodisplay.patch
 
 # Patches that are not suitable for upstream:
 # sgml was removed, so disable test for it.
-Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
+Patch15:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
 
 ExclusiveArch: %{qt5_qtwebengine_arches}
 
@@ -345,6 +351,9 @@ fi
 %{_datadir}/metainfo/*.appdata.xml
 
 %changelog
+* Mon Oct 18 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 4.23.0-6
+- Three bugfix patches (#1922761, #2015130)
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 4.23.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 

@@ -1,0 +1,74 @@
+From 9b9d6728ef96f605641ade056a3d00b3c1f715d7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Thu, 30 Sep 2021 08:43:15 +0200
+Subject: [PATCH] conversions: use makedirs(exist_ok=True)
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1922761 reports the following
+failure:
+
+Traceback (most recent call last):
+  File "/bin/ebook-edit", line 20, in <module>
+    sys.exit(ebook_edit())
+  File "/usr/lib64/calibre/calibre/gui_launch.py", line 119, in ebook_edit
+    main(args)
+  File "/usr/lib64/calibre/calibre/gui2/tweak_book/main.py", line 98, in main
+    _run(args)
+  File "/usr/lib64/calibre/calibre/gui2/tweak_book/main.py", line 66, in _run
+    from calibre.gui2.tweak_book.ui import Main
+  File "/usr/lib64/calibre/calibre/gui2/tweak_book/ui.py", line 29, in <module>
+    from calibre.gui2.tweak_book.boss import Boss
+  File "/usr/lib64/calibre/calibre/gui2/tweak_book/boss.py", line 28, in <module>
+    from calibre.ebooks.oeb.polish.main import SUPPORTED, tweak_polish
+  File "/usr/lib64/calibre/calibre/ebooks/oeb/polish/main.py", line 20, in <module>
+    from calibre.ebooks.oeb.polish.jacket import (
+  File "/usr/lib64/calibre/calibre/ebooks/oeb/polish/jacket.py", line 9, in <module>
+    from calibre.ebooks.conversion.config import load_defaults
+  File "/usr/lib64/calibre/calibre/ebooks/conversion/config.py", line 20, in <module>
+    os.makedirs(config_dir)
+  File "/usr/lib64/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
+FileExistsError: [Errno 17] Arquivo existe: '/home/vinicius/.config/calibre/conversion'
+
+I assume that the user had two calibre instances started, and they raced on
+the check and creation of the directory. Let's use os.makedirs(exist_ok=True).
+(added in Python 3.2).
+
+Also, only create the directories when saving/reading the file, not when the
+module is imported.
+---
+ src/calibre/ebooks/conversion/config.py | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/calibre/ebooks/conversion/config.py b/src/calibre/ebooks/conversion/config.py
+index 459caab0d34..ec2da772730 100644
+--- a/src/calibre/ebooks/conversion/config.py
++++ b/src/calibre/ebooks/conversion/config.py
+@@ -17,8 +17,6 @@
+ 
+ 
+ config_dir = os.path.join(config_dir, 'conversion')
+-if not os.path.exists(config_dir):
+-    os.makedirs(config_dir)
+ 
+ 
+ def name_to_path(name):
+@@ -28,6 +26,9 @@ def name_to_path(name):
+ def save_defaults(name, recs):
+     path = name_to_path(name)
+     raw = recs.serialize()
++
++    os.makedirs(config_dir, exist_ok=True)
++
+     with lopen(path, 'wb'):
+         pass
+     with ExclusiveFile(path) as f:
+@@ -36,6 +37,9 @@ def save_defaults(name, recs):
+ 
+ def load_defaults(name):
+     path = name_to_path(name)
++
++    os.makedirs(config_dir, exist_ok=True)
++
+     if not os.path.exists(path):
+         open(path, 'wb').close()
+     with ExclusiveFile(path) as f:
