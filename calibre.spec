@@ -3,7 +3,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        5.32.0
+Version:        5.33.2
 Release:        %autorelease
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -17,10 +17,6 @@ Patch1:         calibre-no-update.patch
 # Do not display multiple apps in desktop files, only the main app
 # This is so gnome-software only 'sees' calibre once.
 Patch3:         calibre-nodisplay.patch
-
-# Patches that are not suitable for upstream:
-# sgml was removed, so disable test for it.
-Patch5:         https://github.com/keszybz/calibre/commit/01bf854923741bf8d6a6328f17d61e0ec5ac3c9f.patch
 
 ExclusiveArch: %{qt5_qtwebengine_arches}
 
@@ -73,6 +69,7 @@ BuildRequires:  python3dist(pyqt-builder)
 BuildRequires:  python3dist(pychm)
 BuildRequires:  python3dist(pycrypto)
 BuildRequires:  python3dist(cchardet)
+BuildRequires:  python3dist(sgmllib3k)
 BuildRequires:  python3-speechd
 BuildRequires:  python3-jeepney
 BuildRequires:  hunspell-devel
