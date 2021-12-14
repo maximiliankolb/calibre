@@ -18,6 +18,9 @@ Patch0:         https://github.com/kovidgoyal/calibre/commit/5d22453ed384df16ab0
 # https://bugzilla.redhat.com/show_bug.cgi?id=1922761
 Patch2:         https://github.com/kovidgoyal/calibre/commit/0db1b7662dd1eedb7a3ec5ffcec90a62b6c1f702.patch
 
+# https://bugzilla.redhat.com/show_bug.cgi?id=2031838
+Patch3:         0001-Fix-inefficient-regex-that-slows-down-a-lot-with-cer.patch
+
 
 # Disable auto update from inside the app
 Patch10:         calibre-no-update.patch
