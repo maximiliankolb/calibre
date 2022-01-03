@@ -3,7 +3,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        5.33.2
+Version:        5.34.0
 Release:        %autorelease
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -14,6 +14,8 @@ Source0:        https://download.calibre-ebook.com/%{version}/%{name}-%{version}
 # Disable auto update from inside the app
 Patch1:         calibre-no-update.patch
 
+# Already upstream patch to fix install path
+Patch2:         https://github.com/kovidgoyal/calibre/commit/dafa08e9213d3baad41c97e7598592bd0e06894d.patch
 # Do not display multiple apps in desktop files, only the main app
 # This is so gnome-software only 'sees' calibre once.
 Patch3:         calibre-nodisplay.patch
@@ -191,7 +193,7 @@ mkdir -p %{buildroot}%{_datadir}
 
 # create directory for calibre environment module
 # the install script assumes it's there.
-mkdir -p %{buildroot}%{python3_sitelib}
+mkdir -p %{buildroot}%{python3_sitearch}
 
 # create directory for completion files, so calibre knows where
 # to install them
@@ -209,7 +211,7 @@ CALIBRE_PY3_PORT=1 \
 
 # remove shebang from init_calibre.py here because
 # it just got spawned by the install script
-sed -i -e '/^#!\//, 1d' %{buildroot}%{python3_sitelib}/init_calibre.py
+sed -i -e '/^#!\//, 1d' %{buildroot}%{python3_sitearch}/init_calibre.py
 
 # there are some python files there, do byte-compilation on them
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/calibre
@@ -353,8 +355,8 @@ fi
 %{_datadir}/mime/packages/*
 %{_datadir}/icons/hicolor/*/mimetypes/*
 %{_datadir}/icons/hicolor/*/apps/*
-%{python3_sitelib}/init_calibre.py
-%{python3_sitelib}/__pycache__/init_calibre.*.py*
+%{python3_sitearch}/init_calibre.py
+%{python3_sitearch}/__pycache__/init_calibre.*.py*
 %{_datadir}/bash-completion/completions
 %{_datadir}/zsh/site-functions/_calibre
 %{_datadir}/metainfo/*.metainfo.xml

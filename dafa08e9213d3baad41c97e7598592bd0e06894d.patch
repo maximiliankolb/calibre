@@ -1,0 +1,24 @@
+From dafa08e9213d3baad41c97e7598592bd0e06894d Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Fri, 17 Dec 2021 17:23:35 +0530
+Subject: [PATCH] Fix path used to init_calibre module installation
+
+Fixes #1553 (Fix python site-package libdir creation in FreeBSD)
+---
+ setup/install.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/setup/install.py b/setup/install.py
+index 1b9464c9394..b4b39df7e67 100644
+--- a/setup/install.py
++++ b/setup/install.py
+@@ -158,7 +158,8 @@ def install_env_module(self):
+         import sysconfig
+         libdir = os.path.join(
+             self.opts.staging_root, sysconfig.get_config_var('PLATLIBDIR') or 'lib',
+-            sysconfig.get_python_version(), 'site-packages')
++            os.path.basename(sysconfig.get_config_var('DESTLIB') or sysconfig.get_config_var('LIBDEST') or f'python{sysconfig.get_python_version()}'),
++            'site-packages')
+         try:
+             if not os.path.exists(libdir):
+                 os.makedirs(libdir)
