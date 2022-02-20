@@ -3,7 +3,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        5.34.0
+Version:        5.37.0
 Release:        %autorelease
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -14,8 +14,6 @@ Source0:        https://download.calibre-ebook.com/%{version}/%{name}-%{version}
 # Disable auto update from inside the app
 Patch1:         calibre-no-update.patch
 
-# Already upstream patch to fix install path
-Patch2:         https://github.com/kovidgoyal/calibre/commit/dafa08e9213d3baad41c97e7598592bd0e06894d.patch
 # Do not display multiple apps in desktop files, only the main app
 # This is so gnome-software only 'sees' calibre once.
 Patch3:         calibre-nodisplay.patch
