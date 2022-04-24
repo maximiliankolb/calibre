@@ -18,7 +18,11 @@ Patch1:         calibre-no-update.patch
 # This is so gnome-software only 'sees' calibre once.
 Patch3:         calibre-nodisplay.patch
 
-ExclusiveArch: %{qt5_qtwebengine_arches}
+ExclusiveArch:  %{qt5_qtwebengine_arches}
+
+# https://fedoraproject.org/wiki/Changes/RetireARMv7
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
