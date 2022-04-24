@@ -297,21 +297,20 @@ rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
 #mv %%{buildroot}%%{_datadir}/calibre/mathjax %%{buildroot}%%{_datadir}/calibre/mathjax-fedora
 
 %check
-# skip failing tests:
-# - unrar (missing dependencies)
-# - bonjour (problems in mock)
-# - 7z (missing dependencies)
-# - qt (fails on 32-bit architectures only)
-# - test_searching (python3 porting issue?)
-CALIBRE_PY3_PORT=1 \
-%{__python3} setup.py test \
-    --exclude-test-name unrar \
-    --exclude-test-name bonjour \
-    --exclude-test-name 7z \
-    --exclude-test-name test_searching \
-%ifarch i686 armv7hl x86_64
-    --exclude-test-name qt
+TEST_ARGS=(
+    # skip failing tests:
+    --exclude-test-name unrar              # missing dependencies
+    --exclude-test-name bonjour            # problems in mock
+    --exclude-test-name 7z                 # missing dependencies
+    --exclude-test-name test_searching     # python3 porting issue?
+%ifarch %{ix86} armv7hl
+    --exclude-test-name qt                 # fails on 32-bit architectures only
+    --exclude-test-name test_dom_load
 %endif
+)
+
+CALIBRE_PY3_PORT=1 \
+%python3 setup.py test "${TEST_ARGS[@]}"
 
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/calibre-gui.metainfo.xml
 
