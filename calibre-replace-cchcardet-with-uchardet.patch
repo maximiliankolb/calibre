@@ -1,0 +1,218 @@
+From 5c3385476fb894979bae9c838766d9e2b1b85267 Mon Sep 17 00:00:00 2001
+From: Kovid Goyal <kovid@kovidgoyal.net>
+Date: Sat, 16 Jul 2022 15:04:38 +0530
+Subject: [PATCH] Switch from cchardet to uchardet
+
+cchardet is not maintained anymore: https://github.com/PyYoshi/cChardet/issues/77
+
+cchardet is based on uchardet with the addition of reporting encoding
+detection confidence. We dont really need that, so moving to uchardet is
+simplest.
+
+See #1690 (Low effort port to charset_normalizer)
+---
+ bypy/linux/__main__.py        |  2 +-
+ bypy/macos/__main__.py        |  2 +-
+ bypy/sources.json             |  8 ++---
+ setup/arch-ci.sh              |  2 +-
+ setup/build_environment.py    |  7 ++++
+ setup/extensions.json         |  7 ++++
+ src/calibre/constants.py      |  1 +
+ src/calibre/ebooks/chardet.py | 22 ++++++------
+ src/calibre/ebooks/uchardet.c | 65 +++++++++++++++++++++++++++++++++++
+ src/calibre/test_build.py     |  7 ++--
+ 10 files changed, 102 insertions(+), 21 deletions(-)
+ create mode 100644 src/calibre/ebooks/uchardet.c
+
+diff --git a/setup/build_environment.py b/setup/build_environment.py
+index ad5f77c82d3..eb0a87a7c63 100644
+--- a/setup/build_environment.py
++++ b/setup/build_environment.py
+@@ -130,6 +130,7 @@ def readvar(name):
+ hunspell_lib_dirs = []
+ hyphen_inc_dirs = []
+ hyphen_lib_dirs = []
++uchardet_inc_dirs, uchardet_lib_dirs, uchardet_libs = [], [], ['uchardet']
+ openssl_inc_dirs, openssl_lib_dirs = [], []
+ ICU = sw = ''
+ 
+@@ -143,6 +144,8 @@ def readvar(name):
+     hyphen_lib_dirs = [sw_lib_dir]
+     openssl_inc_dirs = [sw_inc_dir]
+     openssl_lib_dirs = [sw_lib_dir]
++    uchardet_inc_dirs = [sw_inc_dir]
++    uchardet_lib_dirs = [sw_lib_dir]
+     sqlite_inc_dirs = [sw_inc_dir]
+     chmlib_inc_dirs = [sw_inc_dir]
+     chmlib_lib_dirs = [sw_lib_dir]
+@@ -165,6 +168,7 @@ def readvar(name):
+     podofo_lib = sw_lib_dir
+     ft_libs = ['freetype']
+     ft_inc_dirs = [sw + '/include/freetype2']
++    uchardet_inc_dirs = [sw + '/include/uchardet']
+     SSL = os.environ.get('OPENSSL_DIR', os.path.join(sw, 'private', 'ssl'))
+     openssl_inc_dirs = [os.path.join(SSL, 'include')]
+     openssl_lib_dirs = [os.path.join(SSL, 'lib')]
+@@ -183,6 +187,9 @@ def readvar(name):
+     if not os.path.exists(podofo_inc + '/podofo.h'):
+         podofo_inc = os.path.join(sw, 'include', 'podofo')
+         podofo_lib = os.path.join(sw, 'lib')
++    uchardet_inc_dirs = pkgconfig_include_dirs('uchardet', '', '/usr/include/uchardet')
++    uchardet_lib_dirs = pkgconfig_lib_dirs('uchardet', '', '/usr/lib')
++    uchardet_libs = pkgconfig_libs('uchardet', '', '')
+ 
+ 
+ podofo_lib = os.environ.get('PODOFO_LIB_DIR', podofo_lib)
+diff --git a/setup/extensions.json b/setup/extensions.json
+index 29625fd8700..ec8987ad9c2 100644
+--- a/setup/extensions.json
++++ b/setup/extensions.json
+@@ -16,6 +16,13 @@
+         "lib_dirs": "!hyphen_lib_dirs",
+ 		"needs_c99": true
+     },
++    {
++        "name": "uchardet",
++        "sources": "calibre/ebooks/uchardet.c",
++        "libraries": "!uchardet_libs",
++        "inc_dirs": "!uchardet_inc_dirs",
++        "lib_dirs": "!uchardet_lib_dirs"
++    },
+     {
+         "name": "unicode_names",
+         "headers": "unicode_names/names.h unicode_names/data-types.h",
+diff --git a/src/calibre/constants.py b/src/calibre/constants.py
+index 6eebc5467cd..1a3301e6250 100644
+--- a/src/calibre/constants.py
++++ b/src/calibre/constants.py
+@@ -266,6 +266,7 @@ def __init__(self):
+             'tokenizer',
+             'certgen',
+             'sqlite_extension',
++            'uchardet',
+         )
+         if iswindows:
+             extra = ('winutil', 'wpd', 'winfonts', 'winsapi')
+diff --git a/src/calibre/ebooks/chardet.py b/src/calibre/ebooks/chardet.py
+index 53fe6c51087..4aeceea0fd6 100644
+--- a/src/calibre/ebooks/chardet.py
++++ b/src/calibre/ebooks/chardet.py
+@@ -103,16 +103,18 @@ def substitute_entites(raw):
+ 
+ 
+ def detect(bytestring):
+-    from cchardet import detect as implementation
+-    ans = implementation(bytestring)
+-    enc = ans.get('encoding')
+-    if enc:
+-        ans['encoding'] = enc.lower()
+-    elif enc is None:
+-        ans['encoding'] = ''
+-    if ans.get('confidence') is None:
+-        ans['confidence'] = 0
+-    return ans
++    if isinstance(bytestring, str):
++        bytestring = bytestring.encode('utf-8', 'replace')
++    try:
++        from calibre_extensions.uchardet import detect as implementation
++    except ImportError:
++        # People running from source without updated binaries
++        from cchardet import detect as cdi
++
++        def implementation(x):
++            return cdi(x).get('encoding') or ''
++    enc = implementation(bytestring).lower()
++    return {'encoding': enc, 'confidence': 1 if enc else 0}
+ 
+ 
+ def force_encoding(raw, verbose, assume_utf8=False):
+diff --git a/src/calibre/ebooks/uchardet.c b/src/calibre/ebooks/uchardet.c
+new file mode 100644
+index 00000000000..fe5895c840a
+--- /dev/null
++++ b/src/calibre/ebooks/uchardet.c
+@@ -0,0 +1,65 @@
++/*
++ * uchardet.c
++ * Copyright (C) 2022 Kovid Goyal <kovid at kovidgoyal.net>
++ *
++ * Distributed under terms of the GPL3 license.
++ */
++
++#include "Python.h"
++#include <uchardet.h>
++
++#define CAPSULE_NAME "uchardet.detector_capsule"
++#define CAPSULE_ATTR "detector_capsule"
++
++static PyObject*
++detect(PyObject *self, PyObject *bytes) {
++    if (!PyBytes_Check(bytes)) { PyErr_SetString(PyExc_TypeError, "a byte string is required"); return NULL; }
++    PyObject *capsule = PyObject_GetAttrString(self, CAPSULE_ATTR);
++    if (!capsule) return NULL;
++    void *d = PyCapsule_GetPointer(capsule, CAPSULE_NAME);
++    if (!d) return NULL;
++    uchardet_reset(d);
++    uchardet_handle_data(d, PyBytes_AS_STRING(bytes), (size_t)PyBytes_GET_SIZE(bytes));
++    uchardet_data_end(d);
++    return PyUnicode_FromString(uchardet_get_charset(d));
++}
++
++static PyMethodDef methods[] = {
++    {"detect", detect, METH_O,
++    "detect(bytestring) -> encoding name\n\n"
++    		"Detect the encoding of the specified bytestring"
++    },
++    {NULL, NULL, 0, NULL}
++};
++
++
++static void
++free_detector(PyObject *capsule) {
++    void *d = PyCapsule_GetPointer(capsule, CAPSULE_NAME);
++    if (d) uchardet_delete(d);
++}
++
++static int
++exec_module(PyObject *module) {
++    uchardet_t detector = uchardet_new();
++    if (!detector) { PyErr_NoMemory(); return -1; }
++    PyObject *detector_capsule = PyCapsule_New(detector, CAPSULE_NAME, free_detector);
++    if (!detector_capsule) return -1;
++    int ret = PyModule_AddObjectRef(module, CAPSULE_ATTR, detector_capsule);
++    Py_DECREF(detector_capsule);
++    return ret;
++}
++
++static PyModuleDef_Slot slots[] = { {Py_mod_exec, exec_module}, {0, NULL} };
++
++static struct PyModuleDef module_def = {
++    .m_base     = PyModuleDef_HEAD_INIT,
++    .m_name     = "uchardet",
++    .m_doc      = "Detect the encoding of bytestring",
++    .m_methods  = methods,
++    .m_slots    = slots,
++};
++
++CALIBRE_MODINIT_FUNC PyInit_uchardet(void) {
++    return PyModuleDef_Init(&module_def);
++}
+diff --git a/src/calibre/test_build.py b/src/calibre/test_build.py
+index e8364ab9ee5..f6bc4b05aff 100644
+--- a/src/calibre/test_build.py
++++ b/src/calibre/test_build.py
+@@ -73,11 +73,10 @@ def test_pychm(self):
+         del CHMFile, chmlib
+ 
+     def test_chardet(self):
+-        from cchardet import detect
++        from calibre_extensions.uchardet import detect
+         raw = 'mūsi Füße'.encode()
+-        data = detect(raw)
+-        self.assertEqual(data['encoding'].lower(), 'utf-8')
+-        self.assertGreater(data['confidence'], 0.5)
++        enc = detect(raw).lower()
++        self.assertEqual(enc, 'utf-8')
+         # The following is used by html5lib
+         from chardet.universaldetector import UniversalDetector
+         detector = UniversalDetector()

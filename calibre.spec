@@ -18,6 +18,14 @@ Patch1:         calibre-no-update.patch
 # This is so gnome-software only 'sees' calibre once.
 Patch3:         calibre-nodisplay.patch
 
+# Switch from cchardet to uchardet
+# cchardet is not maintained anymore:
+#   https://github.com/PyYoshi/cChardet/issues/77
+#   https://bugzilla.redhat.com/show_bug.cgi?id=2021804
+# Backported from upstream:
+#   https://github.com/kovidgoyal/calibre/commit/5c3385476f
+Patch4:         calibre-replace-cchcardet-with-uchardet.patch
+
 ExclusiveArch:  %{qt5_qtwebengine_arches}
 
 # https://fedoraproject.org/wiki/Changes/RetireARMv7
@@ -72,7 +80,6 @@ BuildRequires:  python3dist(sip) >= 5.5
 BuildRequires:  python3dist(pyqt-builder)
 BuildRequires:  python3dist(pychm)
 BuildRequires:  python3dist(pycrypto)
-BuildRequires:  python3dist(cchardet)
 BuildRequires:  python3dist(sgmllib3k)
 BuildRequires:  python3-speechd
 BuildRequires:  python3-jeepney
@@ -82,6 +89,7 @@ BuildRequires:  python-qt5-webengine
 BuildRequires:  hyphen-devel
 BuildRequires:  qt5-qtimageformats
 BuildRequires:  libstemmer-devel
+BuildRequires:  uchardet-devel
 # using the bundled mathjax until Fedora updates to 3.0.0
 #BuildRequires:  mathjax
 # Those are only used for tests. Do not add to runtime deps.
@@ -131,7 +139,6 @@ Requires:       python3dist(html5-parser) >= 0.4.8
 Requires:       python3dist(html2text)
 Requires:       python3dist(markdown) >= 3.0
 Requires:       python3dist(pychm)
-Requires:       python3dist(cchardet)
 Requires:       python3dist(pyqt5-sip) >= 12.8, python3dist(pyqt5-sip) < 13
 Requires:       udisks2
 Requires:       /usr/bin/jpegtran
