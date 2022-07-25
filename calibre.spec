@@ -92,7 +92,7 @@ BuildRequires:  /usr/bin/JxrDecApp
 # Project MESSAGE: Running this project against other versions of the Qt modules may crash at any arbitrary point.
 # Project MESSAGE: This is not a bug, but a result of using Qt internals. You have been warned!
 BuildRequires:  qt5-qtbase-private-devel
-%{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
+
 
 Requires:       python3-qt5
 Requires:       python-qt5-webengine
