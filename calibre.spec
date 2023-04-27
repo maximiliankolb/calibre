@@ -3,7 +3,7 @@
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        5.43.0
+Version:        6.17.0
 Release:        %autorelease
 Summary:        E-book converter and library manager
 License:        GPLv3
@@ -302,7 +302,7 @@ ln --symbolic --relative \
 # Remove these 2 appdata files, we can only include one
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-edit.appdata.xml
 rm -f %{buildroot}/%{_datadir}/metainfo/calibre-ebook-viewer.appdata.xml
- 
+
 # rename MathJax folder to allow upgrade from 4.8.0-1 and earlier, which
 # relied on a symlink handled by the %%preun and %%posttrans scriptlets
 #mv %%{buildroot}%%{_datadir}/calibre/mathjax %%{buildroot}%%{_datadir}/calibre/mathjax-fedora
